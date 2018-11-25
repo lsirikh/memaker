@@ -1,0 +1,163 @@
+{% extends "base_products.html" %}
+
+{% block content %}
+{% load staticfiles%}
+{% load humanize %}
+<div class="container">
+    <div class="row-container">
+        <h3>{{ object.category }}</h3>
+        <hr>
+        <div class="col-md-6 item-photo">
+            <img style="max-width:100%;" src="{{ object.product_image.url }}"/>
+        </div>
+        <div class="col-md-6" style="border:0px solid gray">
+            <!-- Datos del vendedor y titulo del producto -->
+            <h3>{{ object.title }}</h3>
+            <h5 style="color:#337ab7">{{ object.description }}</h5>
+
+            <!-- Precios -->
+            <h4 class="title-price">
+                <medium>가격</medium>
+            </h4>
+            <h5 style="margin-top:0px;">￦ {{ object.cost|intcomma }} 원</h5>
+
+            <!-- Detalles especificos del producto -->
+            <div class="section">
+                <h4 class="title-attr" style="margin-top:15px;">
+                    <medium>구매가능</medium>
+                </h4>
+                <div>
+                    {% if object.isSale%}
+                    <h5 class="attr">판매중</h5>
+                    {% else %}
+                    <h5 class="attr">품절</h5>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="section" style="padding-bottom:5px;">
+                <h4 class="title-attr">
+                    <medium>사용연령</medium>
+                </h4>
+                <div>
+                    <h5 class="attr2">8~17세</h5>
+                </div>
+            </div>
+            <div class="section" style="padding-bottom:5px;">
+                <h4 class="title-attr">
+                    <medium>관련 강좌</medium>
+                </h4>
+                {% if object.related_lec.all %}
+                {% for lecture in object.related_lec.all %}
+                <li>{{ lecture.title}}</li>
+                {% endfor %}
+                {% else %}
+                <div>
+                    <h5 class="attr2">강좌 없이 학습 할 수 있습니다.</h5>
+                </div>
+                {% endif %}
+            </div>
+            <div class="section" style="padding-bottom:5px;">
+                <h4 class="title-attr">
+                    <medium>안내</medium>
+                </h4>
+                <div>
+                    <h5 class="attr2">현재 제품의 구매는 네이버를 통해 구매하실 수 있습니다. 이점 착오 없으시길 바랍니다.</h5>
+                </div>
+            </div>
+
+            <!-- Botones de compra -->
+            <div class="section" style="padding-bottom:20px;">
+                <button class="btn btn-success"><span style="margin-right:20px"
+                                                      class="glyphicon glyphicon-shopping-cart"
+                                                      aria-hidden="true"></span>구매하러가기
+                </button>
+            </div>
+        </div>
+
+        <div class="container col-md-12" style="margin-top:100px;">
+            {% if object.movie%}
+            <h2>작동영상</h2>
+            <hr>
+            <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                <div class="col-md-push-3 col-md-6">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="{{object.movie}}"></iframe>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+
+            {% for detail in object.detail_set.all %}
+            <div style="width:100%;">
+                {% if detail.upper_line%}
+                <hr>
+                {%endif%}
+                {% if detail.title%}
+                <h3>{{detail.title}}</h3>
+                {%endif%}
+                {% if detail.image and detail.description %}
+                <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                    <div class="col-md-6">
+                        <img class="featurette-image img-responsive center-block" src="{{ detail.image.url }}"
+                             alt="Generic placeholder image">
+                    </div>
+                    <div class="col-md-push-6">
+                        <midium>
+                            {{ detail.description|linebreaks }}
+                        </midium>
+                    </div>
+                </div>
+                {%elif not detail.image and detail.description %}
+                <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                    <br>
+                    <div class="col-md-12" style="padding:15px;">
+                        <midium>
+                            {{ detail.description|linebreaks }}
+                        </midium>
+                    </div>
+                    <br>
+                </div>
+                {%elif detail.image and not detail.description %}
+                <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                    <br>
+                    <div class="col-md-12">
+                        <img class="featurette-image img-responsive center-block" src="{{ detail.image.url }}"
+                             alt="Generic placeholder image">
+                    </div>
+                    <br>
+                </div>
+                {%endif%}
+                {% if detail.lower_line %}
+                <hr>
+                {%endif%}
+            </div>
+            {% endfor%}
+        </div>
+        <div class="container-fluid">
+            {% if object.related_lec.all %}
+            <h2>관련 강좌</h2>
+            <div class="row">
+                <hr>
+                {% for lecture in object.related_lec.all %}
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img src="{{lecture.thumbnail.url}}" alt="...">
+                        <div class="caption">
+                            <h4>{{ lecture.title|truncatechars:23 }}</h4>
+                            <p>{{ lecture.description|truncatechars:55 }}</p>
+                            <p align="center">
+                                <a href="{% url 'lectures:lecture_detail' lecture.id%}" class="btn btn-primary"
+                                   role="button">수강하기</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

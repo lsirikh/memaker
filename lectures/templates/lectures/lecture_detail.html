@@ -1,0 +1,160 @@
+{% extends "base_lectures.html" %}
+
+{% block content %}
+{% load staticfiles%}
+{% load humanize %}
+<div class="container">
+
+    <h3>{{ object.section }} > {{ object.category }}</h3>
+    <ul class="nav nav-tabs" role="tablist" id="myTab">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
+                                                  data-toggle="tab">Home</a></li>
+        {% for detail in object.video_set.all%}
+        <li role="presentation"><a href="#{{forloop.counter}}강" aria-controls="{{forloop.counter}}강" role="tab"
+                                   data-toggle="tab">{{forloop.counter}}강</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="home">
+            <div class="row">
+                <div class="col-md-6 item-photo">
+                    <img style="max-width:100%;" src="{{ object.lecture_image.url }}"/>
+                </div>
+                <div class="col-md-6" style="border:0px solid gray">
+                    <!-- Datos del vendedor y titulo del producto -->
+                    <h3>{{ object.title }}</h3>
+                    <h5 style="color:#337ab7">{{ object.description }}</h5>
+
+                    <div class="section" style="padding-bottom:5px;">
+                        <h4 class="title-attr">
+                            <medium>시청연령</medium>
+                        </h4>
+                        <div>
+                            <h5 class="attr2">8~17세</h5>
+                        </div>
+                    </div>
+                    <div class="section" style="padding-bottom:5px;">
+                        <h4 class="title-attr">
+                            <medium>활용 교보재</medium>
+                        </h4>
+                        {% if object.material.all %}
+                        {% for material in object.material.all %}
+                        <li>{{ material.title}}</li>
+                        {% endfor %}
+                        {% else %}
+                        <div>
+                            <h5 class="attr2">교재 및 교보재 없이 수강 할 수 있습니다.</h5>
+                        </div>
+                        {% endif %}
+                    </div>
+
+
+                </div>
+
+            </div>
+            {% if object.sample%}
+            <h2>샘플 영상</h2>
+            <hr>
+            <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                <div class="col-md-push-3 col-md-6">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="{{object.sample}}"></iframe>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+            {% if object.content %}
+            <h2>영상 소개</h2>
+            <hr>
+            <h4 class="lead">{{object.content|linebreaks}}</h4>
+            {% endif %}
+
+
+            {% if object.material.all %}
+            <h2>관련 교보재</h2>
+            <div class="row">
+                <hr>
+                {% for product in object.material.all %}
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img src="{{product.thumbnail.url}}" alt="...">
+                        <div class="caption">
+                            <h4>{{ product.title|truncatechars:23 }}</h4>
+                            <p>{{ product.description|truncatechars:55 }}</p>
+                            <p align="center">
+                                <a href="{% url 'products:product_detail' product.id%}" class="btn btn-primary"
+                                   role="button">구경하기</a>
+                                <a href="#" class="btn btn-default" role="button">구매하기</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+
+        </div>
+
+
+        {% for detail in object.video_set.all%}
+        <div role="tabpanel" class="tab-pane fade" id="{{forloop.counter}}강">
+            <div class="row">
+                <div class="col-md-12" style="border:0px solid gray">
+                    <!-- Datos del vendedor y titulo del producto -->
+                    <h3>{{ detail.title }}</h3>
+                    {% if detail.movie%}
+                    <hr>
+                    <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                        <div class="col-md-push-3 col-md-6">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe class="embed-responsive-item" frameborder="0"
+                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen src="{{detail.movie}}"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    {%endif%}
+                    <br>
+                    <br>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">강의 소개</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h5 style="color:#337ab7">{{ detail.content }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<script>
+  $('#myTab a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
+$('#myTab a[href="#home"]').tab('show') // Select tab by name
+{% for detail in object.video_set.all%}
+$('#myTab a[href="#{{forloop.counter}}강"]').tab('show') // Select tab by name
+{% endfor %}
+
+
+
+
+
+
+
+
+</script>
+
+
+{% endblock content %}

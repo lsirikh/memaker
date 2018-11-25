@@ -1,0 +1,2 @@
+[11/09/18/November/2018 14:33:45] DEBUG [polls.views:46] vote().question_id: 2
+[11/09/18/November/2018 14:34:13] DEBUG [polls.views:46] vote().question_id: 1

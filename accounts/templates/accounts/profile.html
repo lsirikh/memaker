@@ -1,0 +1,18 @@
+{% extends "accounts/index.html" %}
+
+{% block accounts %}
+{% load staticfiles%}
+<div class="col-md-8">
+    <div class="container">
+        <h3>회원 정보</h3>
+        <div class="row">
+            <p>아이디 : {{ user.username}} </p>
+            <p>이 름 : {{ user.first_name}} </p>
+            <p>이메일 : {{ user.email}} </p>
+            <p>소 개 : {{ user_profile.description}} </p>
+            <p>연락처 : {{ user_profile.phone}} </p>
+            <p>주 소 : {{ user_profile.address}} </p>
+        </div>
+    </div>
+</div>
+{% endblock accounts %}

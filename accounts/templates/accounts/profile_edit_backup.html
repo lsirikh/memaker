@@ -1,0 +1,59 @@
+{% extends "accounts/index.html" %}
+{% load i18n static %}
+{% block accounts %}
+{% load staticfiles%}
+
+<div class="col-md-8">
+    <div class="container">
+        <h1>Edit your account</h1>
+        <p>다음 정보의 내용을 변경해주세요.</p>
+        <form action="." method="post" enctype="multipart/form-data">
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Save changes"></p>
+        </form>
+
+
+        <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <p>다음 정보의 내용을 변경해주세요.</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">이  름</label>
+                    <input type="text" class="form-control" name="first_name">
+                </div>
+                <div class="form-group">
+                    <label for="password">이메일</label>
+                    <input type="email" class="form-control" name="password">
+                </div>
+                <div class="form-group">
+                    <label for="phone">전화번호</label>
+                    <input type="number" class="form-control" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="address">주  소</label>
+                    <input type="text" class="form-control" name="address">
+                </div>
+                <div class="form-group">
+                    <label for="description">소  개</label>
+                    <input type="text" class="form-control" name="description">
+                </div>
+                <button type="submit" class="btn btn-primary">변경하기</button>
+            </form>
+            <br>
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li style="color:red;"
+                {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <br>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock accounts %}

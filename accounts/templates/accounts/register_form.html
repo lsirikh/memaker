@@ -1,0 +1,24 @@
+{% extends "base_accounts.html" %}
+
+{% block content %}
+{% load staticfiles%}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-push-2 col-md-8">
+            <h3>회원 가입</h3>
+            <p>미메이커 서비스에 회원가입을 하시고 다양한 코딩 교육 콘텐츠와 서비스를 즐겨보세요!</p>
+            <form method="post">
+                {% csrf_token%}
+                {{form.as_p}}
+                <button class="btn btn-primary" type="submit" name="button">등록하기</button>
+            </form>
+            <br>
+            <p>아이디가 생각나지 않습니다.<a href="">아이디 찾기</a></p>
+            <p>비밀번호가 생각나지 않습니다.<a href="{% url 'accounts:password_reset'%}">비밀번호 찾기</a></p>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends "base_accounts.html" %}
+
+{% block content %}
+{% load staticfiles%}
+
+<div class="container">
+    <div class="col-md-4">
+        <ul>
+            <li><a href="{% url 'accounts:profile'%}">회원정보</a></li>
+            <li><a href="{% url 'accounts:edit_profile'%}">회원정보 변경</a></li>
+            <li><a href="{% url 'accounts:password_change'%}">비밀번호 변경</a></li>
+            <li><a href="">메뉴</a></li>
+        </ul>
+    </div>
+    <div class="col-md-8">
+        {% block accounts%}{% endblock accounts%}
+    </div>
+
+</div>
+
+{% endblock content %}

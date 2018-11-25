@@ -1,0 +1,87 @@
+{% extends "base_lectures.html" %}
+
+{% block content %}
+{% load staticfiles%}
+
+
+<div class="container">
+    <div class="cotainer-fluid" align="center">
+        {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+    <h2 style="margin:30px 20px 30px 20px;"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>추천 강의
+    </h2>
+    <hr>
+    <div class="row">
+        {% if lecture_list %}
+        {% for lecture in lecture_list %}
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <img src="{{lecture.thumbnail.url}}" alt="...">
+                <div class="caption">
+                    <h4>{{ lecture.title|truncatechars:23 }}</h4>
+                    <p>{{ lecture.description|truncatechars:55 }}</p>
+                    <p align="center">
+                        <a href="{% url 'lectures:lecture_detail' lecture.id%}" class="btn btn-primary" role="button">수강하기</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-md-12" align="center">
+            <div class="well well-lg" align="center"
+                 style="max-width:600px;height:100px;text-align:center;margin-left:-8px;">
+                제품 준비중입니다.<br>
+                항상 더 나은 교육 콘텐츠품 및 교보재로 찾아가는 미메이커가 되겠습니다.<br>
+                감사합니다.
+            </div>
+        </div>
+        {%endif%}
+    </div>
+    <div class="cotainer-fluid" align="center">
+        {% if is_paginated %}
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}
+
