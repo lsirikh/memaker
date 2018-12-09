@@ -15,48 +15,71 @@ Including another URLconf
 """
 from django.urls import path, re_path, reverse_lazy
 
-from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import (
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView
+)
+from django.contrib.auth import views
+
 
 from accounts import views as account_views
+from accounts.forms import PasswordChangeForm
 
 app_name = 'accounts'
 urlpatterns = [
     # /accounts/
     # re_path(r'^', include('django.contrib.auth.urls')),
-    re_path(r'^$', account_views.AccountsIndexView.as_view(
-    ), name="index"),
+    path('', account_views.AccountsIndexView.as_view(), name="index"),
+    #path('', account_views.index_view, name="index"),
     # re_path(r'^login/$', login, {'template_name' : 'accounts/login.html'})
     re_path(r'^login/$', account_views.login_view, name='login'),
     re_path(r'^logout/$', account_views.logout_view, name="logout"),
+    re_path(r'^withdrawal/$', account_views.withdrawal_view, name="withdrawal"),
+    re_path(r'^withdrawal/done$', account_views.withdrawal_done_view, name="withdrawal_done"),
     re_path(r'^register/$', account_views.register_view, name="register"),
+    re_path(r'^account_activation_sent/$', account_views.account_activation_sent, name='account_activation_sent'),
+    re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+            account_views.activate, name='activate'),
+
     re_path(r'^profile/$', account_views.profile_view, name="profile"),
     re_path(r'^profile/edit/$', account_views.edit_profile_view, name="edit_profile"),
 
     # path('password_change/', account_views.change_password_view, name='password_change'),
 
-    path('password_change/', auth_views.PasswordChangeView.as_view(
-        # form_class = PasswordChangeForm,
+    path('find_id/', account_views.find_id_view, name='find_id'),
+
+    path('password_change/', PasswordChangeView.as_view(
+        form_class = PasswordChangeForm,
         success_url=reverse_lazy('accounts:password_change_done'),
         template_name='accounts/password_change.html',
     ), name='password_change'),
 
-    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(
-        template_name='accounts/index.html',
+    path('password_change/done/', PasswordChangeDoneView.as_view(
+        template_name='accounts/password_change_done.html',
     ), name='password_change_done'),
 
     # reset password urls
     path('password_reset/',
-         auth_views.PasswordResetView.as_view(
-             #success_url=reverse_lazy('accounts:password_reset_done'),
-             #template_name='accounts/password_reset_form.html',
-             #email_template_name='accounts/password_reset_email.html',
+         views.PasswordResetView.as_view(
+             # success_url=reverse_lazy('accounts:password_reset_done'),
+             success_url=reverse_lazy('accounts:password_reset_done'),
+             template_name='accounts/password_reset_form.html',
+             email_template_name='accounts/password_reset_email.html',
+             subject_template_name='accounts/password_reset_subject.txt'
          ), name='password_reset'),
-    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
-    path('password_reset/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
-
+    path('password_reset/done/', views.PasswordResetDoneView.as_view(
+        template_name='accounts/password_reset_done.html'
+    ), name='password_reset_done'),
+    path('password_reset/confirm/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(
+        template_name='accounts/password_reset_confirm.html',
+        success_url=reverse_lazy('accounts:password_reset_complete')
     ), name='password_reset_confirm'),
-    path('reset/done/',
-         auth_views.PasswordResetCompleteView.as_view(
-         ), name='password_reset_complete')
+    path('password_reset/confirm/done/', views.PasswordResetCompleteView.as_view(
+        template_name='accounts/password_reset_complete.html',
+    ), name='password_reset_complete')
 
 ]

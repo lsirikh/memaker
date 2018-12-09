@@ -4,15 +4,16 @@
 {% load staticfiles%}
 
 <div class="container">
-    <div class="col-md-4">
+    <div class="col-md-2 col-xs-12">
         <ul>
-            <li><a href="{% url 'accounts:profile'%}">회원정보</a></li>
-            <li><a href="{% url 'accounts:edit_profile'%}">회원정보 변경</a></li>
-            <li><a href="{% url 'accounts:password_change'%}">비밀번호 변경</a></li>
-            <li><a href="">메뉴</a></li>
+            <li><h4><a href="{% url 'accounts:index'%}">관심정보</a></h4></li>
+            <li><h4><a href="{% url 'accounts:profile'%}">회원정보</a></h4></li>
+            <li><h4><a href="{% url 'accounts:edit_profile'%}">회원정보 변경</a></h4></li>
+            <li><h4><a href="{% url 'accounts:password_change'%}">비밀번호 변경</a></h4></li>
         </ul>
+
     </div>
-    <div class="col-md-8">
+    <div class="col-md-10 col-xs-12">
         {% block accounts%}{% endblock accounts%}
     </div>
 

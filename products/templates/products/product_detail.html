@@ -66,11 +66,21 @@
             </div>
 
             <!-- Botones de compra -->
+
             <div class="section" style="padding-bottom:20px;">
                 <button class="btn btn-success"><span style="margin-right:20px"
                                                       class="glyphicon glyphicon-shopping-cart"
                                                       aria-hidden="true"></span>구매하러가기
                 </button>
+                <span>
+                    {% if isRegistered == True%}
+                    <a href="{%url 'products:favorite_add' object.pk %}" class="btn btn-primary" role="button"
+                       disabled="disabled">관심강의</a>
+                    {% else %}
+                    <a href="{%url 'products:favorite_add' object.pk %}" class="btn btn-primary" role="button">관심강의</a>
+                    {% endif %}
+
+                </span>
             </div>
         </div>
 

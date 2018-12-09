@@ -34,6 +34,15 @@
                         <div>
                             <h5 class="attr2">8~17세</h5>
                         </div>
+                        <p>
+                            {% if isRegistered == True%}
+                            <a href="{%url 'lectures:favorite_add' object.pk %}" class="btn btn-primary" role="button"
+                               disabled="disabled">관심강의</a>
+                            {% else %}
+                            <a href="{%url 'lectures:favorite_add' object.pk %}" class="btn btn-primary" role="button">관심강의</a>
+                            {% endif %}
+
+                        </p>
                     </div>
                     <div class="section" style="padding-bottom:5px;">
                         <h4 class="title-attr">
@@ -146,6 +155,7 @@ $('#myTab a[href="#home"]').tab('show') // Select tab by name
 {% for detail in object.video_set.all%}
 $('#myTab a[href="#{{forloop.counter}}강"]').tab('show') // Select tab by name
 {% endfor %}
+
 
 
 

@@ -4,8 +4,6 @@
     <title>{%block title%}만들면서 배우는 코딩 교육 서비스 '미메이커'{%endblock%}</title>
 
 
-    {% load staticfiles %}
-
     <!-- Bootstrap core CSS -->
     {% load staticfiles %}
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -58,13 +56,16 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         {%block menu%}{%endblock menu%}
+                        {% if request.user.is_superuser %}
                         <li><a href="/admin">Admin Setting</a></li>
+                        {% endif %}
                     </ul>
                     <!-- login side -->
                     <ul class="nav navbar-nav navbar-right">
                         {% if request.user.is_authenticated %}
-                        <li><a href="{% url 'accounts:profile'%}"><span class="glyphicon glyphicon-user"></span> {{request.user}}</a></li>
-                        <li><a href="{% url 'accounts:logout'%}"><span class="glyphicon glyphicon-log-in" ></span> Logout</a>
+                        <li><a href="{% url 'accounts:index'%}"><span class="glyphicon glyphicon-user"></span>
+                            {{request.user}}</a></li>
+                        <li><a href="{% url 'accounts:logout'%}"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
                         </li>
                         {% else %}
                         <li><a href="{% url 'accounts:register'%}"><span class="glyphicon glyphicon-user"></span> Sign
@@ -94,15 +95,108 @@
 <!--<div id="container">
 </div>-->
 
-
+<br>
+<br>
 <!-- FOOTER -->
+
 <footer>
-    <div class="container-fluid" id="footer">
-        <hr>
-        {% block footer %}{% endblock %}
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>만들면서 배우는 코딩 교육 서비스 me:maker <br>
-            &copy; 2017 Openfingers Co., Ltd.</p>
+    {% block footer %}{% endblock %}
+    <style type="text/css">
+    .table-borderless > tbody > tr > td,
+    .table-borderless > tbody > tr > th,
+    .table-borderless > tfoot > tr > td,
+    .table-borderless > tfoot > tr > th,
+    .table-borderless > thead > tr > td,
+    .table-borderless > thead > tr > th,
+    .table-borderless > thead > tr > th {
+        border: none;
+        color:#FDFEFE;
+    }
+    .table-borderless > tbody > tr > th > a,
+    .table-borderless > tbody > tr > td > a,
+    .table-borderless > thead > tr > td > a,
+    .table-borderless > thead > tr > th > a {
+        color:#FDFEFE;
+    }
+
+    .company_info,
+    .company_help {
+        color:#FDFEFE;
+    }
+
+
+
+
+    </style>
+
+    <div class="container-fluid" id="footer" style="background:#8E44AD;">
+        <br>
+        <br>
+        <div class="container">
+            <div class="col-md-4" align="center">
+                <span><img style="width: auto; height: 150px;" src="{% static 'img/memaker_logo.png' %}"></span>
+                <span></span>
+                <span><img src="{% static 'img/2018_hiseoul.png' %}" style="width: auto; height: 150px;"
+                           alt="하이서울어워드"></span>
+            </div>
+            <div class="col-md-8">
+
+                <table class="table table-borderless">
+                    <thead>
+                    <tr>
+                        <th><a href="{% url 'intro:index'%}" >미메이커소개</a><br></th>
+                        <th><a href="{% url 'products:index'%}" >교재와 교보재</a><br></th>
+                        <th><a href="{% url 'lectures:index'%}" >온라인 강의</a></th>
+                        <th><a href="#" >미메이커 채널</a><br></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td></td>
+                        <td><a href="{% url 'products:board_list'%}" style="color:#FDFEFE;">코딩보드 및 센서</a></td>
+                        <td><a href="{% url 'lectures:entry_list'%}" style="color:#FDFEFE;">엔트리</a></td>
+                        <td><a href="https://www.youtube.com/channel/UCO9KRKx0byocVrz3Zmh9mjw" style="color:#FDFEFE;">미메이커 유투브</a></td>
+
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a href="{% url 'products:kit_list'%}" >조립 키트</a></td>
+                        <td><a href="{% url 'lectures:maker_list'%}" >메이커</a></td>
+                        <td><a href="https://www.facebook.com/www.memaker.co.kr/" >미메이커 페이스북</a></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a href="{% url 'products:unpluged_list'%}" >언플러그드</a></td>
+                        <td><a href="{% url 'lectures:scratch_list'%}" >스크래치</a></td>
+                        <td><a href="https://blog.naver.com/openfingers" >미메이커 블로그</a></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a href="{% url 'products:book_list'%}" >교재</a></td>
+                        <td></td>
+                        <td><a href="" >미메이커 브로셔</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="container">
+             <hr>
+            <div class="company_info col-md-8" >
+                회사명 : (주)오픈핑거스 | 대표 : 이기호 | 이메일 : openfingers@openfingers.com<br>
+                대표전화 : 031 365 5315 | 팩스 : 031 365 5317 | 카카오톡ID : 미메이커<br>
+                사업자등록번호 : 708-88-00591 | 통신판매업등록번호 : 2017-경기안산-0903<br>
+                주소 : 경기도 안산시 단원구 연수원로 87 중소기업연수원 창의관 109
+            </div>
+            <div class="company_help col-md-4" style="color:#FDFEFE;">
+                학습지원센터 031-365-5315<br><br>
+                © 2017 Openfingers. All rights reserved.
+            </div>
+        </div>
+        <br>
+        <br>
     </div>
 </footer>
 

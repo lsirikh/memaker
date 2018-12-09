@@ -1,0 +1,73 @@
+{% extends "accounts/index.html" %}
+
+{% block accounts %}
+{% load staticfiles%}
+<h3>나의 관심 강좌</h3>
+<div class="row">
+    {% if user_profile.favorite_lecture.all.count > 0 %}
+    {% for lecture in user_profile.favorite_lecture.all %}
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{{lecture.thumbnail.url}}" alt="...">
+            <div class="caption">
+                <h4>{{ lecture.title|truncatechars:20 }}</h4>
+                <p>{{ lecture.description|truncatechars:40 }}</p>
+                <p align="center"><span>
+                            <a href="{% url 'lectures:lecture_detail' lecture.id%}" class="btn btn-primary"
+                               role="button">수강하기</a>
+                        </span>
+                    <span>
+                            <a href="{% url 'lectures:favorite_sub' lecture.id%}" class="btn btn-warning"
+                               role="button">관심해제</a>
+                        </span></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-md-10" align="center">
+        <div class="well well-lg" align="center"
+             style="max-width:600px;height:100px;text-align:center;margin-left:-8px;">
+            수강중인 강의가 없습니다.
+        </div>
+    </div>
+    {%endif%}
+
+</div>
+
+<h3>나의 관심 상품</h3>
+
+
+<div class="row">
+    {% if user_profile.favorite_product.all.count > 0 %}
+    {% for product in user_profile.favorite_product.all %}
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{{product.thumbnail.url}}" alt="...">
+            <div class="caption">
+                <h4>{{ product.title|truncatechars:20 }}</h4>
+                <p>{{ product.description|truncatechars:40 }}</p>
+                <p align="center"><span>
+                            <a href="{% url 'products:product_detail' product.id%}" class="btn btn-primary"
+                               role="button">수강하기</a>
+                        </span>
+                    <span>
+                            <a href="{% url 'products:favorite_sub' product.id%}" class="btn btn-warning"
+                               role="button">관심해제</a>
+                        </span></p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-md-12 col-sm-12" align="center">
+        <div class="well well-lg" align="center"
+             style="max-width:600px;height:100px;text-align:center;margin-left:-8px;">
+            현재 관심 상품이 없습니다.
+        </div>
+    </div>
+    {%endif%}
+
+</div>
+
+{% endblock accounts %}

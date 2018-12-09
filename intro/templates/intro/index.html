@@ -47,21 +47,22 @@
 
         <!-- START THE FEATURETTES -->
         <div class="container marketing">
-
-            <h1 align="center">미메이커 교육 구성</h1>
+            <div class="col-md-12 col-sm-12">
+                <h1 align="center">미메이커 교육 구성</h1>
+            </div>
             <hr class="featurette-divider">
             {% if model_list %}
             {% for intro in model_list %}
             {% if forloop.counter|divisibleby:2 %}
 
             <div class="row featurette" align="center">
-                <div class="col-md-7">
+                <div class="col-md-7 col-sm-12">
 
                     <h2 class="featurette-heading"><img src="{{intro.character.url}}">{{intro}}<span
                             class="text-muted"></span></h2>
                     <h3 class="lead">{{intro.content|linebreaks}}</h3>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 col-sm-12">
                     <img class="featurette-image img-responsive center-block" src="{{intro.image.url}}"
                          alt="Generic placeholder image">
                 </div>
@@ -70,14 +71,14 @@
             <hr class="featurette-divider">
             {% else %}
             <div class="row featurette" align="center">
-                <div class="col-md-7 col-md-push-5">
+                <div class="col-md-7 col-md-push-5 col-sm-12">
 
-                    <h2 class="featurette-heading"><img src="{{intro.character.url}}">{{intro}}<span
+                    <h3 class="featurette-heading"><img src="{{intro.character.url}}">{{intro}}<span
                             class="text-muted"></span>
-                    </h2>
+                    </h3>
                     <h3 class="lead">{{intro.content|linebreaks}}</h3>
                 </div>
-                <div class="col-md-5 col-md-pull-7">
+                <div class="col-md-5 col-md-pull-7 col-sm-12">
                     <img class="featurette-image img-responsive center-block" src="{{intro.image.url}}"
                          alt="Generic placeholder image">
                 </div>
@@ -95,6 +96,6 @@
 
 
     </div>
+</div>
 
-
-    {% endblock content %}
+{% endblock content %}

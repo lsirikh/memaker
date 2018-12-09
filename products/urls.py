@@ -16,11 +16,10 @@ Including another URLconf
 from . import views
 from django.urls import path
 
-
 app_name = 'products'
 urlpatterns = [
     # /products/
-    #path('', views.ProductModelView.as_view(), name='index'),
+    # path('', views.ProductModelView.as_view(), name='index'),
     path('', views.ProductListView.as_view(), name='index'),
     # /products/#_list/
     path('unpluged_list/', views.UnplugedListView.as_view(), name='unpluged_list'),
@@ -29,4 +28,6 @@ urlpatterns = [
     path('board_list/', views.BoardListView.as_view(), name='board_list'),
     # /products/11/99
     path('<int:pk>/', views.ProductDetailView.as_view(), name='product_detail'),
+    path('add/<int:pk>/', views.favorite_add_view, name='favorite_add'),
+    path('sub/<int:pk>/', views.favorite_sub_view, name='favorite_sub'),
 ]

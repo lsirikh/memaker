@@ -1,0 +1,28 @@
+{% extends "accounts/index.html" %}
+{% load i18n static %}
+
+{% block accounts %}
+{% load staticfiles%}
+
+<div class="panel panel-primary">
+    <div class="panel-heading"><h3>회원 탈퇴</h3></div>
+    <div class="panel-body">
+        <form action="" method="post">
+            {% csrf_token%}
+            {% for field in user_form %}
+            <p>
+                {{ field.label_tag }}<br>
+                {{ field }}
+                {% if field.help_text %}
+                <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+
+                <p style="color: red">{{ messages }}</p>
+            </p>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit" name="button">탈퇴하기</button>
+        </form>
+    </div>
+</div>
+
+{% endblock accounts %}
