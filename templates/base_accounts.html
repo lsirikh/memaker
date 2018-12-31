@@ -33,7 +33,18 @@
         <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
     </ul>
 </li>
-
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">공유게시판<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/boards">공유게시판</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{%url 'boards:board_topic' pk=1%}">코딩 강의</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=2%}">코딩 보드</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=3%}">3D모델링 및 출력</a></li>
+    </ul>
+</li>
 <!--------------------------------------------메뉴 종료------------------------------------------------------>
 {%endblock menu%}
 
@@ -68,8 +79,10 @@ font-weight: bold
 <div class="container-fluid">
     <div class="jumbotron jumbotron-fluid">
         <div class="container" style="color:white;" align="center">
-            <h2>4차 산업혁명시대 필수! 만들면서 배우는 코딩 교육 서비스.</h2>
-            <p>4차 산업혁명 시대에 필수 지식!미메이커에서 진행하는 차별화된 창의 교육 콘텐츠로 학생 교육에 활용해보세요.</p>
+            <div class="me_title1">"미메이커" 서비스에 가입하시고 다양한 메이커&코딩의 세계를 경험하세요.</div>
+            <div class="me_title3">지금 미메이커 서비스에 가입하시면 다양한 강의와 교육 콘텐츠를 무료로 즐기실 수 있습니다.<br>
+            4차 산업혁명시대 꼭! 필요한 코딩 교육 이제 미메이커와 함께하시면 재미와 지식을 모두 잡으실 수 있습니다.
+            </div>
         </div>
     </div>
 </div>

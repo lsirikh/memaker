@@ -19,6 +19,8 @@ from memaker import views #add for landingpage
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+#from ckeditor_uploader import views as uploader_views
+
 
 app_name='memaker'
 urlpatterns = [
@@ -30,6 +32,10 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('lectures/', include('lectures.urls')),
     path('accounts/', include('accounts.urls')),
+    path('boards/', include('boards.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    #path('ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
+    #path('ckeditor/browse/', uploader_views.browse, name='ckeditor_browse'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

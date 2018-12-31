@@ -1,7 +1,24 @@
 {% autoescape off %}
-Hi {{ user.username }},
+{{ user.first_name }}님 안녕하세요.
 
-Please click on the link below to confirm your registration:
+만들면서 배우는 코딩 교육서비스 '미메이커'입니다.
+
+가입을 환영합니다!
+
+미메이커 코딩교육 서비스를 정상적으로 이용하시기 위해서는 아래 링크로 이메일 확인을 해주시면,
+
+서비스를 바로 이용하실 수 있습니다.
+
+언제나 즐겁고 재미있는 코딩과 메이커 교육을 제공하기 위해 최선을 다하겠습니다.
+
+아래 링크를 통해 계정을 활성화 해주세요.
 
 http://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}
+
+감사합니다.
+
+만들면서 배우는 코딩 교육 서비스 '미메이커' www.memaker.co.kr
+
+(주)오픈핑거스
+
 {% endautoescape %}

@@ -5,7 +5,11 @@
 {% load staticfiles%}
 
 <div class="panel panel-primary">
-    <div class="panel-heading"><h3>회원 탈퇴</h3></div>
+    <div class="panel-heading">
+        <div class="row">
+            <div class="me_title1">회원 탈퇴</div>
+        </div>
+    </div>
     <div class="panel-body">
         <form action="" method="post">
             {% csrf_token%}
@@ -17,7 +21,7 @@
                 <small style="color: grey">{{ field.help_text }}</small>
                 {% endif %}
 
-                <p style="color: red">{{ messages }}</p>
+            <p style="color: red">{{ messages }}</p>
             </p>
             {% endfor %}
             <button class="btn btn-primary" type="submit" name="button">탈퇴하기</button>

@@ -5,16 +5,24 @@
 
 <div class="container">
     <div class="row">
-        <div class="panel panel-primary">
-            <div class="panel-heading"><h3>{% block content_title %}아이디 확인{% endblock %}</h3></div>
+        <div class="col-md-push-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {% block content_title %}
+                    <div class="row">
+                        <div class="me_title1">아이디 확인</div>
+                    </div>
+                    {% endblock %}
+                </div>
 
-            <div class="panel-body">
-                <h4>{{user.email}}로 가입 하신 아이디는 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    {{user}} 입니다.</h4>
-                <p>로그인 하러 가기 <a href="{% url 'accounts:login'%}">로그인</a></p>
+                <div class="panel-body">
+                    <h4>{{user.email}}로 가입 하신 아이디는 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        {{user}} 입니다.</h4>
+                    <p>로그인 하러 가기 <a href="{% url 'accounts:login'%}">로그인</a></p>
+                </div>
+
+
             </div>
-
-
         </div>
     </div>
 </div>

@@ -2,31 +2,42 @@
 
 {% block accounts %}
 {% load staticfiles%}
+<div class="row">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3>회원 정보</h3>
+            <div class="row">
+                <div class="me_title1">회원 정보</div>
+            </div>
         </div>
         <div class="panel-body">
-            <ul>
-                <li style="padding:5px;"><h4>아이디 : {{ user.username}}</h4></li>
-                <li style="padding:5px;"><h4>이메일 : {{ user.email}}</h4></li>
-                <li style="padding:5px;"><h4>이 름 : {{ user.first_name}}</h4></li>
-                {% if user_profile.birth %}
-                <li style="padding:5px;"><h4>생년월일 : {{ user_profile.birth}}</h4></li>
-                {% endif %}
-                {% if user_profile.gender %}
-                <li style="padding:5px;"><h4>성 별 : {{ user_profile.gender}}</h4></li>
-                {% endif %}
-                {% if user_profile.phone %}
-                <li style="padding:5px;"><h4>연락처 : {{ user_profile.phone}}</h4></li>
-                {% endif %}
-                {% if user_profile.address %}
-                <li style="padding:5px;"><h4>주 소 : {{ user_profile.address}}</h4></li>
-                {% endif %}
-                {% if user_profile.description %}
-                <li style="padding:5px;"><h4>소 개 : {{ user_profile.description}}</h4></li>
-                {% endif %}
-            </ul>
+            <div class="row">
+                <ul>
+                    <li style="padding:5px;"><div class="me_title3">사 진 : </div><span><img src="{{user_profile.thumbnail.url}}" alt=""
+                                                                       class="img-thumbnail"></span></li>
+                    <li style="padding:5px;"><div class="me_title3">아이디 : {{ user.username}}</div></li>
+                    <li style="padding:5px;"><div class="me_title3">이메일 : {{ user.email}}</div></li>
+                    <li style="padding:5px;"><div class="me_title3">이 름 : {{ user.first_name}}</div></li>
+                    {% if user_profile.birth %}
+                    <li style="padding:5px;"><div class="me_title3">생년월일 : {{ user_profile.birth}}</div></li>
+                    {% endif %}
+                    {% if user_profile.gender %}
+                    <li style="padding:5px;"><div class="me_title3">성 별 : {{ user_profile.gender}}</div></li>
+                    {% endif %}
+                    {% if user_profile.phone %}
+                    <li style="padding:5px;"><div class="me_title3">연락처 : {{ user_profile.phone}}</div></li>
+                    {% endif %}
+                    {% if user_profile.address %}
+                    <li style="padding:5px;"><div class="me_title3">주 소 : {{ user_profile.address}}</div></li>
+                    {% endif %}
+                    {% if user_profile.description %}
+                    <li style="padding:5px;"><div class="me_title3">소 개 : {{ user_profile.description}}</div></li>
+                    {% endif %}
+                    {% if user_profile.route %}
+                    <li style="padding:5px;"><div class="me_title3">가입경로 : {{ user_profile.get_route_display}}</div></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </div>
+</div>
 {% endblock accounts %}

@@ -78,6 +78,55 @@ class RegistrationForm(UserCreationForm):
 
         return user
 
+class RegistrationProfileForm(UserChangeForm):
+    def __init__(self, *args, **kargs):
+        super(UserChangeForm, self).__init__(*args, **kargs)
+        del self.fields['password']
+
+    REGISTER_ROUTE = (
+        ('BLG', '네이버블로그'),
+        ('SRC', '인터넷검색'),
+        ('NWS', '뉴스 및 기사'),
+        ('FBK', '페이스북'),
+        ('ING', '인스타그램'),
+        ('REC', '지인소개'),
+        ('EDU', '강의교육'),
+        ('ETC', '기타'),
+    )
+
+    route = forms.ChoiceField(
+        label='가입경로',
+        required=False,
+        help_text="회원 가입시 \'미메이커\'사이트를 알게 되신 경로를 말씀해 주세요.",
+        widget=forms.RadioSelect(),
+        choices=REGISTER_ROUTE)
+
+    agree = forms.BooleanField(
+        label = '정보제공 동의',
+        required=True,
+        help_text= "회원 가입에 관한 정보를 제공합니다.",
+        widget=forms.CheckboxInput()
+    )
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            'route',
+            'agree',
+        )
+
+    def save(self, commit=True):
+        userprofile = super(RegistrationProfileForm, self).save(commit=False)
+        userprofile.route = self.cleaned_data['route']
+        userprofile.agree = self.cleaned_data['agree']
+
+        if commit:
+            userprofile.save()
+
+        return userprofile
+
+
+
 
 #class UserEditForm(forms.ModelForm):
 class UserEditForm(UserChangeForm):
@@ -108,22 +157,47 @@ class ProfileEditForm(UserChangeForm):
 
     class Meta:
         model = UserProfile
-        fields = ('gender',
+        fields = ('image',
+                  'gender',
                   'birth',
                   'address',
                   'phone',
-                  'description')
+                  'description',
+                  'route',
+                  )
 
     GENDER_CHOICES = (
         ('남', '남자'),
         ('여', '여자'),
     )
 
+    REGISTER_ROUTE = (
+        ('BLG', '네이버블로그'),
+        ('SRC', '인터넷검색'),
+        ('NWS', '뉴스 및 기사'),
+        ('FBK', '페이스북'),
+        ('ING', '인스타그램'),
+        ('REC', '지인소개'),
+        ('EDU', '강의교육'),
+        ('ETC', '기타'),
+    )
+
+    image = forms.ImageField(
+        label='사  진',
+        required=False,
+        help_text='정사각형 형태의 이미지 파일을 등록해 주세요. 예) 가로 400px 세로 400px',
+        widget=forms.FileInput(attrs={'class': 'form-control'})
+        )
     gender = forms.ChoiceField(
         label='성  별',
         required=False,
         help_text='성별을 선택해주세요.',
         widget=forms.RadioSelect(), choices=GENDER_CHOICES)
+    route = forms.ChoiceField(
+        label='가입경로',
+        required=False,
+        help_text="회원 가입시 \'미메이커\'사이트를 알게 되신 경로를 말씀해 주세요.",
+        widget=forms.RadioSelect(), choices=REGISTER_ROUTE)
     birth = forms.DateField(
         label='생년월일',
         required=False,

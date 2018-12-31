@@ -1,0 +1,33 @@
+{% extends "base_boards.html" %}
+
+{% block content %}
+{% load staticfiles%}
+
+<div class="container">
+
+    <div class="me_title2">
+        <a href="{%url 'boards:index'%}">
+        <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
+        공유게시판</a> >
+        <a href="{%url 'boards:board_topic' pk=board.pk%}">{{board.name}}</a> >
+        <a href="{% url 'boards:board_content' pk=topic.board.id topic_pk=topic.id  %}">{{topic.title|truncatechars:20}}</a>
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{form.media}}
+                {{form.as_p}}
+                <div class="row">
+                    <div class="col-md-offset-10 col-md-2">
+                        <button type="submit" class="btn btn-success btn-block">수정하기</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock content %}

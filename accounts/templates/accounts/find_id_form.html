@@ -6,43 +6,42 @@
 
 {% block content %}
 <div class="container">
-
-    <div class="row">
-        <div class="col-md-push-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><h3>아이디가 기억나지 않으시나요?</h3></div>
-                <div class="panel-body">
-                    <p>
-			계정을 등록하실 때 사용하신 이메일 주소를 입력하고 버튼을 클릭하세요.
-                        회원가입 시, 사용하셨던 아이디를 알 수 있습니다.
-                        (단, 회원가입 시, 입력하신 이메일 주소도 기억나지 않는다면, openfingers@openfingers.com으로 문의주시기 바랍니다.)
-		    </p>
-
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="email">이메일</label>
-                            <input type="text" class="form-control" name="email" placeholder="가입시 사용하신 이메일을 입력하세요.">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">아이디 찾기</button>
-                    </form>
-                    <br>
-                    {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                        <li style="color:red;"
-                            {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    <br>
-                    <p>비밀번호가 생각나지 않습니다.<a href="{% url 'accounts:password_reset'%}">비밀번호 찾기</a></p>
-                </div>
+    <div class="col-md-push-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="me_title1">아이디가 기억나지 않으시나요?</div>
             </div>
+            <div class="panel-body">
+                <p>
+                    계정을 등록하실 때 사용하신 이메일 주소를 입력하고 버튼을 클릭하세요.
+                    회원가입 시, 사용하셨던 아이디를 알 수 있습니다.
+                    (단, 회원가입 시, 입력하신 이메일 주소도 기억나지 않는다면, openfingers@openfingers.com으로 문의주시기 바랍니다.)
+                </p>
 
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="email">이메일</label>
+                        <input type="text" class="form-control" name="email" placeholder="가입시 사용하신 이메일을 입력하세요.">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">아이디 찾기</button>
+                </form>
+                <br>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li style="color:red;"
+                        {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <br>
+                <p>비밀번호가 생각나지 않습니다.<a href="{% url 'accounts:password_reset'%}">비밀번호 찾기</a></p>
+            </div>
         </div>
+
     </div>
 
 </div>

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.contrib.auth.forms import (
     UserChangeForm,
     AuthenticationForm,
@@ -20,6 +21,8 @@ from django.utils.encoding import force_text
 from django.contrib.auth.hashers import check_password
 from accounts.tokens import account_activation_token
 
+#from accounts.utils.handle_upload_file import handle_uploaded_file
+
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
 
@@ -27,6 +30,7 @@ from accounts.forms import (
     LoginForm,
     #    PasswordChangeForm,
     RegistrationForm,
+    RegistrationProfileForm,
     WithdrawalForm,
     UserEditForm,
     ProfileEditForm,
@@ -76,6 +80,10 @@ def login_view(request):
         next = request.GET.get('next', '/')  # next 기능은 작동 안됨
         return redirect(next)
     ##########################################################
+
+    #messages = ""
+
+
 
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
@@ -227,14 +235,58 @@ def register_view(request):
     ##########################################################
 
     print("====register_view execute===")
+    messages = ""
 
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
+        form_profile = RegistrationProfileForm(request.POST)
+
+        ##################테스트 프린팅#################
         #username = request.POST.get('username')
-        #email = request.POST.get('email')
         #print("email : " + str(email) + " username " + str(username))
 
-        if form.is_valid():
+        email = request.POST.get('email')
+        agree = request.POST.get('agree')
+
+        try:
+            if agree != 'on':
+                messages = '정보 제공에 동의하셔야 합니다.'
+                print("정보 제공 동의 안함")
+                return render(request,
+                              'accounts/register_form.html',
+                              {'form': form,
+                               'form_profile': form_profile,
+                               'messages': messages,
+                               })
+            else:
+                messages = ''
+                print("정보 제공 동의")
+        except:
+            print("정보 제공 동의 확인 에러")
+            pass
+
+
+        try:
+            user_objects = User.objects.all()
+            for user in user_objects:
+                if email == user.email:
+                    messages ='등록된 이메일 입니다.'
+                    print("등록된 이메일 입니다.")
+                    return render(request,
+                                  'accounts/register_form.html',
+                                  {'form': form,
+                                   'form_profile': form_profile,
+                                   'messages': messages,
+                                   })
+
+            messages = ''
+            print("사용 가능한 이메일 주소.")
+        except:
+            print("사용 가능한 이메일 주소 확인 에러")
+            pass
+
+
+        if form.is_valid() and form_profile.is_valid():
             #이메일 인증이 없는 형태의 회원 가입
             #form.save()
             #username = form.cleaned_data.get('username')
@@ -242,26 +294,55 @@ def register_view(request):
             #user = authenticate(username=username, password=raw_password)
             #login(request, user)
             #return HttpResponseRedirect('/')
+
             #이메일 인증이 가능한 회원 가입, 이메일을 인증해야 계정이 활성화 됨.
             user = form.save(commit=False)
             user.is_active = False
+
             user.save()
+
+            #profile_data.route = form_profile.cleaned_data.get('route')
+            #form_profile.save()
+
+            try:
+                profile_data = user.userprofile
+                get_route = form_profile.cleaned_data.get('route')
+                if get_route is not "":
+                    print("가입경로 선택 : "+str(get_route))
+                    profile_data.route = get_route
+                    profile_data.save()
+                else:
+                    print("가입경로 선택 안됨.....")
+            except:
+                print("가입경로 선택 확인 에러")
+                pass
+
             current_site = get_current_site(request)
-            subject = '이메일로 보내진 링크를 이용하여 계정을 활성화하세요.'
+            subject = '가입을 환영합니다. 만들면서 배우는 코딩교육 미메이커입니다. 링크를 이용하여 계정을 활성화하세요.'
             message = render_to_string('accounts/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
+            user.email_user(subject, message, from_email='openfingers@openfingers.com')
             return redirect('accounts:account_activation_sent')
     else:
         form = RegistrationForm()
+        form_profile = RegistrationProfileForm()
 
-    return render(request, 'accounts/register_form.html',  {'form': form})
+
+    return render(request, 'accounts/register_form.html',  {'form': form,
+                                   'form_profile': form_profile,
+                                   'messages': messages,
+                                   })
 
 def account_activation_sent(request):
+    ################로그인 된 경우 redirect######################
+    if auth.get_user(request).is_authenticated:
+        next = request.GET.get('next', '/')  # next 기능은 작동 안됨
+        return redirect(next)
+    ##########################################################
     return render(request, 'accounts/account_activation_sent.html')
 
 def activate(request, uidb64, token):
@@ -286,7 +367,7 @@ def activate(request, uidb64, token):
 def profile_view(request):
     # UserProfile.objects.get을 통해 싱글 오브젝트 retrive하기
     user_profile = UserProfile.objects.get(user__username=request.user)
-
+    print(get_current_site(request))
     args = {'user': request.user, 'user_profile': user_profile}
     return render(request, 'accounts/profile.html', args)
 
@@ -300,15 +381,29 @@ def edit_profile_view(request):
         user_form = UserEditForm(data=request.POST,
                                  instance=request.user)
         # print(str(user_form))
-        # print(user_form['first_name'])
-        # print(user_form['email'])
+        #print(user_form['first_name'])
+
         profile_form = ProfileEditForm(
             instance=request.user.userprofile,
-            data=request.POST
-            #    files=request.FILES #use this code if image or etc file to be loaded
+            data=request.POST,
+            files=request.FILES #use this code if image or etc file to be loaded
         )
 
+        image_ = request.POST.get('image')
+        print(str(image_))
+
         if user_form.is_valid() and profile_form.is_valid():
+            # user_profile = UserProfile.objects.get(user=request.user)
+            # user_profile.image = profile_form.cleaned_date['image']
+            image = profile_form.cleaned_data['image']
+            print("is_valid : " + str(image))
+            try:
+                image_file = request.FILES['image']
+                print("is_valid of FILE : " +str(image_file))
+                print(image_file.name)
+                print(image_file.size)
+            except:
+                print("Image file is not loaded.....")
             user_form.save()
             profile_form.save()
             return redirect('/accounts/profile')

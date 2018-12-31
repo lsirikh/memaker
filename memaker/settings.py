@@ -15,23 +15,22 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = ''
+# SECRET_KEY = ''
 with open(os.path.join(BASE_DIR, 'static', 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
+# DEBUG = False
 DEBUG = True
 
 # For test, this comment needs to be discarded.
 ALLOWED_HOSTS = ['127.0.0.1']
 # For operational, this comment needs to be discarded.
-#ALLOWED_HOSTS = ['ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
+# ALLOWED_HOSTS = ['ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
 
 
 # Application definition
@@ -43,15 +42,57 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'imagekit',
     'django.contrib.humanize',
     'easy_thumbnails',
-    'polls.apps.PollsConfig', #추가
-    'intro.apps.IntroConfig', #추가
-    'products.apps.ProductsConfig', #추가
-    'lectures.apps.LecturesConfig', #추가
-    'accounts.apps.AccountsConfig',
+    'widget_tweaks',
+
+    'ckeditor',
+    'ckeditor_uploader',
+    'polls.apps.PollsConfig',  # 추가
+    'intro.apps.IntroConfig',  # 추가
+    'products.apps.ProductsConfig',  # 추가
+    'lectures.apps.LecturesConfig',  # 추가
+    'accounts.apps.AccountsConfig',  # 추가
+    'boards.apps.BoardsConfig',  # 추가
 ]
+
+###################################CK Editor Setting################################################
+
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+
+CKEDITOR_UPLOAD_PATH = "files/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_RESTRICT_BY_USER = True
+CKEDITOR_REQUIRE_STAFF = False
+# CKEDITOR_FILENAME_GENERATOR = 'utils.get_filename'
+
+# CKEDITOR_ALLOW_NONIMAGE_FILES = False
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'height': 300,
+        'width': 'auto',
+        'toolbar_Custom': [
+            ['Styles', 'Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['TextColor', 'BGColor'],
+            ['Smiley', 'SpecialChar'], ['Source'],
+        ],
+        'extraPlugins': ','.join([
+            'clipboard',
+            'uploadimage',
+            'image2',
+        ]),
+    }
+
+}
+AWS_QUERYSTRING_AUTH = False
+
+######################################################################################################
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,7 +124,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'memaker.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -95,7 +135,6 @@ DATABASES = {
         },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -115,13 +154,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-#LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
 LANGUAGE_CODE = 'ko-KR'
-#TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
@@ -130,17 +168,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = [
-	#'home/ubuntu/memaker/memaker/',
-	os.path.join(BASE_DIR, 'static'),
+    # 'home/ubuntu/memaker/memaker/',
+    os.path.join(BASE_DIR, 'static'),
 ]
-
 
 # set the log configuration with keeping Django default setting
 
@@ -148,50 +184,59 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
-
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-
-
 LOGGING = {
-    'version':1,
-    'disable_existing_loggers':False,
-    'formatters':{
-        'verbose':{
-            'format':"[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt':"%D/%B/%Y %H:%M:%S"
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%D/%B/%Y %H:%M:%S"
         },
     },
-    'handlers':{
-        'file':{
-            'level':'DEBUG',
-            'class':'logging.FileHandler',
-            'filename':os.path.join(BASE_DIR, 'logs', 'memaker.log'),
-            'formatter':'verbose'
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'memaker.log'),
+            'formatter': 'verbose'
         },
 
     },
-    'loggers':{
-            'lectures':{
-                'handlers':['file'],
-                'level':'DEBUG'
-            },
-            'intro':{
-                'handlers':['file'],
-                'level':'DEBUG'
-            },
-            'products':{
-                'handlers':['file'],
-                'level':'DEBUG'
-            },
-            'polls':{
-                'handlers':['file'],
-                'level':'DEBUG'
-            },
+    'loggers': {
+        'lectures': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        },
+        'intro': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        },
+        'products': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        },
+        'polls': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        },
     },
 
 }
 
+#ses-smtp-user.20181231-105435
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = 'smtp.worksmobile.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'openfingers@openfingers.com'
+with open(os.path.join(BASE_DIR, 'static', 'email_key.txt')) as e:
+    EMAIL_HOST_PASSWORD = e.read().strip()
+DEFAULT_FROM_EMAIL = 'help@openfingers.com'

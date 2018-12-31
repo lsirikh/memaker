@@ -10,7 +10,7 @@
 
         <br/>
         <div class="row">
-            <h1 align="center">미메이커 서비스 특징</h1>
+            <div class="me_title0" align="center">미메이커 서비스 특징</div>
             <br/>
             <br/>
             <br/>
@@ -18,7 +18,7 @@
                 <img class="img-circle"
                      src="{% static 'img/feature01.png'%}"
                      alt="Generic placeholder image" width="140" height="140">
-                <h2>다양한 메이커활동</h2>
+                <div class="me_title1">다양한 메이커활동</div>
                 <p>미메이커 코딩보드 전용의 프로젝트 키트를 이용한 다양한 프로젝트 코딩을 제공합니다.</p>
                 <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
             </div><!-- /.col-lg-4 -->
@@ -26,7 +26,7 @@
                 <img class="img-circle"
                      src="{% static 'img/feature02.png'%}"
                      alt="Generic placeholder image" width="140" height="140">
-                <h2>손쉬운 보드 사용</h2>
+                <div class="me_title1">손쉬운 보드 사용</div>
                 <p>기존의 아두이노로 어려웠던 수업과 학습이 미메이커 코딩보드를 활용하면 10배는 쉽게 코딩의 본질을 배울 수 있습니다.</p>
                 <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
             </div><!-- /.col-lg-4 -->
@@ -34,7 +34,7 @@
                 <img class="img-circle"
                      src="{% static 'img/feature03.png'%}"
                      alt="Generic placeholder image" width="140" height="140">
-                <h2>다양한 온라인 강의</h2>
+                <div class="me_title1">다양한 온라인 강의</div>
                 <p>엔트리 코딩, 미메이커 로봇코딩, 3D 프린터 활용과 모델링 등 다양한 코딩과 메이커의 세계로 오세요!</p>
                 <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
             </div><!-- /.col-lg-4 -->
@@ -47,54 +47,54 @@
 
         <!-- START THE FEATURETTES -->
         <div class="container marketing">
-            <div class="col-md-12 col-sm-12">
-                <h1 align="center">미메이커 교육 구성</h1>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="me_title0" align="center">미메이커 교육 구성</div>
+                </div>
+                <hr class="featurette-divider">
+                {% if model_list %}
+                {% for intro in model_list %}
+                {% if forloop.counter|divisibleby:2 %}
+
+                <div class="row featurette" align="center">
+                    <div class="col-md-7 col-sm-12">
+
+                        <div class="me_title1_nopadding"><img src="{{intro.character.url}}">{{intro}}<span
+                                class="text-muted"></span></div>
+                        <div class="me_title3_nopadding">{{intro.content|linebreaks}}</div>
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                        <img class="featurette-image img-responsive center-block" src="{{intro.image.url}}"
+                             alt="Generic placeholder image">
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+                {% else %}
+                <div class="row featurette" align="center">
+                    <div class="col-md-7 col-md-push-5 col-sm-12">
+
+                        <h3 class="me_title1_nopadding"><img src="{{intro.character.url}}">{{intro}}<span
+                                class="text-muted"></span>
+                        </h3>
+                        <div class="me_title3_nopadding">{{intro.content|linebreaks}}</div>
+                    </div>
+                    <div class="col-md-5 col-md-pull-7 col-sm-12">
+                        <img class="featurette-image img-responsive center-block" src="{{intro.image.url}}"
+                             alt="Generic placeholder image">
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                <p>No Data are available.</p>
+                {% endif %}
+
             </div>
-            <hr class="featurette-divider">
-            {% if model_list %}
-            {% for intro in model_list %}
-            {% if forloop.counter|divisibleby:2 %}
-
-            <div class="row featurette" align="center">
-                <div class="col-md-7 col-sm-12">
-
-                    <h2 class="featurette-heading"><img src="{{intro.character.url}}">{{intro}}<span
-                            class="text-muted"></span></h2>
-                    <h3 class="lead">{{intro.content|linebreaks}}</h3>
-                </div>
-                <div class="col-md-5 col-sm-12">
-                    <img class="featurette-image img-responsive center-block" src="{{intro.image.url}}"
-                         alt="Generic placeholder image">
-                </div>
-            </div>
-
-            <hr class="featurette-divider">
-            {% else %}
-            <div class="row featurette" align="center">
-                <div class="col-md-7 col-md-push-5 col-sm-12">
-
-                    <h3 class="featurette-heading"><img src="{{intro.character.url}}">{{intro}}<span
-                            class="text-muted"></span>
-                    </h3>
-                    <h3 class="lead">{{intro.content|linebreaks}}</h3>
-                </div>
-                <div class="col-md-5 col-md-pull-7 col-sm-12">
-                    <img class="featurette-image img-responsive center-block" src="{{intro.image.url}}"
-                         alt="Generic placeholder image">
-                </div>
-            </div>
-
-            <hr class="featurette-divider">
-            {% endif %}
-            {% endfor %}
-            {% else %}
-            <p>No Data are available.</p>
-            {% endif %}
-
+            <!-- /END THE FEATURETTES -->
         </div>
-        <!-- /END THE FEATURETTES -->
-
-
     </div>
 </div>
 

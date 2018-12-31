@@ -3,32 +3,44 @@
 {% block menu %}
 
 <!--------------------------------------------메뉴 시작------------------------------------------------------>
-                        <li><a href="/intro">미메이커는?</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{% url 'products:index' %}">교재와 교보재</a></li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">세부항목</li>
-                                <li><a href="{% url 'products:board_list'%}">코딩보드 및 센서</a></li>
-                                <li><a href="{% url 'products:kit_list'%}">조립 키트</a></li>
-                                <li><a href="{% url 'products:unpluged_list'%}">언플러그드</a></li>
-                                <li><a href="{% url 'products:book_list'%}">교재</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-expanded="false">온라인 강의<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{% url 'lectures:index' %}">온라인 강의</a></li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">세부항목</li>
-                                <li><a href="{% url 'lectures:entry_list'%}">엔트리</a></li>
-                                <li><a href="{% url 'lectures:maker_list'%}">메이커</a></li>
-                                <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
-                            </ul>
-                        </li>
+<li><a href="/intro">미메이커는?</a></li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="{% url 'products:index' %}">교재와 교보재</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{% url 'products:board_list'%}">코딩보드 및 센서</a></li>
+        <li><a href="{% url 'products:kit_list'%}">조립 키트</a></li>
+        <li><a href="{% url 'products:unpluged_list'%}">언플러그드</a></li>
+        <li><a href="{% url 'products:book_list'%}">교재</a></li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">온라인 강의<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="{% url 'lectures:index' %}">온라인 강의</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{% url 'lectures:entry_list'%}">엔트리</a></li>
+        <li><a href="{% url 'lectures:maker_list'%}">메이커</a></li>
+        <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">공유게시판<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/boards">공유게시판</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{%url 'boards:board_topic' pk=1%}">코딩 강의</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=2%}">코딩 보드</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=3%}">3D모델링 및 출력</a></li>
+    </ul>
+</li>
 <!--------------------------------------------메뉴 종료------------------------------------------------------>
 
 
@@ -55,11 +67,12 @@
                      style="background: url('../static/img/main_slide01_2000X500.png') center center no-repeat;"
                      alt="First slide">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1>미메이커 코딩보드</h1>
-                    <p>모듈 조립형 코딩 보드로 합리적인 가격과 다양한 콘텐츠로 로봇코딩의 세계를 경험 할 수 있습니다.
+                    <div class="me_title1">미메이커 코딩보드</div>
+                    <div class="me_title2">모듈 조립형 코딩 보드로 합리적인 가격과 다양한 콘텐츠로 로봇코딩의 세계를 경험 할 수 있습니다.
                         Creative 창의성의 의미는 Create 라는 단어와 닮았습니다. 많이 만들고 고민해야만 창의성을 키울 수 있습니다.
-                        창의력이 필요한 4차 산업혁명시대 자녀와 학생의 창의력을 코딩하세요!</p>
-                    <p><a class="btn btn-lg btn-primary" href="{% url 'products:board_list' %}" role="button">구매하기</a></p>
+                        창의력이 필요한 4차 산업혁명시대 자녀와 학생의 창의력을 코딩하세요!</div>
+                    <p><a class="btn btn-lg btn-info" href="{% url 'products:board_list' %}" role="button">구매하기</a>
+                    </p>
                 </div>
             </div>
             <div class="item">
@@ -68,9 +81,9 @@
                      style="background: url('../static/img/main_slide02_2000X500.png') center center no-repeat;"
                      alt="Second slide">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1>다양한 조립활동</h1>
-                    <p>다양한 미메이커 프로젝트 키트를 활용하여 자신만의 로봇 코딩을 만들어 보세요.</p>
-                    <p><a class="btn btn-lg btn-primary" href="{% url 'products:kit_list' %}" role="button">구경하기</a></p>
+                    <div class="me_title1">다양한 조립활동</div>
+                    <div class="me_title2">다양한 미메이커 프로젝트 키트를 활용하여 자신만의 로봇 코딩을 만들어 보세요.</div>
+                    <p><a class="btn btn-lg btn-info" href="{% url 'products:kit_list' %}" role="button">구경하기</a></p>
                 </div>
             </div>
             <div class="item">
@@ -79,9 +92,9 @@
                      style="background: url('../static/img/main_slide03_2000X500.png') center center no-repeat;"
                      alt="Third slide">
                 <div class="carousel-caption d-none d-md-block">
-                    <h1>무료 강의와 교육자료</h1>
-                    <p>전문 강사의 엔트리 코딩 강의와 로봇 코딩 강의를 통해 알고리즘의 원리를 익히고,기 응용해봅시다. 4차 산업혁명 시대, 필수 언어인 코딩을 익혀보세요.</p>
-                    <p><a class="btn btn-lg btn-primary" href="{% url 'lectures:index' %}" role="button">강의듣기</a></p>
+                    <div class="me_title1">무료 강의와 교육자료</div>
+                    <div class="me_title2">전문 강사의 엔트리 코딩 강의와 로봇 코딩 강의를 통해 알고리즘의 원리를 익히고,기 응용해봅시다. 4차 산업혁명 시대, 필수 언어인 코딩을 익혀보세요.</div>
+                    <p><a class="btn btn-lg btn-info" href="{% url 'lectures:index' %}" role="button">강의듣기</a></p>
                 </div>
             </div>
         </div>
@@ -101,52 +114,57 @@
     <div class="row">
         <div class="col-lg-3" align="center">
             <img class="img-circle"
+                 src="{% static 'img/mathematics_memaker.png'%}"
+                 alt="Generic placeholder image" width="140" height="140">
+            <div class="me_title1">수학이 있는 코딩</div>
+            <p>수학이 있는 코딩은 초등학교 중학교에서 배우는 산수, 수학 단원의 핵심내용을 코딩과 접목하여 학습하는 커리큘럼입니다.
+                단순하게 스크래치나 엔트리로 블록을 쌓고 게임을 하는 것이 아니라 그 속에 수학의 원리와 개념을 학습하는 코딩 교육과정이라고 할 수 있습니다.
+                (커리큘럼 준비중)
+            </p>
+            <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-3" align="center">
+            <img class="img-circle"
                  src="{% static 'img/science_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
-            <h2>과학이 있는 코딩</h2>
-            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
-                vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-                cursus magna.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+            <div class="me_title1">과학이 있는 코딩</div>
+            <p>과학이 있는 코딩은 교과서에서 다루는 주제 혹은 우리 일상생활에서 접할 수 있는 다양한 과학상식과 지식을 코딩으로 학습하는 커리큘럼입니다.
+                과학이 있는 코딩을 통해서 상상만으로 이해하기 힘들었던 다양한 원리와 개념을 익일 수 있습니다.
+                (커리큘럼 준비중)
+            </p>
+            <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-3" align="center">
             <img class="img-circle"
                  src="{% static 'img/technology_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
-            <h2>기술이 있는 코딩</h2>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras
-                mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-                condimentum nibh.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+            <div class="me_title1">기술이 있는 코딩</div>
+            <p>기술이 있는 코딩은 단순한 스크래치, 엔트리와 같은 블록코딩의 범위를 넘나들며 다양한 코딩의 기술을 배우고 메이커의 지식을 학습하는 커리큘럼입니다.
+                기술이 있는 코딩을 통해 진정한 프로그래머 그리고, 메이커를 향한 도약을 할 수 있습니다.
+                (커리큘럼 준비중)
+            </p>
+            <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-3" align="center">
             <img class="img-circle"
                  src="{% static 'img/engineering_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
-            <h2>공학이 있는 코딩</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
-                porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-                ut
-                fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+            <div class="me_title1">공학이 있는 코딩</div>
+            <p>공학이 있는 코딩은 엔지니어의 사고방식을 바탕으로 코딩을 배워나가는 학습과정입니다.
+                미메이커의 온/오프라인 교육은 다양한 Computational Thinking을 학습할 수 있습니다. 창의 공학적 코딩의 세계로 초대합니다.
+                (커리큘럼 준비중)
+            </p>
+            <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3" align="center">
-            <img class="img-circle"
-                 src="{% static 'img/mathematics_memaker.png'%}"
-                 alt="Generic placeholder image" width="140" height="140">
-            <h2>수학이 있는 코딩</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
-                porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
-                ut
-                fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div><!-- /.col-lg-4 -->
+
     </div><!-- /.row -->
 </div>
 
 <div class="container">
-    <h2><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
-        추천 강의 </h2>
+    <div class="me_title1_nopadding">
+        <a href="{%url 'lectures:index'%}">
+        <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+        추천 강의</a> </div>
     <hr>
 
     <div class="row">
@@ -166,8 +184,9 @@
         {% endfor %}
     </div>
 
-    <h2><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
-        추천 제품 </h2>
+    <div class="me_title1_nopadding"><a href="{%url 'products:index'%}">
+        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+        추천 제품</a> </div>
     <hr>
     <div class="row">
         {% for product in product_list %}
@@ -191,21 +210,27 @@
 
 </div>
 <div class="container">
-    <h2><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
-        서비스 특징 </h2>
+    <div class="me_title1_nopadding">
+        <a href="{%url 'intro:index'%}">
+        <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+            서비스 특징 </a>
+    </div>
     <hr>
     <div class="row container-fluid">
-        <div class="col-sm-12 col-md-12" align="center" >
+        <div class="col-sm-12 col-md-12" align="center">
             <br>
-            <img src="{% static 'img/특징_인강.png'%}" alt="Responsive image" class="img-responsive img-rounded col-sm-12 col-md-push-2 col-md-8">
+            <img src="{% static 'img/특징_인강.png'%}" alt="Responsive image"
+                 class="img-responsive img-rounded col-sm-12 col-md-push-2 col-md-8">
         </div>
-        <div class="col-sm-12 col-md-12" align="center" >
+        <div class="col-sm-12 col-md-12" align="center">
             <br>
-            <img src="{% static 'img/특징_보드.png'%}" alt="Responsive image" class="img-responsive img-rounded col-sm-12 col-md-push-2 col-md-8" >
+            <img src="{% static 'img/특징_보드.png'%}" alt="Responsive image"
+                 class="img-responsive img-rounded col-sm-12 col-md-push-2 col-md-8">
         </div>
-        <div class="col-sm-12 col-md-12" align="center" >
+        <div class="col-sm-12 col-md-12" align="center">
             <br>
-            <img src="{% static 'img/특징_교재.png'%}" alt="Responsive image" class="img-responsive img-rounded col-sm-12 col-md-push-2 col-md-8" >
+            <img src="{% static 'img/특징_교재.png'%}" alt="Responsive image"
+                 class="img-responsive img-rounded col-sm-12 col-md-push-2 col-md-8">
         </div>
     </div>
 </div>

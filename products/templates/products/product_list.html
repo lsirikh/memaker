@@ -28,11 +28,19 @@
         </ul>
         {% endif %}
     </div>
-    <h2 style="margin:30px 20px 30px 20px;">
-        <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
-        {{category}}
+    <div class="me_title2_nopadding" >
+        <a href="{%url 'products:index' %}">
+        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+        교재와 교보재</a> >
+        {% if category.title == "코딩보드"%}
+        <a href="{%url 'products:board_list'%}">{{category}}</a>
+        {% elif category.title == "조립키트" %}
+        <a href="{%url 'products:kit_list'%}">{{category}}</a>
+        {% elif category.title == "교재" %}
+        <a href="{%url 'products:book_list'%}">{{category}}</a>
+        {% endif %}
         <!--추천 제품-->
-    </h2>
+    </div>
     <div class="row">
         <hr>
         <h2>{{product_list.title}}</h2>
@@ -70,7 +78,7 @@
 
     <div class="cotainer-fluid" align="center">
         {% if is_paginated %}
-        <ul class="pagination">
+        <ul class="pagination pagination">
             {% if page_obj.has_previous %}
             <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
             {% else %}

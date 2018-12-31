@@ -1,0 +1,165 @@
+{%extends "base.html"%}
+
+{% load staticfiles %}
+{% load humanize %}
+{%block menu%}
+
+<style>
+.table-striped > thead > tr > td,
+.table-striped > thead > tr > th,
+.table-striped > thead > tr > th{
+  background-color: #EBDEF0;
+}
+.me_title1,
+.me_title2{
+    padding: 15px;
+}
+
+
+@media screen and (min-width: 601px) {
+  .me_title1{
+    font-size: 25px;
+  }
+  .me_title2{
+    font-size: 20px;
+  }
+  .table {
+    font-size: 15px;
+  }
+  .pagination{
+    font-size: 12px;
+  }
+  .jumbotron{
+   font-size: 25px;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+  .me_title1{
+    font-size: 23px;
+  }
+  .me_title2{
+    font-size: 15px;
+  }
+  .jumbotron{
+   font-size: 15px;
+  }
+  .table {
+    font-size: 9px;
+  }
+  .pagination{
+    font-size: 9px;
+  }
+
+}
+
+</style>
+
+<!--------------------------------------------메뉴 시작------------------------------------------------------>
+<li><a href="/intro">미메이커는?</a></li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/products">교재와 교보재</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{% url 'products:board_list'%}">코딩보드 및 센서</a></li>
+        <li><a href="{% url 'products:kit_list'%}">조립 키트</a></li>
+        <li><a href="{% url 'products:unpluged_list'%}">언플러그드</a></li>
+        <li><a href="{% url 'products:book_list'%}">교재</a></li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">온라인 강의<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/lectures">온라인 강의</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{% url 'lectures:entry_list'%}">엔트리</a></li>
+        <li><a href="{% url 'lectures:maker_list'%}">메이커</a></li>
+        <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">공유게시판<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/boards">공유게시판</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{%url 'boards:board_topic' pk=1%}">코딩 강의</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=2%}">코딩 보드</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=3%}">3D모델링 및 출력</a></li>
+    </ul>
+</li>
+
+<!--------------------------------------------메뉴 종료------------------------------------------------------>
+{%endblock menu%}
+
+{%block jumbotron%}
+{% load staticfiles%}
+<style type="text/css">
+.jumbotron{
+    background-image: url("{% static 'img/img_sub4.jpg'%}");
+    z-index: -1;
+    whidth: 100%;
+    height: auto;
+    opacity: 0.8;
+     display: block;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    color : #FFF;
+
+}
+.display-3{
+font-weight: bold
+}
+
+
+.jumbotron .container {
+  position: relative;
+}
+
+
+
+
+    @media screen and (min-width: 601px) {
+
+
+    }
+
+
+
+
+
+    @media screen and (max-width: 600px) {
+
+
+
+
+    }
+
+
+
+</style>
+<div class="container-fluid">
+    <div class="jumbotron jumbotron-fluid">
+            <div class="me_title1" align="center">유저가 참여하는 집단 지성 <br> "정보 공유 게시판".</div>
+            <div class="me_title3" align="center">개인이 알고 있는 지식에는 한계가 있습니다. 지금은 지식 정보의 시대입니다. <br>
+                함께 정보를 공유하여 문제를 해결하는 집단 지성의 힘을 익혀 보세요. <br> 이제 서로 공유를 통해 함께 풀어봅시다!</div>
+    </div>
+</div>
+
+
+{%endblock jumbotron%}
+
+
+
+
+
+

@@ -66,6 +66,7 @@ urlpatterns = [
     path('password_reset/',
          views.PasswordResetView.as_view(
              # success_url=reverse_lazy('accounts:password_reset_done'),
+             #from_email ='help@openfingers.com',
              success_url=reverse_lazy('accounts:password_reset_done'),
              template_name='accounts/password_reset_form.html',
              email_template_name='accounts/password_reset_email.html',

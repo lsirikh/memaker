@@ -5,7 +5,20 @@
 {% load humanize %}
 <div class="container">
 
-    <h3>{{ object.section }} > {{ object.category }}</h3>
+    <div class="me_title2_nopadding">
+        <a href="{%url 'lectures:index' %}">
+            <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+            온라인 강의</a> >
+        {% if object.category.title == "엔트리"%}
+        <a href="{%url 'lectures:entry_list'%}">{{object.category}}</a> >
+        {% elif object.category.title == "메이커" %}
+        <a href="{%url 'lectures:maker_list'%}">{{object.category}}</a> >
+        {% elif object.category.title == "스크래치" %}
+        <a href="{%url 'lectures:scratch_list'%}">{{object.category}}</a> >
+        {% endif %}
+        <a href="{%url 'lectures:lecture_detail' pk=object.pk%}">{{object.title}}</a>
+    </div>
+    <hr>
     <ul class="nav nav-tabs" role="tablist" id="myTab">
         <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
                                                   data-toggle="tab">Home</a></li>
@@ -19,52 +32,65 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane fade in active" id="home">
             <div class="row">
-                <div class="col-md-6 item-photo">
-                    <img style="max-width:100%;" src="{{ object.lecture_image.url }}"/>
+                <div class="col-md-6 col-xs-12 item-photo">
+                        <img style="max-width:100%;" src="{{ object.lecture_image.url }}"/>
                 </div>
-                <div class="col-md-6" style="border:0px solid gray">
+                <div class="col-md-6 col-xs-12" style="border:0px solid gray">
+                    <br>
                     <!-- Datos del vendedor y titulo del producto -->
-                    <h3>{{ object.title }}</h3>
-                    <h5 style="color:#337ab7">{{ object.description }}</h5>
-
+                    <div class="me_title2_nopadding">{{ object.title }}</div>
+                    <br>
+                    <div class="me_title4_nopadding" style="color:#337ab7">{{ object.description }}</div>
+                    <br>
                     <div class="section" style="padding-bottom:5px;">
-                        <h4 class="title-attr">
-                            <medium>시청연령</medium>
-                        </h4>
-                        <div>
-                            <h5 class="attr2">8~17세</h5>
+                        <div class="me_title4_nopadding">
+                            <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 시청연령
                         </div>
-                        <p>
-                            {% if isRegistered == True%}
-                            <a href="{%url 'lectures:favorite_add' object.pk %}" class="btn btn-primary" role="button"
-                               disabled="disabled">관심강의</a>
-                            {% else %}
-                            <a href="{%url 'lectures:favorite_add' object.pk %}" class="btn btn-primary" role="button">관심강의</a>
-                            {% endif %}
+                        <div>
+                            <div class="me_title5_nopadding">8~17세</div>
+                        </div>
 
-                        </p>
                     </div>
+                    <br>
                     <div class="section" style="padding-bottom:5px;">
-                        <h4 class="title-attr">
-                            <medium>활용 교보재</medium>
-                        </h4>
+                        <div class="me_title4_nopadding">
+                            <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 활용 교보재
+                        </div>
                         {% if object.material.all %}
                         {% for material in object.material.all %}
-                        <li>{{ material.title}}</li>
+                        <div class="me_title5_nopadding">{{ material.title}}</div>
                         {% endfor %}
                         {% else %}
                         <div>
-                            <h5 class="attr2">교재 및 교보재 없이 수강 할 수 있습니다.</h5>
+                            <h5 class="me_title5_nopadding">교재 및 교보재 없이 수강 할 수 있습니다.</h5>
                         </div>
                         {% endif %}
                     </div>
-
-
+                    <br>
+                    <div class="section row ">
+                        <div class="col-md-offset-3 col-md-6 col-xs-12">
+                            {% if isRegistered == True%}
+                            <a href="{%url 'lectures:favorite_add' object.pk %}" class="btn btn-primary btn-block"
+                               role="button"
+                               disabled="disabled">
+                                <span class="glyphicon glyphicon glyphicon-heart" aria-hidden="true"></span> 관심강의
+                            </a>
+                            {% else %}
+                            <a href="{%url 'lectures:favorite_add' object.pk %}" class="btn btn-primary btn-block"
+                               role="button">
+                                <span class="glyphicon glyphicon glyphicon-heart-empty" aria-hidden="true"></span> 관심강의
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-
             </div>
+
+            <br>
             {% if object.sample%}
-            <h2>샘플 영상</h2>
+            <div class="me_title2_nopadding"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+                샘플 영상
+            </div>
             <hr>
             <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
                 <div class="col-md-push-3 col-md-6">
@@ -75,14 +101,16 @@
             </div>
             {%endif%}
             {% if object.content %}
-            <h2>영상 소개</h2>
+            <div class="me_title2_nopadding"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> 영상 소개
+            </div>
             <hr>
             <h4 class="lead">{{object.content|linebreaks}}</h4>
             {% endif %}
 
 
             {% if object.material.all %}
-            <h2>관련 교보재</h2>
+            <div class="me_title2_nopadding"><span class="glyphicon glyphicon-gift" aria-hidden="true"></span> 관련 교보재
+            </div>
             <div class="row">
                 <hr>
                 {% for product in object.material.all %}
@@ -95,7 +123,7 @@
                             <p align="center">
                                 <a href="{% url 'products:product_detail' product.id%}" class="btn btn-primary"
                                    role="button">구경하기</a>
-                                <a href="#" class="btn btn-default" role="button">구매하기</a>
+                                <a href="{{product.link}}" class="btn btn-default" role="button">구매하기</a>
                             </p>
                         </div>
                     </div>
@@ -155,6 +183,8 @@ $('#myTab a[href="#home"]').tab('show') // Select tab by name
 {% for detail in object.video_set.all%}
 $('#myTab a[href="#{{forloop.counter}}강"]').tab('show') // Select tab by name
 {% endfor %}
+
+
 
 
 

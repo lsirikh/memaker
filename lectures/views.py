@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Section, Category, Lecture, Video
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView
@@ -30,29 +30,12 @@ def favorite_add_view(request, pk):
     userprofile = UserProfile.objects.get(user__username=request.user)
     requested_lecture = Lecture.objects.get(pk=pk)
     # 관심 강의 등록 과정
-    userprofile.favorite_lecture.add(requested_lecture)
+    try:
+        userprofile.favorite_lecture.add(requested_lecture)
+    except:
+        print("관심상품 등록는 중에 오류가 발생했습니다.")
 
-    for lecture in userprofile.favorite_lecture.all():
-        if lecture.pk == pk:
-            args = {
-                'object': requested_lecture,
-                'user_profile': userprofile,
-                'isRegistered': True
-            }
-            break;
-        else:
-            # 여기는 당연히 나올 수 없는 코드
-            print("이 코드가 실행되면 오류!")
-            args = {
-                'object': requested_lecture,
-                'user_profile': userprofile,
-                'isRegistered': False
-            }
-    # next = request.GET.get('next', '/')  # next 기능은 작동 안됨
-    return_url = 'lectures/lecture_detail.html'
-    print(return_url)
-    print(args)
-    return render(request, return_url, args)
+    return redirect('lectures:lecture_detail', pk=pk)
 
 
 @login_required(login_url="accounts:login")
@@ -61,43 +44,16 @@ def favorite_sub_view(request, pk):
     user = auth.get_user(request)
     userprofile = UserProfile.objects.get(user__username=request.user)
     requested_lecture = Lecture.objects.get(pk=pk)
-    # 관심강좌 등록 해제.....
-    userprofile.favorite_lecture.remove(requested_lecture)
 
     try:
+        # 관심강좌 등록 해제.....
+        userprofile.favorite_lecture.remove(requested_lecture)
 
-        for lecture in userprofile.favorite_lecture.all():
-            if lecture.pk == pk:
-                # 여기는 당연히 나올 수 없는 코드 관심 강좌 등록을 해제했으니까....
-                print("이 코드가 실행되면 오류!")
-                args = {
-                    'object': requested_lecture,
-                    'user_profile': userprofile,
-                    'isRegistered': True
-                }
-                print(args)
-                break;
-            else:
-                args = {
-                    'object': requested_lecture,
-                    'user_profile': userprofile,
-                    'isRegistered': False
-                }
-        print(args)
     except:
-        args = {
-            'object': requested_lecture,
-            'user_profile': userprofile,
-            'isRegistered': False
-        }
-        print(args)
+        print("관심강좌 해제하는 중에 오류가 발생했습니다.")
+        pass
 
-
-    # next = request.GET.get('next', '/')  # next 기능은 작동 안됨
-    return_url = 'accounts/dash_board.html'
-    print(return_url)
-
-    return render(request, return_url, args)
+    return redirect('accounts:index')
 
 
 class LectureListView(ListView):
@@ -115,6 +71,11 @@ class EntryListView(ListView):
     paginate_by = 6
     queryset = Lecture.objects.filter(category__title='엔트리')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = Category.objects.get(title='엔트리')
+        return context
+
 
 class MakerListView(ListView):
     template_name = 'lectures/lecture_list.html'
@@ -123,6 +84,12 @@ class MakerListView(ListView):
     paginate_by = 6
     queryset = Lecture.objects.filter(category__title='메이커')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = Category.objects.get(title='메이커')
+        context['category'] = category
+        print(category)
+        return context
 
 class ScratchListView(ListView):
     template_name = 'lectures/lecture_list.html'
@@ -131,28 +98,28 @@ class ScratchListView(ListView):
     paginate_by = 6
     queryset = Lecture.objects.filter(category__title='스크래치')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = Category.objects.get(title='스크래치')
+
+        return context
 
 class LectureDetailView(DetailView):
     model = Lecture
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        lecture = Lecture.objects.get(pk=self.kwargs.get('pk'))
+
         try:
-            user = auth.get_user(self.request)
-            number = self.kwargs.get(self.pk_url_kwarg)
-            userprofile = UserProfile.objects.get(user__username=user)
-            context['userprofile'] = userprofile
-            print(number)
-            for lecture in userprofile.favorite_lecture.all():
-                if lecture.pk == number:
-                    print("같은 강의가 있음 : " + lecture.title)
-                    context['isRegistered'] = True
-                    break;
-                else:
-                    context['isRegistered'] = False
-                    print("같은 강의가 없음 ")
+            selected_user = lecture.userprofile_set.get(user=self.request.user)
+            if (selected_user is not None):
+                context['isRegistered'] = True
+                print(selected_user)
+                print("등록된 사용자")
 
         except:
-            pass
+            print("등록안된 사용자")
+            context['isRegistered'] = False
 
         return context

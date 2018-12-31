@@ -1,0 +1,42 @@
+{% extends "base_boards.html" %}
+
+{% block content %}
+{% load staticfiles%}
+<script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+<div class="container">
+    <h3>{{board.name}}</h3>
+    <table class="table">
+        <thead class="thead-inverse">
+        <tr>
+            <th>Topic</th>
+            <th>Starter</th>
+            <th>Replies</th>
+            <th>Views</th>
+            <th>Last Update</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for topic in topic_list %}
+        <tr>
+            <td><a href="{% url 'boards:board_content' pk=topic.board.id topic_pk=topic.id %}">{{ topic.subject }}</a></td>
+            <td><span><img src="{{topic.starter.userprofile.thumbnail.url}}" style="width:30px;height:30px;"></span>  {{ topic.starter.username }}</td>
+            <td>0</td>
+            <td>{{topic.views}}</td>
+            <td>{{ topic.last_updated }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'boards:add_content' board.id %}" class="btn btn-success">새글</a>
+    <textarea name="content" id="editor">
+        &lt;p&gt;This is some sample content.&lt;/p&gt;
+    </textarea>
+</div>
+<script>
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .catch( error => {
+            console.error( error );
+        } );
+</script>
+{% endblock content %}

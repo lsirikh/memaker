@@ -26,6 +26,7 @@ class Product(models.Model):
     isSale = models.BooleanField('For Sale', default=False)
     description = models.CharField('Description', max_length=300)
     file = models.FileField(upload_to='data_file/product/', blank=True)
+    link = models.URLField('Link URL', default='', blank=True)
     product_image = models.ImageField(upload_to='product_image/', blank=True)
     thumbnail = ImageSpecField(
         source='product_image',

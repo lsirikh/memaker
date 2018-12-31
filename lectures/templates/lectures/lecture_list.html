@@ -26,7 +26,21 @@
         </ul>
         {% endif %}
     </div>
+    <div class="me_title2_nopadding" >
+        <a href="{%url 'lectures:index' %}">
+        <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+        온라인 강의</a> >
+        {% if category.title == "엔트리"%}
+        <a href="{%url 'lectures:entry_list'%}">{{category}}</a>
+        {% elif category.title == "메이커" %}
+        <a href="{%url 'lectures:maker_list'%}">{{category}}</a>
+        {% elif category.title == "스크래치" %}
+        <a href="{%url 'lectures:scratch_list'%}">{{category}}</a>
+        {% endif %}
+        <!--추천 제품-->
+    </div>
     <div class="row">
+        <hr>
         {% if lecture_list %}
         {% for lecture in lecture_list %}
         <div class="col-sm-6 col-md-4">

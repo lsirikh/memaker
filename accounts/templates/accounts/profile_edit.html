@@ -2,49 +2,55 @@
 {% load i18n static %}
 {% block accounts %}
 {% load staticfiles%}
+<div class="row">
 
     <div class="panel panel-primary">
-        <div class="panel-heading"><h3>회원 정보 변경</h3></div>
-        <div class="panel-body">
-            <p>다음 정보의 내용을 변경해주세요.</p>
-            <form action="{% url 'accounts:edit_profile'%}" method="post">
-                {% csrf_token %}
-                {% for field in user_form %}
-                <p>
-                    {{ field.label_tag }}<br>
-                    {{ field }}
-                    {% if field.help_text %}
-                    <small style="color: grey">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
-                {% endfor %}
-                </p>
-
-                {% endfor %}
-                {% for field in profile_form %}
-                <p>
-                    {{ field.label_tag }}<br>
-                    {{ field }}
-                    {% if field.help_text %}
-                    <small style="color: grey">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
-                {% endfor %}
-                </p>
-
-                {% endfor %}
-                <button type="submit" class="btn btn-primary">변경하기</button>
-            </form>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <p style="color:#CCD1D1;">*회원을 탈퇴하고 싶습니다.</p>
-            <a href="{%url 'accounts:withdrawal' %}" class="btn btn-default" role="button">회원탈퇴</a>
+        <div class="panel-heading">
+            <div class="row">
+                <div class="me_title1">회원 정보</div>
+            </div>
         </div>
+        <div class="panel-body">
+                <p>다음 정보의 내용을 변경해주세요.</p>
+                <form action="{% url 'accounts:edit_profile'%}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in user_form %}
+                    <p>
+                        {{ field.label_tag }}<br>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small style="color: grey">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                    </p>
+
+                    {% endfor %}
+                    {% for field in profile_form %}
+                    <p>
+                        {{ field.label_tag }}<br>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small style="color: grey">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                    </p>
+
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">변경하기</button>
+                </form>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <p style="color:#CCD1D1;">*회원을 탈퇴하고 싶습니다.</p>
+                <a href="{%url 'accounts:withdrawal' %}" class="btn btn-default" role="button">회원탈퇴</a>
+            </div>
     </div>
+</div>
 {% endblock accounts %}

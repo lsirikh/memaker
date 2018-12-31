@@ -19,6 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
                                       'cost',
                                       'discount',
                                       'isSale',
+                                      'link',
                                       'description',
                                       'category']}),
         ('Data & Image', {'fields': ['file',

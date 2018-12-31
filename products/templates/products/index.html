@@ -7,7 +7,7 @@
 <div class="container">
     <div class="cotainer-fluid" align="center">
         {% if is_paginated %}
-        <ul class="pagination">
+        <ul class="pagination pagination-sm">
             {% if page_obj.has_previous %}
             <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
             {% else %}
@@ -28,11 +28,11 @@
         </ul>
         {% endif %}
     </div>
-    <h2 style="margin:30px 20px 30px 20px;">
-        <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
+    <div class="me_title2_nopadding">
+        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
         <!--{{category}}-->
         추천 제품
-    </h2>
+    </div>
     <div class="row">
         <hr>
         <h2>{{product_list.title}}</h2>

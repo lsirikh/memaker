@@ -1,0 +1,30 @@
+{% extends "base_boards.html" %}
+{% load staticfiles%}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container">
+    <div class="me_title2">
+        <a href="{%url 'boards:index'%}">공유게시판</a> > <a
+            href="{%url 'boards:board_topic' pk=board.pk%}">{{board.name}}</a>
+    </div>
+    <div class="panel panel-success">
+        <div class="panel-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{form.media}}
+                {{form.as_p}}
+                <div class="row">
+                    <div class="col-md-offset-10 col-md-2">
+                        <button type="submit" class="btn btn-success btn-block">등록하기</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}
+

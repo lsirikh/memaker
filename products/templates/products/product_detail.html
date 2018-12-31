@@ -5,168 +5,206 @@
 {% load humanize %}
 <div class="container">
     <div class="row-container">
-        <h3>{{ object.category }}</h3>
+        <div class="me_title2_nopadding">
+            <a href="{%url 'products:index' %}">
+                <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+                교재와 교보재</a> >
+            {% if object.category.title == "코딩보드"%}
+            <a href="{%url 'products:board_list'%}">{{object.category}}</a> >
+            {% elif object.category.title == "조립키트" %}
+            <a href="{%url 'products:kit_list'%}">{{object.category}}</a> >
+            {% elif object.category.title == "교재" %}
+            <a href="{%url 'products:book_list'%}">{{object.category}}</a> >
+            {% endif %}
+            <a href="{%url 'products:product_detail' pk=object.pk%}">{{object.title}}</a>
+
+        </div>
         <hr>
         <div class="col-md-6 item-photo">
             <img style="max-width:100%;" src="{{ object.product_image.url }}"/>
         </div>
-        <div class="col-md-6" style="border:0px solid gray">
-            <!-- Datos del vendedor y titulo del producto -->
-            <h3>{{ object.title }}</h3>
-            <h5 style="color:#337ab7">{{ object.description }}</h5>
-
-            <!-- Precios -->
-            <h4 class="title-price">
-                <medium>가격</medium>
-            </h4>
-            <h5 style="margin-top:0px;">￦ {{ object.cost|intcomma }} 원</h5>
-
-            <!-- Detalles especificos del producto -->
+        <div class="col-md-6">
+            <br>
+            <div class="me_title2_nopadding">{{ object.title }}</div>
+            <br>
+            <div class="me_title4_nopadding" style="color:#337ab7">{{ object.description }}</div>
+            <br>
+            <div class="me_title4_nopadding">
+                <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 가격
+            </div>
+            <div class="me_title5_nopadding">￦ {{ object.cost|intcomma }} 원</div>
+            <br>
             <div class="section">
-                <h4 class="title-attr" style="margin-top:15px;">
-                    <medium>구매가능</medium>
-                </h4>
+                <div class="me_title4_nopadding" style="margin-top:15px;">
+                    <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 구매가능
+                </div>
                 <div>
                     {% if object.isSale%}
-                    <h5 class="attr">판매중</h5>
+                    <div class="me_title5_nopadding">판매중</div>
                     {% else %}
-                    <h5 class="attr">품절</h5>
+                    <div class="me_title5_nopadding">품절</div>
                     {% endif %}
                 </div>
             </div>
+            <br>
             <div class="section" style="padding-bottom:5px;">
-                <h4 class="title-attr">
-                    <medium>사용연령</medium>
-                </h4>
+                <div class="me_title4_nopadding">
+                    <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 사용연령
+                </div>
                 <div>
-                    <h5 class="attr2">8~17세</h5>
+                    <div class="me_title5_nopadding">8~17세</div>
                 </div>
             </div>
+            <br>
             <div class="section" style="padding-bottom:5px;">
-                <h4 class="title-attr">
-                    <medium>관련 강좌</medium>
-                </h4>
+                <div class="me_title4_nopadding">
+                    <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 관련 강좌
+                </div>
                 {% if object.related_lec.all %}
                 {% for lecture in object.related_lec.all %}
-                <li>{{ lecture.title}}</li>
+                <li class="me_title5_nopadding">{{ lecture.title}}</li>
                 {% endfor %}
                 {% else %}
                 <div>
-                    <h5 class="attr2">강좌 없이 학습 할 수 있습니다.</h5>
+                    <div class="me_title5_nopadding">강좌 없이 학습 할 수 있습니다.</div>
                 </div>
                 {% endif %}
             </div>
+            <br>
             <div class="section" style="padding-bottom:5px;">
-                <h4 class="title-attr">
-                    <medium>안내</medium>
-                </h4>
+                <div class="me_title4_nopadding">
+                    <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 안내
+                </div>
                 <div>
-                    <h5 class="attr2">현재 제품의 구매는 네이버를 통해 구매하실 수 있습니다. 이점 착오 없으시길 바랍니다.</h5>
+                    <div class="me_title5_nopadding">현재 제품의 구매는 네이버를 통해 구매하실 수 있습니다. 이점 착오 없으시길 바랍니다.</div>
                 </div>
             </div>
-
+            <br>
             <!-- Botones de compra -->
 
-            <div class="section" style="padding-bottom:20px;">
-                <button class="btn btn-success"><span style="margin-right:20px"
-                                                      class="glyphicon glyphicon-shopping-cart"
-                                                      aria-hidden="true"></span>구매하러가기
-                </button>
-                <span>
-                    {% if isRegistered == True%}
-                    <a href="{%url 'products:favorite_add' object.pk %}" class="btn btn-primary" role="button"
-                       disabled="disabled">관심강의</a>
-                    {% else %}
-                    <a href="{%url 'products:favorite_add' object.pk %}" class="btn btn-primary" role="button">관심강의</a>
-                    {% endif %}
+            <div class="row" >
+                <div class="col-md-6 col-xs-12">
+                    <a href="{{object.link}}" target="_blank"
+                       class="btn btn-success btn-block"
+                       style="margin:5px;"
+                    ><span class="glyphicon glyphicon-shopping-cart"
+                            aria-hidden="true" ></span> 구매하러가기
+                    </a>
+                </div>
 
-                </span>
+                {% if isRegistered == True%}
+                <div class="col-md-6 col-xs-12">
+                    <a href="{%url 'products:favorite_add' object.pk %}"
+                       class="btn btn-primary btn-block"
+                       role="button"
+                       disabled="disabled"
+                       style="margin:5px;"
+                    >
+                        <span class="glyphicon glyphicon glyphicon-heart" aria-hidden="true"></span> 관심상품
+                    </a>
+                </div>
+                {% else %}
+                <div class="col-md-6 col-xs-12">
+                    <a href="{%url 'products:favorite_add' object.pk %}"
+                       class="btn btn-primary btn-block"
+                       role="button"
+                       style="margin:5px;"
+                    >
+                        <span class="glyphicon glyphicon glyphicon-heart-empty" aria-hidden="true"></span> 관심상품
+                    </a>
+                </div>
+                {% endif %}
             </div>
-        </div>
 
-        <div class="container col-md-12" style="margin-top:100px;">
-            {% if object.movie%}
-            <h2>작동영상</h2>
-            <hr>
-            <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
-                <div class="col-md-push-3 col-md-6">
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="{{object.movie}}"></iframe>
-                    </div>
-                </div>
-            </div>
-            {%endif%}
 
-            {% for detail in object.detail_set.all %}
-            <div style="width:100%;">
-                {% if detail.upper_line%}
-                <hr>
-                {%endif%}
-                {% if detail.title%}
-                <h3>{{detail.title}}</h3>
-                {%endif%}
-                {% if detail.image and detail.description %}
-                <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
-                    <div class="col-md-6">
-                        <img class="featurette-image img-responsive center-block" src="{{ detail.image.url }}"
-                             alt="Generic placeholder image">
-                    </div>
-                    <div class="col-md-push-6">
-                        <midium>
-                            {{ detail.description|linebreaks }}
-                        </midium>
-                    </div>
-                </div>
-                {%elif not detail.image and detail.description %}
-                <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
-                    <br>
-                    <div class="col-md-12" style="padding:15px;">
-                        <midium>
-                            {{ detail.description|linebreaks }}
-                        </midium>
-                    </div>
-                    <br>
-                </div>
-                {%elif detail.image and not detail.description %}
-                <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
-                    <br>
-                    <div class="col-md-12">
-                        <img class="featurette-image img-responsive center-block" src="{{ detail.image.url }}"
-                             alt="Generic placeholder image">
-                    </div>
-                    <br>
-                </div>
-                {%endif%}
-                {% if detail.lower_line %}
-                <hr>
-                {%endif%}
-            </div>
-            {% endfor%}
-        </div>
-        <div class="container-fluid">
-            {% if object.related_lec.all %}
-            <h2>관련 강좌</h2>
-            <div class="row">
-                <hr>
-                {% for lecture in object.related_lec.all %}
-                <div class="col-sm-6 col-md-4">
-                    <div class="thumbnail">
-                        <img src="{{lecture.thumbnail.url}}" alt="...">
-                        <div class="caption">
-                            <h4>{{ lecture.title|truncatechars:23 }}</h4>
-                            <p>{{ lecture.description|truncatechars:55 }}</p>
-                            <p align="center">
-                                <a href="{% url 'lectures:lecture_detail' lecture.id%}" class="btn btn-primary"
-                                   role="button">수강하기</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
         </div>
     </div>
+
+    <div class="container col-md-12" style="margin-top:100px;">
+        {% if object.movie%}
+        <div class="me_title3_nopadding"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> 작동영상</div>
+        <hr>
+        <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+            <div class="col-md-push-3 col-md-6">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="{{object.movie}}"></iframe>
+                </div>
+            </div>
+        </div>
+        {%endif%}
+
+        {% for detail in object.detail_set.all %}
+        <div style="width:100%;">
+            {% if detail.upper_line%}
+            <hr>
+            {%endif%}
+            {% if detail.title%}
+            <div class="me_title3_nopadding"><span class="glyphicon glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                {{detail.title}}
+            </div>
+            {%endif%}
+            {% if detail.image and detail.description %}
+            <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                <div class="col-md-6">
+                    <img class="featurette-image img-responsive center-block" src="{{ detail.image.url }}"
+                         alt="Generic placeholder image">
+                </div>
+                <div class="col-md-push-6">
+                    <midium>
+                        {{ detail.description|linebreaks }}
+                    </midium>
+                </div>
+            </div>
+            {%elif not detail.image and detail.description %}
+            <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                <br>
+                <div class="col-md-12" style="padding:15px;">
+                    <midium>
+                        {{ detail.description|linebreaks }}
+                    </midium>
+                </div>
+                <br>
+            </div>
+            {%elif detail.image and not detail.description %}
+            <div class="row featurette" style="margin-top:10px;margin-bottom:10px;">
+                <br>
+                <div class="col-md-12">
+                    <img class="featurette-image img-responsive center-block" src="{{ detail.image.url }}"
+                         alt="Generic placeholder image">
+                </div>
+                <br>
+            </div>
+            {%endif%}
+            {% if detail.lower_line %}
+            <hr>
+            {%endif%}
+        </div>
+        {% endfor%}
+    </div>
+    <div class="container-fluid">
+        {% if object.related_lec.all %}
+        <div class="me_title3_nopadding"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> 관련 강좌</div>
+        <div class="row">
+            <hr>
+            {% for lecture in object.related_lec.all %}
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img src="{{lecture.thumbnail.url}}" alt="...">
+                    <div class="caption">
+                        <h4>{{ lecture.title|truncatechars:23 }}</h4>
+                        <p>{{ lecture.description|truncatechars:55 }}</p>
+                        <p align="center">
+                            <a href="{% url 'lectures:lecture_detail' lecture.id%}" class="btn btn-primary"
+                               role="button">수강하기</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
 </div>
 
 

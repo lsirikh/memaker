@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Product, Detail
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView
@@ -30,29 +30,12 @@ def favorite_add_view(request, pk):
     userprofile = UserProfile.objects.get(user__username=request.user)
     requested_product = Product.objects.get(pk=pk)
     # 관심 상품 등록 과정
-    userprofile.favorite_product.add(requested_product)
+    try:
+        userprofile.favorite_product.add(requested_product)
+    except:
+        print("관심상품 등록는 중에 오류가 발생했습니다.")
 
-    for lecture in userprofile.favorite_product.all():
-        if lecture.pk == pk:
-            args = {
-                'object': requested_product,
-                'user_profile': userprofile,
-                'isRegistered': True
-            }
-            break;
-        else:
-            # 여기는 당연히 나올 수 없는 코드
-            print("이 코드가 실행되면 오류!")
-            args = {
-                'object': requested_product,
-                'user_profile': userprofile,
-                'isRegistered': False
-            }
-    # next = request.GET.get('next', '/')  # next 기능은 작동 안됨
-    return_url = 'products/product_detail.html'
-    print(return_url)
-    print(args)
-    return render(request, return_url, args)
+    return redirect('products:product_detail', pk=pk)
 
 
 @login_required(login_url="accounts:login")
@@ -61,43 +44,15 @@ def favorite_sub_view(request, pk):
     user = auth.get_user(request)
     userprofile = UserProfile.objects.get(user__username=request.user)
     requested_product = Product.objects.get(pk=pk)
-    # 관심강좌 등록 해제.....
-    userprofile.favorite_product.remove(requested_product)
 
     try:
-
-        for lecture in userprofile.favorite_product.all():
-            if lecture.pk == pk:
-                # 여기는 당연히 나올 수 없는 코드 관심 강좌 등록을 해제했으니까....
-                print("이 코드가 실행되면 오류!")
-                args = {
-                    'object': requested_product,
-                    'user_profile': userprofile,
-                    'isRegistered': True
-                }
-                print(args)
-                break;
-            else:
-                args = {
-                    'object': requested_product,
-                    'user_profile': userprofile,
-                    'isRegistered': False
-                }
-        print(args)
+        # 관심상품 등록 해제.....
+        userprofile.favorite_product.remove(requested_product)
     except:
-        args = {
-            'object': requested_product,
-            'user_profile': userprofile,
-            'isRegistered': False
-        }
-        print(args)
+        print("관심상품 해제하는 중에 오류가 발생했습니다.")
+        pass
 
-
-    # next = request.GET.get('next', '/')  # next 기능은 작동 안됨
-    return_url = 'accounts/dash_board.html'
-    print(return_url)
-
-    return render(request, return_url, args)
+    return redirect('accounts:index')
 
 
 
@@ -134,7 +89,7 @@ class KitListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = '조립키트'
+        context['category'] = Category.objects.get(title='조립키트')
         return context
 
 
@@ -146,7 +101,7 @@ class BoardListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = '코딩보드'
+        context['category'] = Category.objects.get(title='코딩보드')
         return context
 
 class UnplugedListView(ListView):
@@ -157,11 +112,31 @@ class UnplugedListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = '언플러그드'
+        context['category'] = Category.objects.get(title='언플러그드')
         return context
 
 
 
 
 class ProductDetailView(DetailView):
+
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = Product.objects.get(pk=self.kwargs.get('pk'))
+
+
+        try:
+            selected_user = product.userprofile_set.get(user=self.request.user)
+            if (selected_user is not None):
+                context['isRegistered'] = True
+                print(selected_user)
+                print("등록된 사용자")
+
+        except:
+            print("등록안된 사용자")
+            context['isRegistered'] = False
+
+        return context
+

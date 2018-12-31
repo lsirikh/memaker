@@ -7,32 +7,44 @@
 
 
 <!--------------------------------------------메뉴 시작------------------------------------------------------>
-                        <li><a href="/intro">미메이커는?</a></li>
-                        <li class="dropdown active">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/products">교재와 교보재</a></li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">세부항목</li>
-                                <li><a href="{% url 'products:board_list'%}">코딩보드 및 센서</a></li>
-                                <li><a href="{% url 'products:kit_list'%}">조립 키트</a></li>
-                                <li><a href="{% url 'products:unpluged_list'%}">언플러그드</a></li>
-                                <li><a href="{% url 'products:book_list'%}">교재</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-expanded="false">온라인 강의<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/lectures">온라인 강의</a></li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">세부항목</li>
-                                <li><a href="{% url 'lectures:entry_list'%}">엔트리</a></li>
-                                <li><a href="{% url 'lectures:maker_list'%}">메이커</a></li>
-                                <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
-                            </ul>
-                        </li>
+<li><a href="/intro">미메이커는?</a></li>
+<li class="dropdown active">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/products">교재와 교보재</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{% url 'products:board_list'%}">코딩보드 및 센서</a></li>
+        <li><a href="{% url 'products:kit_list'%}">조립 키트</a></li>
+        <li><a href="{% url 'products:unpluged_list'%}">언플러그드</a></li>
+        <li><a href="{% url 'products:book_list'%}">교재</a></li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">온라인 강의<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/lectures">온라인 강의</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{% url 'lectures:entry_list'%}">엔트리</a></li>
+        <li><a href="{% url 'lectures:maker_list'%}">메이커</a></li>
+        <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
+    </ul>
+</li>
+<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+       aria-expanded="false">공유게시판<span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu">
+        <li><a href="/boards">공유게시판</a></li>
+        <li class="divider"></li>
+        <li class="dropdown-header">세부항목</li>
+        <li><a href="{%url 'boards:board_topic' pk=1%}">코딩 강의</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=2%}">코딩 보드</a></li>
+        <li><a href="{%url 'boards:board_topic' pk=3%}">3D모델링 및 출력</a></li>
+    </ul>
+</li>
 <!--------------------------------------------메뉴 종료------------------------------------------------------>
 
 
@@ -71,13 +83,16 @@ font-weight: bold
 
 
 
+
 </style>
 <div class="container-fluid">
     <div class="jumbotron jumbotron-fluid">
         <div class="container-fluid">
-            <h2 class="display-3" align="center">쉽고 재미있게 배울 수 있는 다양한 코딩 교보재 <br>'미메이커 코딩보드 세트'</h2>
-            <p class="lead" align="center">로봇 코딩을 통해 코딩이 우리 삶에 다양하게 쓰일 수 있고<br/>
-                활용될 수 있다는 것을 경험해 보세요!</p>
+            <div class="me_title1" align="center">쉽고 재미있게 배울 수 있는 다양한 코딩 교보재 <br>'미메이커 코딩보드 세트'</div>
+            <div class="me_title3" align="center">로봇 코딩을 통해 코딩이 우리 삶에 다양하게 쓰일 수 있고<br/>
+                활용될 수 있다는 것을 경험해 보세요!<br>
+                미메이커에서는 수십종의 다양한 키트를 활용한 코딩&메이커 교육을 경험할 수 있습니다.
+            </div>
         </div>
     </div>
 </div>
