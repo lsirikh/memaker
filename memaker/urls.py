@@ -19,7 +19,7 @@ from memaker import views #add for landingpage
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-#from ckeditor_uploader import views as uploader_views
+from ckeditor_uploader.urls import views as uploader_views
 
 
 app_name='memaker'

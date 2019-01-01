@@ -78,14 +78,17 @@ CKEDITOR_CONFIGS = {
         'toolbar_Custom': [
             ['Styles', 'Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
             ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['Image', 'Embed', 'Table', 'HorizontalRule'],
             ['TextColor', 'BGColor'],
-            ['Smiley', 'SpecialChar'], ['Source'],
+            ['Smiley', 'Emoji', 'SpecialChar'], ['Source','CodeSnippet'],
         ],
         'extraPlugins': ','.join([
             'clipboard',
             'uploadimage',
             'image2',
+            'pastefromword',
+            'codesnippet',
+            'embed',
         ]),
     }
 
@@ -226,10 +229,10 @@ LOGGING = {
 
 }
 
-#ses-smtp-user.20181231-105435
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# ses-smtp-user.20181231-105435
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 
 EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
