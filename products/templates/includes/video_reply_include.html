@@ -43,7 +43,7 @@
             </div>
             {% if request.user == reply.user%}
             <div class="col-md-offset-4 col-md-2 col-md-2 col-xs-3">
-                <a href="{% url 'products:content_video_reply_remove' pk=content.pk pk_video=video.pk pk_reply=reply.pk %}"
+                <a href="{% url 'products:content_video_reply_remove' pk=content.pk pk_video=video.pk pk_reply=reply.pk %}#review"
                    class="btn btn-success btn-block">삭 제</a>
             </div>
             <div class="col-md-2 col-xs-3">
