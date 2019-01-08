@@ -1,0 +1,27 @@
+게시판 테스트 코드
+
+
+from django.contrib.auth.models import User
+from products.models import Category, Content, Product, Lecture, Video, Appraisal, ReplyChapter, Image, File
+from django.utils import timezone
+from random import *
+
+
+
+
+user = User.objects.get(username='testuser01')
+content = Content.objects.get(pk=1)
+category = Category.objects.get(pk=1)
+product = Product.objects.get(content = content)
+lecture = Lecture.objects.get(content = content)
+
+
+for i in range(30):
+	Appraisal.objects.create(rate=randint(1,5), user=user, content=content, message='#{0}_messages'.format(i), created_at=timezone.now(), updated_at=timezone.now())
+
+
+
+for i in range(9):
+...     video = Video.objects.get(pk=i+1)
+...     for j in range(30):
+...             ReplyChapter.objects.create(video=video, user=user, message = 'reply test #{0}'.format(j), order = j, created_at = timezone.now())

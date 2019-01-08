@@ -1,42 +1,187 @@
 from django.contrib import admin
-from products.models import Category, Product, Detail
+import nested_admin
+from products.models import (
+    Category,
+    Content,
+    Product,
+    Image,
+    File,
+    Lecture,
+    Video,
+    Product,
+    Appraisal,
+    ReplyChapter
+)
 
-# Register your models here.
+class ReplyChapterAdmin(nested_admin.NestedModelAdmin):
+    list_display = ('pk', 'video', 'user', 'order', 'created_at', 'updated_at')
 
-#class ChoiceInline(admin.StackedInline): #카드형식으로 나열
-class DetailInline(admin.TabularInline): #테이블 형식
-    model = Detail
-    extra = 1
-
-
-class ProductAdmin(admin.ModelAdmin):
-    #fields = ['pub_date', 'question_text']  #필드 순서 변경
+class ImageAdmin(nested_admin.NestedModelAdmin):  # 테이블 형식
     fieldsets = [
-        ('Product Information', {'fields':
-                                     ['title',
-                                     # 'added',
-                                     # 'updated',
-                                      'cost',
-                                      'discount',
-                                      'isSale',
-                                      'link',
-                                      'description',
-                                      'category']}),
-        ('Data & Image', {'fields': ['file',
-                                     'movie',
-                                     'product_image',
-                                     'related_lec']}),
+        ('샘플이미지', {'fields':
+            [
+                'image',
+                'description',
+            ]}),
     ]
-    inlines = [DetailInline]
-    list_display = ('title', 'added', 'updated', 'category', 'isSale', 'product_image', 'file')    #레코드 리스트 컬럼 지정
-    search_fields = ['description']   #검색 박스 추가
-    list_per_page = 4   #페이지네이션 튜플 개수 설정
+    list_display = ('image',  'pk', 'description',)
+
+
+class FileAdmin(nested_admin.NestedModelAdmin):  # 테이블 형식
+    fieldsets = [
+        ('컨텐츠파일', {'fields':
+            [
+                'file',
+                'type',
+                'description',
+            ]}),
+    ]
+    list_display = ('description', 'type', 'file',  'pk', )
+
+class CategoryAdmin(admin.ModelAdmin):
+    fields = ['title', 'section', 'description']
+    list_display= ['pk','title', 'section','description']
+
+class VideoInline(nested_admin.NestedStackedInline):  # 테이블 형식
+
+    extra = 1
+    model = Video
+
+class VideoAdmin(nested_admin.NestedModelAdmin):
+    fieldsets = [
+        ('비디오정보', {'fields':
+            [
+                'title',
+                'video_link',
+                'introduce',
+            ]}),
+    ]
+
+    list_display = ('title', 'get_introduce', 'pk', 'video_link',)
+
+    def get_introduce(self, obj):
+        return str(obj.introduce)[0:30]
+
+
+class LectureInline(nested_admin.NestedStackedInline):  # 테이블 형식
+    model = Lecture
+    extra = 1
+    max_num = 1
+    inlines = [VideoInline]
+
+class LectureAdmin(nested_admin.NestedModelAdmin):
+    fieldsets = [
+        ('강좌정보', {'fields':
+            [
+                'introduce',
+
+            ]}),
+        ('추가정보', {
+            'classes': ('collapse',),
+            'fields':
+                [
+                    'teacher',
+                    'location',
+
+                ]}),
+        ('기간정보', {
+            'classes': ('collapse',),
+            'fields':
+                [
+                    'register_from',
+                    'period_from',
+                    'period_to',
+                    'duration',
+                ]}),
+
+    ]
+    #
+    list_display = ('get_introduce', 'pk', 'register_from',)
+
+    def get_introduce(self, obj):
+        return str(obj.introduce)[0:30]
 
 
 
+class ProductInline(nested_admin.NestedTabularInline):  # 테이블 형식
+
+    model = Product
+    extra = 1
+    max_num = 1
+
+class ProductAdmin(nested_admin.NestedModelAdmin):
+    fields = ['introduce', 'link',]
+    list_display = ('get_introduce', 'pk', 'link',)
+
+    def get_introduce(self, obj):
+        return str(obj.introduce)[0:30]
+
+
+class ContentAdmin(nested_admin.NestedModelAdmin):
+    # fields = ['pub_date', 'question_text']  #필드 순서 변경
+
+    fieldsets = [
+        ('콘텐츠 기본 정보', {
+            'fields':
+            [
+                'category',
+                'title',
+                'description',
+                'related_content',
+                'sample',
+            ]}),
+
+        ('판매정보', {
+            'classes': ('collapse',),
+            'fields':
+            [
+                'cost',
+                'discount',
+                'isSale',
+                'isShow',
+                'isDiscount',
+                'recommend',
+            ]}),
+        ('추가정보', {
+            'classes': ('collapse',),
+            'fields':
+            [
+                'image',
+                'file',
+            ]}),
+    ]
+    #inlines = [ProductInline]
+    inlines = [LectureInline, ProductInline]
+    list_display = ('title', 'added', 'updated', 'category', 'get_section', 'isSale', )  # 레코드 리스트 컬럼 지정
+    search_fields = ['description']  # 검색 박스 추가
+    list_per_page = 1  # 페이지네이션 튜플 개수 설정
+
+    def get_formsets_with_inlines(self, request, obj=None):
+        for inline in self.get_inline_instances(request, obj):
+
+
+            try:
+                print(str(obj.category.section))
+                print(str(inline.__class__.__name__))
+                if obj.category.section == '강좌' and inline.__class__.__name__ == 'LectureInline':
+                    yield inline.get_formset(request, obj), inline
+                if obj.category.section == '상품' and inline.__class__.__name__ == 'ProductInline':
+                    yield inline.get_formset(request, obj), inline
+            except:
+                pass
 
 
 
+    def get_section(self, obj):
+        return str(obj.category.section)
+
+
+admin.site.register(Content, ContentAdmin)
+admin.site.register(Image, ImageAdmin)
+admin.site.register(File, FileAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Detail)
-admin.site.register(Category)
+admin.site.register(Lecture, LectureAdmin)
+admin.site.register(Video, VideoAdmin)
+admin.site.register(Appraisal)
+admin.site.register(ReplyChapter, ReplyChapterAdmin)

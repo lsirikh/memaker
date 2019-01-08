@@ -1,0 +1,14 @@
+<div class="panel panel-success">
+    <div class="panel-body" id="{{topic.post.count|default:0}}">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.media }}
+            {{form.as_p}}
+            <div class="row">
+                <div class="col-md-offset-10 col-md-2">
+                    <button type="submit" class="btn btn-success btn-block">댓글달기</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

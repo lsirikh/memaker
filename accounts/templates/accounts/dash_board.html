@@ -6,20 +6,20 @@
     <div class="me_title2"><span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> 나의 관심 강좌</div>
     <div class="row">
 
-        {% if user_profile.favorite_lecture.all.count > 0 %}
-        {% for lecture in user_profile.favorite_lecture.all %}
+        {% if lecture_list.count > 0 %}
+        {% for lecture in lecture_list %}
         <div class="col-sm-6 col-md-4">
             <div class="thumbnail">
-                <img src="{{lecture.thumbnail.url}}" alt="...">
+                <img src="{{lecture.image.first.thumbnail.url}}" alt="...">
                 <div class="caption">
                     <h4>{{ lecture.title|truncatechars:22 }}</h4>
                     <p>{{ lecture.description|truncatechars:40 }}</p>
                     <div align="center"><span>
-                            <a href="{% url 'lectures:lecture_detail' lecture.id%}" class="btn btn-primary"
+                            <a href="{% url 'products:content_information' lecture.pk%}" class="btn btn-primary"
                                role="button">수강하기</a>
                         </span>
                         <span>
-                            <a href="{% url 'lectures:favorite_sub' lecture.id%}" class="btn btn-warning"
+                            <a href="{% url 'products:content_information_favorite_sub' lecture.pk%}" class="btn btn-warning"
                                role="button">관심해제</a>
                         </span></div>
                 </div>
@@ -43,20 +43,20 @@
 <div class="row">
     <div class="me_title2"><span class="glyphicon glyphicon-gift" aria-hidden="true"></span> 나의 관심 상품</div>
     <div class="row">
-        {% if user_profile.favorite_product.all.count > 0 %}
-        {% for product in user_profile.favorite_product.all %}
+        {% if product_list.count > 0 %}
+        {% for product in product_list %}
         <div class="col-md-4 col-xs-12">
             <div class="thumbnail">
-                <img src="{{product.thumbnail.url}}" alt="...">
+                <img src="{{product.image.first.thumbnail.url}}" alt="...">
                 <div class="caption">
                     <h4>{{ product.title|truncatechars:22 }}</h4>
                     <p>{{ product.description|truncatechars:40 }}</p>
                     <p align="center"><span>
-                            <a href="{% url 'products:product_detail' product.id%}" class="btn btn-primary"
+                            <a href="{% url 'products:content_information' product.pk%}" class="btn btn-primary"
                                role="button">상세보기</a>
                         </span>
                         <span>
-                            <a href="{% url 'products:favorite_sub' product.id%}" class="btn btn-warning"
+                            <a href="{% url 'products:content_information_favorite_sub' product.pk%}" class="btn btn-warning"
                                role="button">관심해제</a>
                         </span></p>
                 </div>

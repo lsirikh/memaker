@@ -29,6 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% block extrastyle %}{% endblock %}"/>
 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
@@ -36,14 +37,13 @@
 <body>
 
 <!--------------------------------------------메뉴 시작------------------------------------------------------>
-<div class="navbar-wrapper">
-    <div class="container">
-
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-
+<div class="row">
+    <div class="navbar-wrapper">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#navbar"
                             aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -52,10 +52,9 @@
                     </button>
                     <a href="/" class="navbar-brand">
                         <img class="d-inline-block align-top" alt="Brand"
-                             src="{% static 'img/memaker_logo_ver1.png'%}"></a>
+                             src="{% static 'img/memaker_logo_ver3.png'%}"></a>
 
                 </div>
-
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         {%block menu%}{%endblock menu%}
@@ -68,10 +67,12 @@
                         {% if request.user.is_authenticated %}
                         <li><a href="{% url 'accounts:index'%}"><span class="glyphicon glyphicon-user"></span>
                             {{request.user}}</a></li>
-                        <li><a href="{% url 'accounts:logout'%}"><span class="glyphicon glyphicon-log-in"></span> Logout</a>
+                        <li><a href="{% url 'accounts:logout'%}"><span class="glyphicon glyphicon-log-in"></span>
+                            Logout</a>
                         </li>
                         {% else %}
-                        <li><a href="{% url 'accounts:register'%}"><span class="glyphicon glyphicon-user"></span> Sign
+                        <li><a href="{% url 'accounts:register'%}"><span class="glyphicon glyphicon-user"></span>
+                            Sign
                             Up</a></li>
                         <li><a href="{% url 'accounts:login'%}?next={{ request.path|urlencode }}"><span
                                 class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -80,7 +81,6 @@
                     </ul>
 
                 </div>
-
             </div>
         </nav>
 
@@ -106,9 +106,17 @@
     {% block footer %}{% endblock %}
     <style type="text/css">
 
+
     .jumbo_text {
         color: white;
-      }
+    }
+
+    .navbar {
+        min-height: 30px;
+        margin-bottom: 0px;
+    }
+
+
 
     .table-borderless > tbody > tr > td,
     .table-borderless > tbody > tr > th,
@@ -148,85 +156,152 @@
         color:#FDFEFE;
     }
 
-    @media screen and (min-width: 601px) {
-      .me_badge {
-        max-height : 150px;
-      }
-      .company_info {
-        font-size: 13px;
-      }
-      .company_help {
-        font-size: 13px;
-      }
 
 
+     div.scrollmenu {
+      background-color: #FAFAFA;
+      overflow: auto;
+      white-space: nowrap;
+    }
+
+    div.scrollmenu a {
+      display: inline-block;
+      text-align: center;
+    }
 
 
-      .panel-heading{
-        font-size : 20px;
+    div.scrollmenu a .panel:hover {
+       div.scrollmenu a .panel .panel-heading{
+        background-color: #D0A9F5;
       }
-      .panel-body{
-        font-size : 15px;
-      }
-
-
-
-      .me_title0{
-        font-size: 35px;
-      }
-      .me_title1{
-        font-size: 30px;
-      }
-      .me_title2{
-        font-size: 25px;
-      }
-      .me_title3{
-        font-size: 20px;
-      }
-      .me_title4{
-        font-size: 18px;
-      }
-      .me_title5{
-        font-size: 15px;
-      }
-
-      .me_title0_nopadding{
-        font-size: 35px;
-      }
-      .me_title1_nopadding{
-        font-size: 30px;
-      }
-      .me_title2_nopadding{
-        font-size: 25px;
-      }
-      .me_title3_nopadding{
-        font-size: 20px;
-      }
-      .me_title4_nopadding{
-        font-size: 18px;
-      }
-      .me_title5_nopadding{
-        font-size: 15px;
-      }
-
-
-
-
-
-
-      .table {
-        font-size: 15px;
-      }
-      .pagination{
-        font-size: 12px;
-      }
+      background-color: #D0A9F5;
     }
 
 
 
 
+    @media screen and (min-width: 601px) {
+           .navbar-wrapper .navbar {
+                padding-right: 15%;
+                padding-left: 15%;
+            }
+
+
+          .me_badge {
+            max-height : 150px;
+          }
+          .company_info {
+            font-size: 13px;
+          }
+          .company_help {
+            font-size: 13px;
+          }
+
+
+
+
+          .panel-heading{
+            font-size : 20px;
+          }
+          .panel-body{
+            font-size : 15px;
+          }
+
+          .me_jumbotron_title{
+            font-size: 30px;
+            font-weight: bold;
+          }
+          .me_jumbotron_subtitle{
+            font-size: 20px;
+          }
+
+          .me_title0{
+            font-size: 35px;
+          }
+          .me_title1{
+            font-size: 30px;
+          }
+          .me_title2{
+            font-size: 25px;
+          }
+          .me_title3{
+            font-size: 20px;
+          }
+          .me_title4{
+            font-size: 18px;
+          }
+          .me_title5{
+            font-size: 15px;
+          }
+
+          .me_title0_nopadding{
+            font-size: 35px;
+          }
+          .me_title1_nopadding{
+            font-size: 30px;
+          }
+          .me_title2_nopadding{
+            font-size: 25px;
+          }
+          .me_title3_nopadding{
+            font-size: 20px;
+          }
+          .me_title4_nopadding{
+            font-size: 18px;
+          }
+          .me_title5_nopadding{
+            font-size: 15px;
+          }
+
+
+          .table {
+                font-size: 15px;
+          }
+          .pagination{
+                font-size: 12px;
+          }
+
+
+
+          .img-rounded{
+                object-fit:cover;
+                width:100%;
+          }
+
+          .jumbotron{
+                margin-top: -25px;
+                z-index: -1;
+                whidth: 100%;
+                height: auto;
+                opacity: 0.8;
+                 display: block;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+                color : #FFF;
+          }
+
+          .jumbotron .container {
+                position: relative;
+          }
+
+          .file_icon{
+            max-width:100%;
+            height:auto!important;
+          }
+
+
+
+    }
+
+
 
     @media screen and (max-width: 600px) {
+      .file_icon{
+        max-width:100%;
+        height:auto!important;
+      }
 
       .image > img{
         max-width:100%;
@@ -236,7 +311,6 @@
         max-width:100%;
         height:auto!important;
       }
-
 
 
       .me_badge {
@@ -264,6 +338,14 @@
       }
 
 
+      .me_jumbotron_title{
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .me_jumbotron_subtitle{
+        font-size: 13px;
+      }
 
       .me_title0{
         font-size: 25px;
@@ -305,9 +387,6 @@
 
 
 
-
-
-
     .table > tbody ,
     .table > tbody ,
     .table > tfoot ,
@@ -328,9 +407,37 @@
         line-height: 1;
     }
 
+    .img-rounded{
+        object-fit:cover;
+        height:35px;
     }
 
+    .jumbotron{
+        margin-top:-25px;
+        z-index: -1;
+        width: auto;
+        height: 250px;
+        background-position: center;
+        opacity: 0.7;
+        display: block;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
 
+        color : #FFFF;
+      }
+
+      .jumbotron .container {
+          position: relative;
+
+      }
+
+
+
+
+
+}
 
 
 
@@ -338,12 +445,12 @@
 
 
     </style>
+    <div class="row">
+        <div class="container-fluid" id="footer" style="background:#8E44AD;">
+            <br>
+            <br>
+            <div class="container">
 
-    <div class="container-fluid" id="footer" style="background:#8E44AD;">
-        <br>
-        <br>
-        <div class="container">
-            <div class="row">
                 <div class="col-md-4" align="center">
                     <span><img class="me_badge" src="{% static 'img/memaker_logo.png' %}"></span>
                     <span></span>
@@ -355,8 +462,8 @@
                         <thead>
                         <tr>
                             <th class="col-md-2 col-xs-2"><a href="{% url 'intro:index'%}">소개</a><br></th>
-                            <th class="col-md-2 col-xs-2"><a href="{% url 'products:index'%}">제품</a><br></th>
-                            <th class="col-md-2 col-xs-2"><a href="{% url 'lectures:index'%}">강의</a></th>
+                            <th class="col-md-2 col-xs-2"><a href="#">제품</a><br></th>
+                            <th class="col-md-2 col-xs-2"><a href="#">강의</a></th>
                             <th class="col-md-3 col-xs-3"><a href="{% url 'boards:index'%}">게시판</a></th>
                             <th class="col-md-3 col-xs-3"><a href="#">채널</a><br></th>
                         </tr>
@@ -365,10 +472,10 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="{% url 'products:board_list'%}" style="color:#FDFEFE;">코딩보드 및 센서</a>
+                                <a href="#" style="color:#FDFEFE;">코딩보드 및 센서</a>
                             </td>
                             <td>
-                                <a href="{% url 'lectures:entry_list'%}" style="color:#FDFEFE;">엔트리</a>
+                                <a href="#" style="color:#FDFEFE;">엔트리</a>
                             </td>
                             <td>
                                 <a href="{% url 'boards:board_topic' pk=1%}" style="color:#FDFEFE;">코딩 강의 게시판</a>
@@ -384,10 +491,10 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="{% url 'products:kit_list'%}">조립 키트</a>
+                                <a href="#">조립 키트</a>
                             </td>
                             <td>
-                                <a href="{% url 'lectures:maker_list'%}">메이커</a>
+                                <a href="#">메이커</a>
                             </td>
                             <td>
                                 <a href="{% url 'boards:board_topic' pk=2%}" style="color:#FDFEFE;">미메이커 코딩보드 게시판</a>
@@ -399,10 +506,10 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="{% url 'products:unpluged_list'%}">언플러그드</a>
+                                <a href="#">언플러그드</a>
                             </td>
                             <td>
-                                <a href="{% url 'lectures:scratch_list'%}">스크래치</a>
+                                <a href="#">스크래치</a>
                             </td>
                             <td>
                                 <a href="{% url 'boards:board_topic' pk=3%}" style="color:#FDFEFE;">3D모델링 및 출력 게시판</a>
@@ -414,7 +521,7 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="{% url 'products:book_list'%}">교재</a>
+                                <a href="#">교재</a>
                             </td>
                             <td></td>
                             <td>

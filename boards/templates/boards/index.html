@@ -5,8 +5,6 @@
 {% load humanize %}
 
 
-
-
 <div class="container">
 
     <div class="col-md-12 col-xs-12">
@@ -19,45 +17,47 @@
 
             <div class="me_title2 col-md-12 co-xs-12">
                 <a href="{%url 'boards:board_topic' pk=forloop.counter %}">
-                <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
-                {{board.first.board.name}} 바로가기</a>
+                    <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
+                    {{board.first.board.name}} 바로가기</a>
 
             </div>
             <div class="panel panel-success">
-                <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead class="thead">
-                        <tr>
-                            <th class="col-md-6 col-xs-6">주제</th>
-                            <th class="col-md-2 col-xs-2">작성자</th>
-                            <th class="col-md-2 col-xs-2">조회수</th>
-                            <th class="col-md-2 col-xs-2">등록일</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                <table class="table table-striped">
+                    <thead class="thead">
+                    <tr>
+                        <th class="col-md-6 col-xs-6">주제</th>
+                        <th class="col-md-2 col-xs-2">작성자</th>
+                        <th class="col-md-2 col-xs-2">조회수</th>
+                        <th class="col-md-2 col-xs-2">등록일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-                        {% for topic in board.all|slice:"5" %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'boards:board_content' pk=topic.board.id topic_pk=topic.id %}">
-                                    {{ topic.title|truncatechars:40 }}({{topic.post.count|default:"0"}})
-                                </a>
-                            </td>
-                            <td><span><img src="{{topic.user.userprofile.thumbnail.url}}"
-                                           style="width:30px;height:30px;"></span>
-                                {{topic.user.username }}
-                            </td>
-                            <td>
-                                {{topic.views}}
-                            </td>
-                            <td>
-                                {{ topic.updated_at|naturaltime }}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                    {% for topic in board.all|slice:"5" %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'boards:board_content' pk=topic.board.id topic_pk=topic.id %}">
+                                {{ topic.title|truncatechars:40 }}({{topic.post.count|default:"0"}})
+                            </a>
+                        </td>
+                        <td><span><img src="{{topic.user.userprofile.thumbnail.url}}"
+                                       style="width:30px;height:30px;"></span>
+                            {{topic.user.username }}
+                        </td>
+                        <td>
+                            {{topic.views}}
+                        </td>
+                        <td>
+                            {% if topic.updated_at|date:'d m y h:i:s' == topic.created_at|date:'d m y h:i:s' %}
+                            {{topic.created_at|naturaltime}}
+                            {% else %}
+                            {{topic.updated_at|naturaltime}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
             {% endfor%}
 

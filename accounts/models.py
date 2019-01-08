@@ -42,8 +42,10 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     route = models.CharField(max_length=5, choices=REGISTER_ROUTE, null=True, blank=True)
     agree = models.BooleanField(default=False)
-    favorite_product = models.ManyToManyField('products.Product', blank=True)
-    favorite_lecture = models.ManyToManyField('lectures.Lecture', blank=True)
+    favorite = models.ManyToManyField('products.Content', blank=True)
+
+    #favorite_product = models.ManyToManyField('products.Product', blank=True)
+    #favorite_lecture = models.ManyToManyField('lectures.Lecture', blank=True)
 
     def __str__(self):
         return self.user.username

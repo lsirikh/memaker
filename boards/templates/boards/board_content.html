@@ -2,83 +2,11 @@
 
 {% block content %}
 {% load staticfiles%}
-
 <div class="container">
+    <!--토픽 내용 본문-->
+    {% include 'includes/board_content_include.html'%}
 
-    <div class="me_title2">
-        <a href="{%url 'boards:index'%}">
-        <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
-        공유게시판</a> >
-        <a href="{%url 'boards:board_topic' pk=board.pk%}">{{board.name}}</a> >
-        <a href="{% url 'boards:board_content' pk=board.id topic_pk=topic.id  %}">{{topic.title|truncatechars:20}}</a>
-    </div>
-    <div class="panel panel-success">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="container">
-                    {{topic}}
-                </div>
-                <div class="container">
-                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"> {{topic.views}}</span>
-                </div>
-            </div>
-        </div>
-        <div class="panel-body">
-            <div class="col-md-2 col-xs-12">
-                <div class="row">
-                    <div class="col-md-12 col-xs-4" align="center">
-                        <img class="img-rounded" src="{{topic.user.userprofile.thumbnail.url}}"
-                             style="object-fit:cover;width:100%;">
-                    </div>
-                    <div class="col-md-12 col-xs-8" align="center">
-                        <div class="col-md-12  col-xs-12 text-center">
-                            <strong>
-                                {{topic.user}}
-                            </strong>
-                        </div>
-                        <div class="col-md-12  col-xs-12 text-center">
-                            {% if topic.updated_at is None %}
-                            <span class="glyphicon glyphicon-time" aria-hidden="true"> <small>{{topic.created_at}} (등록)</small></span>
-                            {% else %}
-                            <span class="glyphicon glyphicon-time" aria-hidden="true"> <small>{{topic.updated_at}} (수정)</small></span>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-10 col-xs-12">
-                <div class="message row">
-                    <p>{{topic.message|safe}}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="panel-footer">
-            <div class="row">
-                {% if request.user == topic.user%}
-                <div class="col-md-offset-6 col-md-2 col-md-2 col-xs-4">
-                    <a href="{% url 'boards:remove_content' pk=topic.board.id topic_pk=topic.id %}"
-                       class="btn btn-success btn-block">삭제</a>
-                </div>
-                <div class="col-md-2 col-xs-4">
-                    <a href="{% url 'boards:edit_content' pk=topic.board.id topic_pk=topic.id %}"
-                       class="btn btn-success btn-block">수 정</a>
-                </div>
-                <div class="col-md-2 col-xs-4">
-                    <a href="{% url 'boards:add_reply' pk=topic.board.id topic_pk=topic.id %}#{{topic.post.count|default:0}}"
-                       class="btn btn-success btn-block">댓 글</a>
-                </div>
-                {% else %}
-                <div class="col-md-offset-10 col-md-2 col-xs-12">
-                    <a href="{% url 'boards:add_reply' pk=topic.board.id topic_pk=topic.id %}#{{topic.post.count|default:0}}"
-                       class="btn btn-success btn-block">댓 글</a>
-                </div>
-                {% endif%}
-            </div>
-        </div>
-
-    </div>
-
+    <!--포스트 리스트 내용-->
     {% if topic.post.count > 0%}
     <div class="me_title2">
         댓글
@@ -86,128 +14,13 @@
     {% endif %}
 
     {% if topic.post.count > 0%}
-
-    {%for post in post_list %}
-    <div class="panel panel-success">
-        <div class="panel-body" id="{{post.order}}">
-            <div class="col-md-2 col-xs-12">
-                <div class="row">
-                    <div class="col-md-12 col-xs-4">
-                        <img class="img-rounded" src="{{post.user.userprofile.thumbnail.url}}"
-                             style="object-fit:cover;width:100%;">
-                    </div>
-                    <div class="row col-md-12  col-xs-8">
-                        <div class="col-md-12 col-xs-12 text-center">
-                            <strong>
-                                {{post.user}}
-                            </strong>
-                        </div>
-                        <div class="col-md-12  col-xs-12 text-center">
-                            {% if post.updated_at is None %}
-                            <span class="glyphicon glyphicon-time" aria-hidden="true"> <small>{{post.created_at}} (등록)</small></span>
-                            {% else %}
-                            <span class="glyphicon glyphicon-time" aria-hidden="true"> <small>{{post.updated_at}} (수정)</small></span>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-10 col-xs-12">
-                <!--{{post.order}}-->
-                <div class="row">
-                    <p>{{post.message|safe}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="panel-footer">
-
-            <div class="row">
-                <div class="me_title2_nopadding col-md-2 col-xs-3">
-                    #{{post.pk}}
-                </div>
-                {% if request.user == post.user%}
-                <div class="col-md-offset-4 col-md-2 col-md-2 col-xs-3">
-                    <a href="{% url 'boards:remove_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}"
-                       class="btn btn-success btn-block">삭 제</a>
-                </div>
-                <div class="col-md-2 col-xs-3">
-                    <a href="{% url 'boards:edit_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}#{{post.order}}"
-                       class="btn btn-success btn-block">수 정</a>
-                </div>
-                <div class="col-md-2 col-xs-3">
-                    <a href="{% url 'boards:reply_to_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}#{{post.order}}"
-                       class="btn btn-success btn-block">댓 글</a>
-                </div>
-                {% else%}
-                <div class="col-md-offset-8 col-md-2 col-xs-9">
-                    <a href="{% url 'boards:reply_to_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}#{{post.order}}"
-                       class="btn btn-success btn-block">댓 글</a>
-                </div>
-                {% endif%}
-            </div>
-        </div>
-    </div>
+    {% for post in post_list %}
+    {% include 'includes/board_reply_include.html'%}
     {% endfor %}
     {%endif%}
-    {% if is_paginated %}
-    <div class="container" align="center">
-        <nav aria-label="Topics pagination" class="mb-4">
-            <ul class="pagination pagination-sm">
-                {% if page_obj.number > 1 %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1"> << </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> << </span>
-                </li>
-                {% endif %}
 
-                {% if has_previous_index %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ previous_index }}"> < </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> < </span>
-                </li>
-                {% endif %}
-
-                {% for page in page_range %}
-                {% if page == page_obj.number %}
-                <li class="active">
-                    {% else%}
-                <li>
-                    {% endif %}
-                    <a href="?page={{ page }}">{{ page }}</a>
-                </li>
-                {% endfor %}
-
-
-                {% if has_next_index %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ next_index }}"> > </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> > </span>
-                </li>
-                {% endif %}
-
-                {% if page_obj.number != paginator.num_pages %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ paginator.num_pages }}"> >> </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> >> </span>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-
-    {% endif %}
+    <!--function view 페이지네이션 내용-->
+    {% include 'includes/pagenation_class.html'%}
 
 
 </div>

@@ -1,0 +1,24 @@
+게시판 테스트 코드
+
+
+from django.contrib.auth.models import User
+from boards.models import Board, Topic, Post
+from django.utils import timezone
+
+
+
+
+토픽테스트 코드(30개 생성)
+
+user = User.objects.get(username='testuser01')
+board = Board.objects.get(pk=1)
+
+for i in range(30):
+	Topic.objects.create(title='#{0}_test'.format(i), user=user, board=board, message='#{0}_messages'.format(i), created_at=timezone.now(), updated_at=timezone.now())
+
+포스트테스트 코드(30개 생성)
+
+topic = Topic.objects.get(title='#20_test')
+
+for i in range(30):
+     Post.objects.create(message = 'reply test #{0}'.format(i),order = i, topic = topic, created_at = timezone.now(), user=user)

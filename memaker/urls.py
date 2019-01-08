@@ -21,10 +21,15 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from ckeditor_uploader.urls import views as uploader_views
 
-
 app_name='memaker'
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('_nested_admin/', include('nested_admin.urls')),
+
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    #path('ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
+    #path('ckeditor/browse/', uploader_views.browse, name='ckeditor_browse'),
+
 #    re_path(r'^r/$', views.login_redirect, name='login_redirect'),
     path('', views.HomeView.as_view(), name='home'),
     path('polls/', include('polls.urls')),
@@ -33,9 +38,7 @@ urlpatterns = [
     path('lectures/', include('lectures.urls')),
     path('accounts/', include('accounts.urls')),
     path('boards/', include('boards.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
-    #path('ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
-    #path('ckeditor/browse/', uploader_views.browse, name='ckeditor_browse'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

@@ -1,0 +1,6 @@
+{% if reply.pk == pk_reply%}
+{% include 'includes/video_reply_include.html' %}
+{% include 'includes/form_for_reply.html' %}
+{% else %}
+{% include 'includes/video_reply_include.html' %}
+{% endif %}

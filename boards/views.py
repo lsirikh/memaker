@@ -289,7 +289,6 @@ def add_content_view(request, pk):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.board = board
-            topic.updated_at = timezone.now()
             topic.user = user
             topic.save()
 
@@ -470,14 +469,8 @@ def add_reply_to_reply_view(request, pk, topic_pk, post_pk):
         number_for_page = int(number_for_page)
 
     print(str(number_for_page))
-    #queryset = topic.post.order_by('-order')
-    #page = request.GET.get('page', number_for_page)
-    #paginator = Paginator(queryset, 10)
-
     queryset = topic.post.order_by('-order')
-    #print(queryset)
     page = request.GET.get('page', number_for_page)
-    #current_page = int(page) if page else 1
     current_page = number_for_page
     paginator = Paginator(queryset, 10)
 
@@ -527,10 +520,12 @@ def add_reply_to_reply_view(request, pk, topic_pk, post_pk):
             post.topic = topic
             post.order = post_order
             post.user = request.user
+            post.is_post_to_post = True
+            post.post_to_post_address = post_pk
             post.save()
 
             ##########################################################
-            number_for_page = (topic.post.count() - post_order) / 10
+            number_for_page = (Post.objects.filter(topic=topic).count() - post_order) / 10
             number_for_page_int = int(number_for_page)
             if number_for_page_int < number_for_page:
                 number_for_page = int(number_for_page) + 1
@@ -576,13 +571,17 @@ def add_reply_to_reply_view(request, pk, topic_pk, post_pk):
 # 페이지네이션이 필요.(검증완료)
 @login_required(login_url="accounts:login")
 def edit_reply_view(request, pk, topic_pk, post_pk):
+    print("edit_reply_view")
     board = get_object_or_404(Board, pk=pk)
     topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
-    post = get_object_or_404(Post, topic__pk=topic_pk, pk=post_pk)
     post_list = Post.objects.filter(topic=topic).order_by('-order')
+    post_order = Post.objects.get(pk=post_pk).order
+
+    #수정을 위한 해당 Post ritrieve 과정
+    post = get_object_or_404(Post, topic__pk=topic_pk, pk=post_pk)
+    #해당 Post정보를 이용해서 form구성
     form = NewPostForm(request.POST or None, instance=post)
 
-    post_order = Post.objects.get(pk=post_pk).order
 
     # print(queryset)
     number_for_page = (topic.post.count() - post_order) / 10
@@ -595,10 +594,38 @@ def edit_reply_view(request, pk, topic_pk, post_pk):
     print(str(number_for_page))
     queryset = topic.post.order_by('-order')
     page = request.GET.get('page', number_for_page)
+    current_page = number_for_page
     paginator = Paginator(queryset, 10)
 
+    # pagenator의 페이지당 인덱스 수를 5로 설정한다.
+    page_numbers_range = 5  # Display only 5 page numbers
+    # set max_index as "int" from the length of paginator.page_range
+    # print(type(paginator.page_range))
+    # print(type(len(paginator.page_range)))
+    max_index = len(paginator.page_range)
 
+    start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
+    print("start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range")
+    print("{0} = int(({1} - 1) / {2}) * {3}".format(start_index, current_page, page_numbers_range, page_numbers_range))
+    end_index = start_index + page_numbers_range
+    print(end_index)
 
+    ####next index checking and last index setting#####
+    if end_index >= max_index:
+        end_index = max_index
+        has_next_index = False
+    else:
+        has_next_index = True
+
+    ####previous index checking#####
+    if (start_index + 1) > 1:
+        has_previous_index = True
+    else:
+        has_previous_index = False
+
+    page_range = paginator.page_range[start_index:end_index]
+    next_index = start_index + page_numbers_range + 1
+    previous_index = (start_index + 1) - page_numbers_range
 
     print("edit_reply_view 성공")
     if request.method == 'POST':
@@ -639,7 +666,17 @@ def edit_reply_view(request, pk, topic_pk, post_pk):
             post_list = paginator.page(paginator.num_pages)
 
     return render(request, 'boards/board_reply_content_edit.html',
-                  {'board': board, 'topic': topic, 'post_list': post_list, 'post_pk': post_pk, 'form': form}
+                  {'board': board,
+                   'topic': topic,
+                   'post_list': post_list,
+                   'post_pk': post_pk,
+                   'form': form,
+                   'page_range': page_range,
+                   'next_index': next_index,
+                   'previous_index': previous_index,
+                   'has_next_index': has_next_index,
+                   'has_previous_index': has_previous_index,
+                   }
                   )
 
 # 페이지네이션이 필요 없음.

@@ -6,10 +6,11 @@ from accounts.models import UserProfile
 @admin.register(UserProfile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user',
-                    #'image',
+                    'route',
+                    'agree',
+                    'email_confirmed',
                     'gender',
                     'birth',
-                    'description',
                     'address',
                     'phone',
                     'route',

@@ -19,15 +19,15 @@ from django.urls import path
 
 app_name = 'lectures'
 urlpatterns = [
-    # /lectures/
-    #path('', views.LectureModelView.as_view(), name='index'),
-    path('', views.LectureListView.as_view(), name='index'),
-    # /lectures/#_list/
-    path('entry_list/', views.EntryListView.as_view(), name='entry_list'),
-    path('maker_list/', views.MakerListView.as_view(), name='maker_list'),
-    path('scratch_list/', views.ScratchListView.as_view(), name='scratch_list'),
-    # /lectures/99
-    path('<int:pk>/', views.LectureDetailView.as_view(), name='lecture_detail'),
-    path('add/<int:pk>/', views.favorite_add_view, name='favorite_add'),
-    path('sub/<int:pk>/', views.favorite_sub_view, name='favorite_sub'),
+    # # /lectures/
+    # #path('', views.LectureModelView.as_view(), name='index'),
+    # path('', views.LectureListView.as_view(), name='index'),
+    # # /lectures/#_list/
+    # path('entry_list/', views.EntryListView.as_view(), name='entry_list'),
+    # path('maker_list/', views.MakerListView.as_view(), name='maker_list'),
+    # path('scratch_list/', views.ScratchListView.as_view(), name='scratch_list'),
+    # # /lectures/99
+    # path('<int:pk>/', views.LectureDetailView.as_view(), name='lecture_detail'),
+    # path('add/<int:pk>/', views.favorite_add_view, name='favorite_add'),
+    # path('sub/<int:pk>/', views.favorite_sub_view, name='favorite_sub'),
 ]

@@ -12,25 +12,25 @@
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
        aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="/products">교재와 교보재</a></li>
+        <li><a href="{% url 'products:product_list'%}">교재와 교보재</a></li>
         <li class="divider"></li>
         <li class="dropdown-header">세부항목</li>
-        <li><a href="{% url 'products:board_list'%}">코딩보드 및 센서</a></li>
-        <li><a href="{% url 'products:kit_list'%}">조립 키트</a></li>
-        <li><a href="{% url 'products:unpluged_list'%}">언플러그드</a></li>
-        <li><a href="{% url 'products:book_list'%}">교재</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=4 %}">코딩보드 및 센서</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=3 %}">조립 키트</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=2 %}">언플러그드</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=1 %}">교재</a></li>
     </ul>
 </li>
 <li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
        aria-expanded="false">온라인 강의<span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="/lectures">온라인 강의</a></li>
+        <li><a href="{% url 'products:lecture_list'%}">온라인 강의</a></li>
         <li class="divider"></li>
         <li class="dropdown-header">세부항목</li>
-        <li><a href="{% url 'lectures:entry_list'%}">엔트리</a></li>
-        <li><a href="{% url 'lectures:maker_list'%}">메이커</a></li>
-        <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=5 %}">엔트리</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=7 %}">메이커</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=6 %}">스크래치</a></li>
     </ul>
 </li>
 <li class="dropdown">
@@ -53,40 +53,22 @@
 <style type="text/css">
 .jumbotron{
     background-image: url("{% static 'img/img_sub6.jpg'%}");
-    z-index: -1;
-    whidth: 100%;
-    height: auto;
-    opacity: 0.8;
-     display: block;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    color : #FFF;
-
 }
-.display-3{
-font-weight: bold
-}
-
-
-.jumbotron .container {
-  position: relative;
-}
-
 
 </style>
-<div class="container-fluid">
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container" style="color:white;" align="center">
-            <div class="me_title1">"미메이커" 서비스에 가입하시고 다양한 메이커&코딩의 세계를 경험하세요.</div>
-            <div class="me_title3">지금 미메이커 서비스에 가입하시면 다양한 강의와 교육 콘텐츠를 무료로 즐기실 수 있습니다.<br>
-            4차 산업혁명시대 꼭! 필요한 코딩 교육 이제 미메이커와 함께하시면 재미와 지식을 모두 잡으실 수 있습니다.
+<div class="row">
+    <div class="container-fluid">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container-fluid">
+                <div class="me_jumbotron_title" align="center">"미메이커" 서비스에 가입하시고,<br> 다양한 메이커&코딩을 경험하세요.</div>
+                <br>
+                <div class="me_jumbotron_subtitle" align="center">지금 미메이커 서비스에 가입하시면 다양한 강의와 교육 콘텐츠를 무료로 즐기실 수 있습니다.<br>
+                    4차 산업혁명시대 꼭! 필요한 코딩 교육 이제 미메이커와 함께하시면 재미와 지식을 모두 잡으실 수 있습니다.
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 
 {%endblock jumbotron%}
 

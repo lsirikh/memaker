@@ -49,7 +49,14 @@ class AccountsIndexView(LoginRequiredMixin, TemplateView):
         #context['model_list'] = UserProfile.objects.all()
         user = auth.get_user(self.request)
         user_profile = UserProfile.objects.get(user__username=user)
-        context = {'user':user, 'user_profile':user_profile}
+        product_list = user_profile.favorite.filter(category__section="상품")
+        lecture_list = user_profile.favorite.filter(category__section="강좌")
+        context = {
+            'user':user,
+            'user_profile':user_profile,
+            'product_list':product_list,
+            'lecture_list':lecture_list,
+                   }
 
         return context
 
@@ -247,6 +254,7 @@ def register_view(request):
 
         email = request.POST.get('email')
         agree = request.POST.get('agree')
+        print("agree : "+agree)
 
         try:
             if agree != 'on':
@@ -307,9 +315,11 @@ def register_view(request):
             try:
                 profile_data = user.userprofile
                 get_route = form_profile.cleaned_data.get('route')
+                get_agree = form_profile.cleaned_data.get('agree')
                 if get_route is not "":
                     print("가입경로 선택 : "+str(get_route))
                     profile_data.route = get_route
+                    profile_data.agree = get_agree
                     profile_data.save()
                 else:
                     print("가입경로 선택 안됨.....")
@@ -356,6 +366,7 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.userprofile.email_confirmed = True
         user.save()
+        user.userprofile.save()
         login(request, user)
         return redirect('/')
     else:

@@ -1,0 +1,15 @@
+<div class="panel panel-success">
+    <div class="panel-body" id="{{reply.order}}">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.media }}
+            {{form.as_p}}
+            <div class="row">
+                <div class="col-md-offset-10 col-md-2">
+                    <button type="submit" class="btn btn-success btn-block">등록하기</button>
+                </div>
+            </div>
+        </form>
+        <br>
+    </div>
+</div>

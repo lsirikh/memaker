@@ -1,0 +1,26 @@
+<div class="me_title3_nopadding">
+    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+    강좌 목록
+    <hr>
+</div>
+<div class="row">
+
+    {% if content.lecture_set.first.video_set.count > 0 %}
+    <div class="scrolling-wrapper">
+        <div class="scrollmenu">
+            {% for video in content.lecture_set.first.video_set.all %}
+            <a href="{% url 'products:content_video' pk=content.pk pk_video=video.pk %}#video">
+                <div class="panel panel-success" style="margin:5px;">
+                    <div class="panel-heading">{{forloop.counter}}강</div>
+                    <div class="panel-body">
+                        <small>{{video.title|truncatechars:20}}</small>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endif %}
+</div>
+<br>

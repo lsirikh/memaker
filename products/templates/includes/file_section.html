@@ -1,0 +1,26 @@
+{% load staticfiles%}
+<div class="me_title3_nopadding"><span class="glyphicon glyphicon-file"
+                                       aria-hidden="true"></span>
+    파일
+</div>
+<hr>
+<div class="container">
+    {% for file in content.file.all %}
+    {% if file.type == 'ppt' or file.type == 'pptx' %}
+    <div class="col-md-1 col-xs-4"><a href="{{file.file.url}}" download="{{file.description|cut:' '}}.{{file.type}}"><img class="file_icon"
+                                                                src="{% static 'img/ppt_icon.png' %}">
+        <p>{{file}}</p></a></div>
+    {% elif file.type == 'pdf' %}
+    <div class="col-md-1 col-xs-4"><a href="{{file.file.url}}" download="{{file.description|cut:' '}}.{{file.type}}"><img class="file_icon"
+                                                                src="{% static 'img/pdf_icon.png' %}" >
+        <div class="me_title6_nopadding">{{file}}</div>
+    </a></div>
+    {% elif file.type == 'zip' %}
+    <div class="col-md-1 col-xs-4"><a href="{{file.file.url}}" download="{{file.description|cut:' '}}.{{file.type}}"><img class="file_icon"
+                                                                src="{% static 'img/zip_icon.png' %}">
+        <div class="me_title6_nopadding">{{file}}</div>
+    </a></div>
+    {% endif %}
+    {% endfor %}
+</div>
+<br>

@@ -1,0 +1,106 @@
+{% extends selected_base_page %}
+
+{% block content %}
+{% load staticfiles%}
+<div class="container">
+    <div class="row-container">
+        {% if content.category.section == '상품' %}
+        {% include 'includes/product_information_include.html'%}
+        {% elif content.category.section == '강좌' %}
+        {% include 'includes/lecture_information_include.html'%}
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <ul class="nav nav-tabs" role="tablist" id="myTab">
+            {% if content.category.section == "상품" %}
+            <li role="presentation" class="active">
+                <a href="{% url 'products:content_information' pk=content.pk %}#intro"
+                   aria-controls="home"
+                   role="tab">상품설명</a></li>
+            <li role="presentation">
+                <a href="{% url 'products:content_review' pk=content.pk %}#review"
+                   aria-controls="review" role="tab">리뷰</a></li>
+            {% elif content.category.section == "강좌"%}
+            <li role="presentation" class="active">
+                <a href="{% url 'products:content_information' pk=content.pk %}#intro"
+                   aria-controls="home"
+                   role="tab">강의소개</a></li>
+            <li role="presentation">
+                <a href="{% url 'products:content_review' pk=content.pk %}#review"
+                   aria-controls="review" role="tab">리뷰</a></li>
+            <li role="presentation">
+                <a href="{% url 'products:content_video' pk=content.pk pk_video=content.lecture_set.first.video_set.first.pk %}#video"
+                   aria-controls="video" role="tab">
+                    비디오</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="row">
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="intro">
+                <div class="container col-md-12" style="margin-top:50px;">
+                    {% if content.category.section == "강좌"%}
+                    {% include 'includes/video_scroll.html'%}
+                    {% endif %}
+                    {% if content.sample %}
+                    <div class="me_title3_nopadding"><span class="glyphicon glyphicon-facetime-video"
+                                                           aria-hidden="true"></span>
+                        {% if content.category.section == "상품" %}
+                        작동 영상
+                        <hr>
+                        {% elif content.category.section == "강좌"%}
+                        맛보기 영상
+                        <hr>
+                        {% endif %}
+
+                    </div>
+                    <div class="row featurette" style="margin-top:10px;">
+                        <div class="col-md-push-3 col-md-6">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe class="embed-responsive-item" src="{{content.sample}}"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    {%endif%}
+                    {% if content.file.count > 0%}
+                    {% include 'includes/file_section.html'%}
+                    {% endif %}
+
+
+                    <div class="me_title2_nopadding">
+                        <div class="me_title3_nopadding"><span class="glyphicon glyphicon-asterisk"
+                                                               aria-hidden="true"></span>
+                            {% if content.category.section == "상품" %}
+                            제품 소개
+                            <hr>
+                            {% elif content.category.section == "강좌"%}
+                            강의 소개
+                            <hr>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                    <div class="container-fluid">
+                        {% if content.category.section == "상품" %}
+                        <p>{{content.product_set.first.introduce|safe}}</p>
+                        {% elif content.category.section == "강좌"%}
+                        <p>{{content.lecture_set.first.introduce|safe}}</p>
+                        {% endif %}
+                    </div>
+                    <br>
+                </div>
+                <div class="container-fluid">
+                    {% include 'includes/related_content.html'%}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+{% endblock content %}

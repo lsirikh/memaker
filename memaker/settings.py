@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'nested_admin',  # 추가 20190102
+
     'imagekit',
     'django.contrib.humanize',
     'easy_thumbnails',
@@ -80,7 +82,7 @@ CKEDITOR_CONFIGS = {
             ['Link', 'Unlink', 'Anchor'],
             ['Image', 'Embed', 'Table', 'HorizontalRule'],
             ['TextColor', 'BGColor'],
-            ['Smiley', 'Emoji', 'SpecialChar'], ['Source','CodeSnippet'],
+            ['Smiley', 'Emoji', 'SpecialChar'], ['Source', 'CodeSnippet'],
         ],
         'extraPlugins': ','.join([
             'clipboard',
@@ -174,11 +176,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
 STATIC_URL = '/static/'
-STATIC_ROOT = 'staticfiles'
+# STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = os.path.join(ROOT_DIR, 'staticfiles')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
 STATICFILES_DIRS = [
     # 'home/ubuntu/memaker/memaker/',
-    os.path.join(BASE_DIR, 'static'),
+    # os.path.join(BASE_DIR, 'static'),
+    STATIC_DIR
 ]
 
 # set the log configuration with keeping Django default setting

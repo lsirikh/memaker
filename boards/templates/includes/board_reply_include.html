@@ -1,0 +1,64 @@
+<div class="panel panel-success">
+    <div class="panel-body" id="{{post.order}}">
+        <div class="col-md-2 col-xs-12">
+            <div class="row">
+                <div class="col-md-12 col-xs-2">
+                    <img class="img-rounded" src="{{post.user.userprofile.thumbnail.url}}">
+                </div>
+                <div class="row col-md-12  col-xs-10">
+                    <div class="col-md-12 col-xs-12 text-center">
+                        <strong>
+                            {{post.user}}
+                        </strong>
+                    </div>
+                    <div class="col-md-12  col-xs-12 text-center" >
+                        <div class="row" >
+                            {% if post.updated_at|date:'d m y h:i:s' == post.created_at|date:'d m y h:i:s' %}
+                            <small><span class="glyphicon glyphicon-time" aria-hidden="true"> {{post.created_at|date:'y-m-d H:i'}}(등록)</span></small>
+                            {% else %}
+                            <small><span class="glyphicon glyphicon-time" aria-hidden="true"> {{post.updated_at|date:'y-m-d H:i'}}(수정)</span></small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="col-md-10 col-xs-12">
+            <!--{{post.order}}-->
+            <div class="row">
+                {% if post.is_post_to_post %}
+                <strong style="color:red;">#{{post.post_to_post_address}}의 댓글</strong>
+                {% endif %}
+                <p>{{post.message|safe}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+
+        <div class="row">
+            <div class="me_title2_nopadding col-md-2 col-xs-3">
+                #{{post.pk}}
+            </div>
+            {% if request.user == post.user%}
+            <div class="col-md-offset-4 col-md-2 col-md-2 col-xs-3">
+                <a href="{% url 'boards:remove_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}"
+                   class="btn btn-success btn-block">삭 제</a>
+            </div>
+            <div class="col-md-2 col-xs-3">
+                <a href="{% url 'boards:edit_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}#{{post.order}}"
+                   class="btn btn-success btn-block">수 정</a>
+            </div>
+            <div class="col-md-2 col-xs-3">
+                <a href="{% url 'boards:reply_to_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}#{{post.order}}"
+                   class="btn btn-success btn-block">댓 글</a>
+            </div>
+            {% else%}
+            <div class="col-md-offset-8 col-md-2 col-xs-9">
+                <a href="{% url 'boards:reply_to_reply' pk=topic.board.id topic_pk=topic.id post_pk=post.id %}#{{post.order}}"
+                   class="btn btn-success btn-block">댓 글</a>
+            </div>
+            {% endif%}
+        </div>
+    </div>
+</div>

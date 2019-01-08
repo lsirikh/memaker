@@ -1,95 +1,83 @@
-{% extends "base_products.html" %}
 
+{% extends selected_base_page %}
 {% block content %}
 {% load staticfiles%}
 
 
 <div class="container">
     <div class="cotainer-fluid" align="center">
-        {% if is_paginated %}
-        <ul class="pagination pagination-sm">
-            {% if page_obj.has_previous %}
-            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&laquo;</span></li>
-            {% endif %}
-            {% for i in paginator.page_range %}
-            {% if page_obj.number == i %}
-            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-            {% else %}
-            <li><a href="?page={{ i }}">{{ i }}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&raquo;</span></li>
-            {% endif %}
-        </ul>
-        {% endif %}
+        {% include 'includes/pagenation_class.html'%}
     </div>
     <div class="me_title2_nopadding">
-        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
-        <!--{{category}}-->
-        추천 제품
+        {% if section == "상품" %}
+        <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> 추천 제품
+
+        {% elif section == "강좌" %}
+        <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> 추천 강의
+        {% endif %}
+
     </div>
     <div class="row">
         <hr>
-        <h2>{{product_list.title}}</h2>
-        {% if product_list %}
-        {% for product in product_list %}
+        {% if content_list.count > 0%}
+        {% for content in content_list %}
         <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img src="{{product.thumbnail.url}}" alt="...">
+            <div class="thumbnail" align="center">
+                <img src="{{content.image.first.thumbnail.url}}"
+                     alt="...">
                 <div class="caption">
-                    <h4>{{ product.title|truncatechars:23 }}</h4>
-                    <p>{{ product.description|truncatechars:55 }}</p>
+                    <h4>
+                        {% if content.recommend == 1 %}
+                            <span class="label label-success">{{content.get_recommend_display}}</span>
+                        {% elif content.recommend == 2 %}
+                            <span class="label label-warning">{{content.get_recommend_display}}</span>
+                        {% endif %}
+                        {{ content.title|truncatechars:23 }}
+                    </h4>
+                    <p>{{ content.description|truncatechars:55 }}</p>
+
                     <p align="center">
-                        <a href="{% url 'products:product_detail' product.id%}" class="btn btn-primary"
+                        {% if content.category.section == '상품'%}
+                        <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
                            role="button">구경하기</a>
-                        <a href="#" class="btn btn-default" role="button">구매하기</a>
+                        <a href="{{content.product_set.first.link}}" class="btn btn-default" role="button" target="_blank">구매하기</a>
+                        {% elif content.category.section == '강좌'%}
+                        <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
+                           role="button">수강하기</a>
+                        {% endif %}
                     </p>
                 </div>
             </div>
         </div>
+
         {% endfor %}
         {% else %}
         <div class="col-md-12" align="center">
             <div class="well well-lg" align="center"
-                 style="max-width:600px;height:100px;text-align:center;margin-left:-8px;">
-                제품 준비중입니다.<br>
-                항상 더 나은 교육 콘텐츠품 및 교보재로 찾아가는 미메이커가 되겠습니다.<br>
-                감사합니다.
+                 style="max-width:auto;height:auto;text-align:center;margin-left:-8px;">
+                <div class="me_title3_nopadding">
+                    {% if section == '상품' %}
+                    상품 준비중입니다.<br>
+                    항상 더 나은 교육 콘텐츠품 및 교보재로 찾아가는 미메이커가 되겠습니다.<br>
+                    감사합니다.
+                    {% elif section == '강좌' %}
+                    강좌 준비중입니다.<br>
+                    항상 더 나은 교육 강좌와 콘텐츠로 찾아가는 미메이커가 되겠습니다.<br>
+                    감사합니다.
+                    {% endif %}
+                </div>
             </div>
         </div>
         {%endif%}
 
     </div>
 
+
+
     <hr>
 
     <div class="cotainer-fluid" align="center">
-        {% if is_paginated %}
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&laquo;</span></li>
-            {% endif %}
-            {% for i in paginator.page_range %}
-            {% if page_obj.number == i %}
-            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-            {% else %}
-            <li><a href="?page={{ i }}">{{ i }}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&raquo;</span></li>
-            {% endif %}
-        </ul>
-        {% endif %}
+        {% include 'includes/pagenation_class.html'%}
     </div>
 </div>
 

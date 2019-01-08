@@ -1,0 +1,39 @@
+{% if content.related_content.all.count > 0 %}
+{% if content.category.section == '상품' %}
+<div class="me_title3_nopadding"><span class="glyphicon glyphicon-facetime-video"
+                                       aria-hidden="true"></span> 관련 영상
+</div>
+<hr>
+{% elif content.category.section == '강좌'%}
+<div class="me_title3_nopadding"><span class="glyphicon glyphicon-gift"
+                                       aria-hidden="true"></span> 관련 제품
+</div>
+<hr>
+{% endif %}
+<div class="row">
+    {% for content in content.related_content.all %}
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{{content.image.first.thumbnail.url}}" alt="...">
+            <div class="caption">
+                <h4>{{ content.title|truncatechars:23 }}</h4>
+                <p>{{ content.description|truncatechars:55 }}</p>
+                <p align="center">
+                    {% if content.category.section == '상품'%}
+                    <a href="{% url 'products:content_information' pk=content.pk %}"
+                       class="btn btn-primary"
+                       role="button">구경하기</a>
+                    <a href="{{content.product_set.first.link}}" class="btn btn-default"
+                       role="button"
+                       target="_blank">구매하기</a>
+                    {% elif content.category.section == '강좌'%}
+                    <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
+                       role="button">수강하기</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

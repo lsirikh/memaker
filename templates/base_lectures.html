@@ -12,25 +12,25 @@
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
        aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="/products">교재와 교보재</a></li>
+        <li><a href="{% url 'products:product_list'%}">교재와 교보재</a></li>
         <li class="divider"></li>
         <li class="dropdown-header">세부항목</li>
-        <li><a href="{% url 'products:board_list'%}">코딩보드 및 센서</a></li>
-        <li><a href="{% url 'products:kit_list'%}">조립 키트</a></li>
-        <li><a href="{% url 'products:unpluged_list'%}">언플러그드</a></li>
-        <li><a href="{% url 'products:book_list'%}">교재</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=4 %}">코딩보드 및 센서</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=3 %}">조립 키트</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=2 %}">언플러그드</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=1 %}">교재</a></li>
     </ul>
 </li>
 <li class="dropdown active">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
        aria-expanded="false">온라인 강의<span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu">
-        <li><a href="/lectures">온라인 강의</a></li>
+        <li><a href="{% url 'products:lecture_list'%}">온라인 강의</a></li>
         <li class="divider"></li>
         <li class="dropdown-header">세부항목</li>
-        <li><a href="{% url 'lectures:entry_list'%}">엔트리</a></li>
-        <li><a href="{% url 'lectures:maker_list'%}">메이커</a></li>
-        <li><a href="{% url 'lectures:scratch_list'%}">스크래치</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=5 %}">엔트리</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=7 %}">메이커</a></li>
+        <li><a href="{% url 'products:content_category_list' pk=6 %}">스크래치</a></li>
     </ul>
 </li>
 <li class="dropdown">
@@ -56,37 +56,50 @@
 
 .jumbotron{
     background: url("{% static 'img/img_sub2.jpg'%}") center center no-repeat;
-    z-index: -1;
-    whidth: 100%;
-    height: auto;
-    opacity: 0.8;
-     display: block;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    color : #FFF;
-
-}
-.display-3{
-font-weight: bold
 }
 
+@media screen and (min-width: 601px) {
 
-.jumbotron .container {
-  position: relative;
-  top:100px;
+.carousel-inner > .item > img
+{
+  width:auto;
+  height:350px;
+  max-height:350px;
+}
+.carousel,
+.carousel-inner > .item
+ {
+  width:auto;
+  height:350px;
+}
+}
+@media screen and (max-width: 600px) {
+.carousel-inner > .item > img
+{
+  width:auto;
+  height:200px;
+  max-height:200px;
+}
+.carousel,
+.carousel-inner > .item
+{
+  width:auto;
+  height:200px;
 }
 
 
 </style>
-<div class="container-fluid">
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container-fluid">
-            <div class="me_title1" align="center">유투브로 무료 학습하는 <br>'미메이커 온라인 교육'</div>
-            <div class="me_title3" align="center">미메이커는 다양한 코딩키트와 교육 커리큘럼이 준비되어 있습니다.<br/>
-                또한, 이러한 커리큘럼을 온라인을 통해 무료학습하고 반복해서 보실 수 있습니다.<br/>
-                미메이커 코딩보드 세트와 키트만 있으면 언제 어디서나 무료로 배우실 수 있습니다!</div>
+<div class="row">
+    <div class="container-fluid">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container-fluid">
+                <div class="me_jumbotron_title" align="center">유투브로 무료 학습하는 <br>'미메이커 온라인 교육'</div>
+                <br>
+                <div class="me_jumbotron_subtitle" align="center">미메이커는 다양한 코딩키트와 교육 커리큘럼이 준비되어 있습니다.<br/>
+                    또한, 이러한 커리큘럼을 온라인을 통해 무료학습하고 반복해서 보실 수 있습니다.<br/>
+                    미메이커 코딩보드 세트와 키트만 있으면 언제 어디서나 무료로 배우실 수 있습니다!
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -100,9 +113,9 @@ font-weight: bold
 <div class="row-fluid">
     <div class="col-md-12" align="center">
         <div class="btn-group" role="group" aria-label="...">
-            <a href="{% url 'lectures:entry_list'%}" class="btn btn-primary" role="button">엔트리</a>
-            <a href="{% url 'lectures:maker_list'%}" class="btn btn-primary" role="button">메이커</a>
-            <a href="{% url 'lectures:scratch_list'%}" class="btn btn-primary" role="button">스크래치</a>
+            <a href="{% url 'products:content_category_list' pk=5 %}" class="btn btn-primary" role="button">엔트리</a>
+            <a href="{% url 'products:content_category_list' pk=7 %}" class="btn btn-primary" role="button">메이커</a>
+            <a href="{% url 'products:content_category_list' pk=6 %}" class="btn btn-primary" role="button">스크래치</a>
         </div>
     </div>
 </div>

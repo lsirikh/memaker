@@ -1,0 +1,57 @@
+{% if is_paginated %}
+<div class="container" align="center">
+    <nav aria-label="Topics pagination" class="mb-4">
+        <ul class="pagination pagination-sm">
+            {% if page_obj.number > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1#review"> << </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"> << </span>
+            </li>
+            {% endif %}
+
+            {% if has_previous_index %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ previous_index }}#reply"> < </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"> < </span>
+            </li>
+            {% endif %}
+
+            {% for page in page_range %}
+            {% if page == page_obj.number %}
+            <li class="active">
+                {% else%}
+            <li>
+                {% endif %}
+                <a href="?page={{ page }}#reply">{{ page }}</a>
+            </li>
+            {% endfor %}
+
+            {% if has_next_index %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ next_index }}#reply"> > </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"> > </span>
+            </li>
+            {% endif %}
+
+            {% if page_obj.number != paginator.num_pages %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ paginator.num_pages }}#reply"> >> </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"> >> </span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endif %}

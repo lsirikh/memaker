@@ -10,8 +10,8 @@
 
         <br/>
         <div class="row">
-            <div class="me_title0" align="center">미메이커 서비스 특징</div>
-            <br/>
+            <div class="me_title0_nopadding" align="center">미메이커 서비스 특징</div>
+            <hr>
             <br/>
             <br/>
             <div class="col-md-4" align="center">
@@ -49,10 +49,10 @@
         <div class="container marketing">
             <div class="row">
                 <div class="col-md-12 col-sm-12">
-                    <div class="me_title0" align="center">미메이커 교육 구성</div>
+                    <div class="me_title0_nopadding" align="center">미메이커 교육 구성</div>
                 </div>
-                <hr class="featurette-divider">
-                {% if model_list %}
+                <hr>
+                {% if model_list.count > 0 %}
                 {% for intro in model_list %}
                 {% if forloop.counter|divisibleby:2 %}
 

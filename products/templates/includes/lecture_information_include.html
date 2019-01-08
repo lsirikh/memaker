@@ -1,0 +1,113 @@
+{% load humanize %}
+<div class="me_title2_nopadding">
+    <a href="{%url 'products:lecture_list' %}">
+        <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
+        온라인 강의</a> >
+    {% if content.category.title == "엔트리" %}
+    <a href="{% url 'products:content_category_list' pk=content.category.pk %}"> {{content.category.title}}</a> >
+    {% elif content.category.title == "메이커" %}
+    <a href="{% url 'products:content_category_list' pk=content.category.pk %}"> {{content.category.title}}</a> >
+    {% elif content.category.title == "스크래치" %}
+    <a href="{% url 'products:content_category_list' pk=content.category.pk %}"> {{content.category.title}}</a> >
+    {% endif %}
+    <a href="{%url 'products:content_information' pk=content.pk %}"> {{content.title}}</a>
+
+</div>
+<hr>
+<div class="col-md-6 col-xs-12 item-photo">
+    {% include 'includes/carousel.html' %}
+
+
+</div>
+<div class="col-md-6 col-xs-12">
+    <div class="me_title2_nopadding">{{ content.title }}</div>
+    <br>
+    <div class="me_title4_nopadding" style="color:#337ab7">{{ content.description }}</div>
+    <br>
+    <div class="me_title4_nopadding" style="padding-bottom:5px;">
+        <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 가격
+    </div>
+    <div class="me_title5_nopadding">
+        {% if content.cost > 0%}
+        <strong>￦ {{ content.cost|intcomma }} 원</strong>
+        {% else %}
+        <strong>무료</strong>
+        {% endif %}
+    </div>
+    <br>
+    <div class="section">
+        <div class="me_title4_nopadding" style="padding-bottom:5px;">
+            <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 수강가능
+        </div>
+        <div>
+            {% if content.isSale%}
+            <strong>
+                <div class="me_title5_nopadding">강의중</div>
+            </strong>
+            {% else %}
+            <strong>
+                <div class="me_title5_nopadding">강의종료</div>
+            </strong>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <div class="section" style="padding-bottom:5px;">
+        <div class="me_title4_nopadding">
+            <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 수강연령
+        </div>
+        <div>
+            <strong>
+                <div class="me_title5_nopadding">전연령</div>
+            </strong>
+        </div>
+    </div>
+    <br>
+    <div class="section" style="padding-bottom:5px;">
+        <div class="me_title4_nopadding">
+            <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 관련 교보재
+        </div>
+        {% if conent.related_content.all.count > 0 %}
+        {% for conent in conent.related_content.all %}
+        <strong>
+            <li class="me_title5_nopadding">{{ conent.title}}</li>
+        </strong>
+        {% endfor %}
+        {% else %}
+        <div>
+            <div class="me_title5_nopadding">교보재 및 교재 없이 학습 할 수 있습니다.</div>
+        </div>
+        {% endif %}
+    </div>
+    <br>
+    <div class="section" style="padding-bottom:5px;">
+        <div class="me_title4_nopadding">
+            <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 안내
+        </div>
+        <div>
+            <div class="me_title5_nopadding">현재 본 강좌는 유투브 무료 수강이 가능한 강좌 입니다. 감사합니다.</div>
+        </div>
+    </div>
+    <br>
+    <!-- Botones de compra -->
+
+    <div class="section row ">
+        <div class="col-md-offset-3 col-md-6 col-xs-12">
+            {% if isRegistered == True%}
+            <a href="{% url 'products:content_information_favorite_add' pk=content.pk %}"
+               class="btn btn-primary btn-block"
+               role="button"
+               disabled="disabled">
+                <span class="glyphicon glyphicon glyphicon-heart" aria-hidden="true"></span> 관심강의
+            </a>
+            {% else %}
+            <a href="{% url 'products:content_information_favorite_add' pk=content.pk %}"
+               class="btn btn-primary btn-block"
+               role="button">
+                <span class="glyphicon glyphicon glyphicon-heart-empty" aria-hidden="true"></span> 관심강의
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+</div>
