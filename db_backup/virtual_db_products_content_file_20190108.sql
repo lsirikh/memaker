@@ -16,32 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `products_content_file`
+-- Table structure for table `products_content_image`
 --
 
-DROP TABLE IF EXISTS `products_content_file`;
+DROP TABLE IF EXISTS `products_content_image`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `products_content_file` (
+CREATE TABLE `products_content_image` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `content_id` int(11) NOT NULL,
-  `file_id` int(11) NOT NULL,
+  `image_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `products_content_file_content_id_file_id_abafefdc_uniq` (`content_id`,`file_id`),
-  KEY `products_content_file_file_id_6f202341_fk_products_file_id` (`file_id`),
-  CONSTRAINT `products_content_file_content_id_e3d8c7a2_fk_products_content_id` FOREIGN KEY (`content_id`) REFERENCES `products_content` (`id`),
-  CONSTRAINT `products_content_file_file_id_6f202341_fk_products_file_id` FOREIGN KEY (`file_id`) REFERENCES `products_file` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `products_content_image_content_id_image_id_a97a3cd2_uniq` (`content_id`,`image_id`),
+  KEY `products_content_image_image_id_3cac61cd_fk_products_image_id` (`image_id`),
+  CONSTRAINT `products_content_ima_content_id_12098195_fk_products_` FOREIGN KEY (`content_id`) REFERENCES `products_content` (`id`),
+  CONSTRAINT `products_content_image_image_id_3cac61cd_fk_products_image_id` FOREIGN KEY (`image_id`) REFERENCES `products_image` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `products_content_file`
+-- Dumping data for table `products_content_image`
 --
 
-LOCK TABLES `products_content_file` WRITE;
-/*!40000 ALTER TABLE `products_content_file` DISABLE KEYS */;
-INSERT INTO `products_content_file` VALUES (5,3,5),(1,4,3),(2,4,4);
-/*!40000 ALTER TABLE `products_content_file` ENABLE KEYS */;
+LOCK TABLES `products_content_image` WRITE;
+/*!40000 ALTER TABLE `products_content_image` DISABLE KEYS */;
+INSERT INTO `products_content_image` VALUES (3,1,4),(4,1,5),(5,1,6),(8,2,7),(6,2,8),(7,2,9),(9,3,10),(10,3,11),(11,4,18),(12,4,19),(13,4,20);
+/*!40000 ALTER TABLE `products_content_image` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-08 15:30:47
+-- Dump completed on 2019-01-08 15:47:53
