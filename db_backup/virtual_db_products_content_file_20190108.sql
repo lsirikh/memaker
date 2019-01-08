@@ -16,32 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `products_content_image`
+-- Table structure for table `products_file`
 --
 
-DROP TABLE IF EXISTS `products_content_image`;
+DROP TABLE IF EXISTS `products_file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `products_content_image` (
+CREATE TABLE `products_file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `content_id` int(11) NOT NULL,
-  `image_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `products_content_image_content_id_image_id_a97a3cd2_uniq` (`content_id`,`image_id`),
-  KEY `products_content_image_image_id_3cac61cd_fk_products_image_id` (`image_id`),
-  CONSTRAINT `products_content_ima_content_id_12098195_fk_products_` FOREIGN KEY (`content_id`) REFERENCES `products_content` (`id`),
-  CONSTRAINT `products_content_image_image_id_3cac61cd_fk_products_image_id` FOREIGN KEY (`image_id`) REFERENCES `products_image` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+  `file` varchar(100) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `type` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `products_content_image`
+-- Dumping data for table `products_file`
 --
 
-LOCK TABLES `products_content_image` WRITE;
-/*!40000 ALTER TABLE `products_content_image` DISABLE KEYS */;
-INSERT INTO `products_content_image` VALUES (3,1,4),(4,1,5),(5,1,6),(8,2,7),(6,2,8),(7,2,9),(9,3,10),(10,3,11),(11,4,18),(12,4,19),(13,4,20);
-/*!40000 ALTER TABLE `products_content_image` ENABLE KEYS */;
+LOCK TABLES `products_file` WRITE;
+/*!40000 ALTER TABLE `products_file` DISABLE KEYS */;
+INSERT INTO `products_file` VALUES (1,'content_file/2019/01/08/악어복불복게임만들기_교안.zip','악어복불복게임만들기 교안','zip'),(2,'content_file/2019/01/08/악어복불복_만들기_키트_조립설명서_ver2.pdf','악어복불복키트 조립설명서','pdf'),(3,'content_file/2019/01/08/블록코딩과_문제_해결_논리_-_거리측정기_r1.pptx','거리측정기만들기 교안','pptx'),(4,'content_file/2019/01/08/거리측정기_만들기_키트_조립설명서_ver1.0.pdf','거리측정기키트 조립설명서','pdf'),(5,'content_file/2019/01/08/미메이커_코딩보드_연결방법.pdf','미메이커 코딩보드 연결방법','pdf');
+/*!40000 ALTER TABLE `products_file` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-08 15:47:53
+-- Dump completed on 2019-01-08 16:00:08
