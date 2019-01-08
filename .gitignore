@@ -1,0 +1,6 @@
+#Logs
+#Logs
+*.log
+#Setting
+setings.py
+
