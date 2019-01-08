@@ -18,3 +18,9 @@ class HomeView(TemplateView):
 
 #def login_redirect(request):
 #    return redirect('accounts:login')
+
+class GoogleView(TemplateView):
+    template_name = 'google2cea96b33d0c202f.html'
+
+class NaverView(TemplateView):
+    template_name = 'navere8566efa5b506b61efd740303a95e363.html'
