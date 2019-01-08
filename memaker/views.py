@@ -24,3 +24,6 @@ class GoogleView(TemplateView):
 
 class NaverView(TemplateView):
     template_name = 'navere8566efa5b506b61efd740303a95e363.html'
+
+class NaverRobot(TemplateView):
+    template_name = 'robots.txt'

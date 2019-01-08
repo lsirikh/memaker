@@ -187,7 +187,7 @@ STATIC_ROOT = os.path.join(ROOT_DIR, 'staticfiles')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
-    # 'home/ubuntu/memaker/memaker/',
+    #'home/ubuntu/memaker/memaker/',
     # os.path.join(BASE_DIR, 'static'),
     STATIC_DIR
 ]

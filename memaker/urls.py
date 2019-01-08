@@ -32,8 +32,9 @@ urlpatterns = [
 
 #    re_path(r'^r/$', views.login_redirect, name='login_redirect'),
     path('', views.HomeView.as_view(), name='home'),
-    path('google2cea96b33d0c202f.html/', views.GoogleView.as_view(), name='google'),
-    path('navere8566efa5b506b61efd740303a95e363.html/', views.NaverView.as_view(), name='google'),
+    path('google2cea96b33d0c202f.html/', views.GoogleView.as_view()),
+    path('navere8566efa5b506b61efd740303a95e363.html/', views.NaverView.as_view()),
+    path('robots.txt/', views.NaverRobot.as_view()),
     path('polls/', include('polls.urls')),
     path('intro/', include('intro.urls')),
     path('products/', include('products.urls')),
