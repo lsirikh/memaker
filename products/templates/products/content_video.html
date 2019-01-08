@@ -71,7 +71,7 @@
                         댓글
                         <hr>
                     </div>
-                    {% if content.lecture_set.first.video_set.count > 0%}
+                    {% if reply_list.count > 0%}
                     <div class="container">
                         {% for reply in reply_list %}
                         {% include 'includes/video_reply_include.html'%}
