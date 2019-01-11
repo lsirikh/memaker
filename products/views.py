@@ -184,7 +184,7 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         print("ProductListView is started")
-        queryset = Content.objects.filter(category__section='상품')
+        queryset = Content.objects.filter(category__section='상품', isShow = True)
         # print("queryset")
         # print(queryset)
         # print(queryset.first())
@@ -249,7 +249,7 @@ class LectureListView(ListView):
 
     def get_queryset(self):
         print("LectureListView is started")
-        queryset = Content.objects.filter(category__section='강좌')
+        queryset = Content.objects.filter(category__section='강좌', isShow = True)
         return queryset
 
 
@@ -318,7 +318,7 @@ class ContentCategoryListView(ListView):
         print("ContentCategoryListView is started")
         self.category = get_object_or_404(Category, pk=self.kwargs.get('pk'))
         print(self.category)
-        queryset = Content.objects.filter(category=self.category)
+        queryset = Content.objects.filter(category=self.category, isShow = True)
         return queryset
 
 

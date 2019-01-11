@@ -12,8 +12,8 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         print("HomeView Start")
         context = super().get_context_data(**kwargs)
-        context = {'product_list':Content.objects.filter(category__section='상품')[:3],
-                   'lecture_list':Content.objects.filter(category__section='강좌')[:3]}
+        context = {'product_list':Content.objects.filter(category__section='상품', isShow = True, recommend__in=[1, 2])[:3],
+                   'lecture_list':Content.objects.filter(category__section='강좌', isShow = True, recommend__in=[1, 2])[:3]}
         return context
 
 #def login_redirect(request):

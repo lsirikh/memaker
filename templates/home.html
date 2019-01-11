@@ -259,9 +259,9 @@
                 <div class="caption">
                     <h4>
                         {% if lecture.recommend == 1 %}
-                            <span class="label label-success">{{content.get_recommend_display}}</span>
+                            <span class="label label-success">{{lecture.get_recommend_display}}</span>
                         {% elif lecture.recommend == 2 %}
-                            <span class="label label-warning">{{content.get_recommend_display}}</span>
+                            <span class="label label-warning">{{lecture.get_recommend_display}}</span>
                         {% endif %}
                         {{ lecture.title|truncatechars:23 }}
                     </h4>
