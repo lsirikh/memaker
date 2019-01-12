@@ -24,15 +24,15 @@ with open(os.path.join(BASE_DIR, 'static', 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 
 # For test, this comment needs to be discarded.
-ALLOWED_HOSTS = ['127.0.0.1']
+#ALLOWED_HOSTS = ['127.0.0.1']
 # For operational, this comment needs to be discarded.
-# ALLOWED_HOSTS = ['memaker.co.kr','www.memaker.co.kr',
-#                 'openfingers.com','www.openfingers.com',
-#                 'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
+ALLOWED_HOSTS = ['memaker.co.kr','www.memaker.co.kr',
+                 'openfingers.com','www.openfingers.com',
+                 'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
 
 
 

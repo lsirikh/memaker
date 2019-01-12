@@ -27,7 +27,7 @@ class Topic(models.Model):
 
     message = RichTextUploadingField('본문 내용', max_length=4000)
     created_at = models.DateTimeField('등록 날짜', auto_now_add=True, blank=True)
-    updated_at = models.DateTimeField('업데이트 날짜', auto_now=True, blank=True)
+    updated_at = models.DateTimeField('업데이트 날짜', blank=True)
     views = models.PositiveIntegerField('조회수', default=0)
 
     def __str__(self):

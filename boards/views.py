@@ -290,6 +290,7 @@ def add_content_view(request, pk):
             topic = form.save(commit=False)
             topic.board = board
             topic.user = user
+            topic.updated_at = timezone.now()
             topic.save()
 
             return redirect('boards:board_topic', pk=board.pk)  # TODO: redirect to the created topic page

@@ -14,9 +14,9 @@
                     <div class="col-md-12  col-xs-12 text-center" >
                         <div class="row" >
                             {% if post.updated_at|date:'d m y h:i:s' == post.created_at|date:'d m y h:i:s' %}
-                            <small><span class="glyphicon glyphicon-time" aria-hidden="true"> {{post.created_at|date:'y-m-d H:i'}}(등록)</span></small>
+                            <small><span class="glyphicon glyphicon-time" aria-hidden="true">{{post.created_at|date:'y-m-d H:i'}}(등록)</span></small>
                             {% else %}
-                            <small><span class="glyphicon glyphicon-time" aria-hidden="true"> {{post.updated_at|date:'y-m-d H:i'}}(수정)</span></small>
+                            <small><span class="glyphicon glyphicon-time" aria-hidden="true">{{post.updated_at|date:'y-m-d H:i'}}(수정)</span></small>
                             {% endif %}
                         </div>
                     </div>
