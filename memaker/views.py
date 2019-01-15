@@ -22,6 +22,9 @@ class HomeView(TemplateView):
 class GoogleView(TemplateView):
     template_name = 'google2cea96b33d0c202f.html'
 
+class GoogleView2nd(TemplateView):
+    template_name = 'google640e077116d2555d.html'
+
 class NaverView(TemplateView):
     template_name = 'navere8566efa5b506b61efd740303a95e363.html'
 
