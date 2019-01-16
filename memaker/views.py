@@ -20,7 +20,7 @@ class HomeView(TemplateView):
 #    return redirect('accounts:login')
 
 class IconView(TemplateView):
-    template_name = 'google2cea96b33d0c202f.html'
+    template_name = 'favicon.ico'
 
 class GoogleView(TemplateView):
     template_name = 'google2cea96b33d0c202f.html'
