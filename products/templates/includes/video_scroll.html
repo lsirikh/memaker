@@ -12,8 +12,8 @@
             <a href="{% url 'products:content_video' pk=content.pk pk_video=video.pk %}#video">
                 <div class="panel panel-success" style="margin:5px;">
                     <div class="panel-heading">{{forloop.counter}}강</div>
-                    <div class="panel-body">
-                        <small>{{video.title|truncatechars:20}}</small>
+                    <div class="panel-body" style="width:130px;min-height:80px;">
+                            {{video.title|wordwrap:10|linebreaks}}
                     </div>
                 </div>
             </a>
