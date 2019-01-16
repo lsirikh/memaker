@@ -19,6 +19,9 @@ class HomeView(TemplateView):
 #def login_redirect(request):
 #    return redirect('accounts:login')
 
+class IconView(TemplateView):
+    template_name = 'google2cea96b33d0c202f.html'
+
 class GoogleView(TemplateView):
     template_name = 'google2cea96b33d0c202f.html'
 
