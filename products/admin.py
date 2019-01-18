@@ -48,6 +48,7 @@ class CategoryAdmin(admin.ModelAdmin):
                    'section',
                    'slug',
                    'description']
+    prepopulated_fields = {'slug': ('title',)}
 
 class VideoInline(nested_admin.NestedStackedInline):  # 테이블 형식
 
@@ -168,7 +169,8 @@ class ContentAdmin(nested_admin.NestedModelAdmin):
                     'get_section',
                     'isSale', )  # 레코드 리스트 컬럼 지정
     search_fields = ['description']  # 검색 박스 추가
-    list_per_page = 1  # 페이지네이션 튜플 개수 설정
+    list_per_page = 10  # 페이지네이션 튜플 개수 설정
+    prepopulated_fields = {'slug': ('title',)}
 
     def get_formsets_with_inlines(self, request, obj=None):
         for inline in self.get_inline_instances(request, obj):

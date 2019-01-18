@@ -16,7 +16,7 @@ class Category(models.Model):
     section = models.CharField('구분', max_length=200, db_index=True, default='') # 구분 ex) 강의, 상품
 
     #slug 추가
-    slug = models.SlugField(max_length=200, blank=True, allow_unicode=True) #Slug field add
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True) #Slug field add
 
 
     description = models.CharField('설명', max_length=100, null=True, blank=True) # 간략 설명
@@ -68,7 +68,7 @@ class Content(models.Model):
     title = models.CharField('제목', max_length=200, default='no title', db_index=True)  # 제목
 
     # slug 추가
-    slug = models.SlugField(max_length=200, blank=True, allow_unicode=True, db_index=True)  # Slug field add
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True, db_index=True)  # Slug field add
 
     added = models.DateTimeField('등록 날짜', auto_now_add=True, blank=True)  # 등록한 날짜
     updated = models.DateTimeField('업데이트 날짜', auto_now=True, blank=True)  # 업데이트 날짜
@@ -89,7 +89,8 @@ class Content(models.Model):
         return self.title
 
     class Meta:
-        ordering = ('-category',)
+        ordering = ('title',)
+        index_together = (('id', 'slug'),)
 
 
 
