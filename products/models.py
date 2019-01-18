@@ -3,13 +3,22 @@ from django.contrib.auth.models import User
 from imagekit.models import ImageSpecField
 from imagekit.processors import Thumbnail
 from ckeditor_uploader.fields import RichTextUploadingField
+
+from django.db.models.signals import pre_save
+from memaker.utils import unique_slug_generator
+
 import os
 
 # Create your models here.
 
 class Category(models.Model):
-    title = models.CharField('제목', max_length=200, default='no title') # 제목
-    section = models.CharField('구분', max_length=200, default='') # 구분 ex) 강의, 상품
+    title = models.CharField('제목', max_length=200, db_index=True, default='no title') # 제목
+    section = models.CharField('구분', max_length=200, db_index=True, default='') # 구분 ex) 강의, 상품
+
+    #slug 추가
+    slug = models.SlugField(max_length=200, blank=True, allow_unicode=True) #Slug field add
+
+
     description = models.CharField('설명', max_length=100, null=True, blank=True) # 간략 설명
 
     def __str__(self):
@@ -17,6 +26,8 @@ class Category(models.Model):
 
     class Meta:
         ordering = ('section',)
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
 class Image(models.Model):
     #content = models.ManyToManyField('products.Content') # Content와 ManyToMany 설정
@@ -54,7 +65,11 @@ class Content(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE) # 카테고리
     related_content = models.ManyToManyField('products.Content', blank=True) # 관련콘텐츠
 
-    title = models.CharField('제목', max_length=200, default='no title')  # 제목
+    title = models.CharField('제목', max_length=200, default='no title', db_index=True)  # 제목
+
+    # slug 추가
+    slug = models.SlugField(max_length=200, blank=True, allow_unicode=True, db_index=True)  # Slug field add
+
     added = models.DateTimeField('등록 날짜', auto_now_add=True, blank=True)  # 등록한 날짜
     updated = models.DateTimeField('업데이트 날짜', auto_now=True, blank=True)  # 업데이트 날짜
     description = models.CharField('간략설명', null=True, blank=True, max_length=300)  # 간략한 설명
@@ -75,6 +90,14 @@ class Content(models.Model):
 
     class Meta:
         ordering = ('-category',)
+
+
+
+def slug_save(sender, instance, *args, **kwargs):
+    if not instance:
+        instance.slug = unique_slug_generator(instance, instance.title, instance.slug)
+
+pre_save.connect(slug_save, sender=Category)
 
 
 

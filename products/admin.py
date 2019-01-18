@@ -39,8 +39,15 @@ class FileAdmin(nested_admin.NestedModelAdmin):  # 테이블 형식
     list_display = ('description', 'type', 'file',  'pk', )
 
 class CategoryAdmin(admin.ModelAdmin):
-    fields = ['title', 'section', 'description']
-    list_display= ['pk','title', 'section','description']
+    fields = ['title',
+              'section',
+              'slug',
+              'description']
+    list_display= ['pk',
+                   'title',
+                   'section',
+                   'slug',
+                   'description']
 
 class VideoInline(nested_admin.NestedStackedInline):  # 테이블 형식
 
@@ -126,6 +133,7 @@ class ContentAdmin(nested_admin.NestedModelAdmin):
             [
                 'category',
                 'title',
+                'slug',
                 'description',
                 'related_content',
                 'sample',
@@ -152,7 +160,13 @@ class ContentAdmin(nested_admin.NestedModelAdmin):
     ]
     #inlines = [ProductInline]
     inlines = [LectureInline, ProductInline]
-    list_display = ('title', 'added', 'updated', 'category', 'get_section', 'isSale', )  # 레코드 리스트 컬럼 지정
+    list_display = ('title',
+                    'slug',
+                    'added',
+                    'updated',
+                    'category',
+                    'get_section',
+                    'isSale', )  # 레코드 리스트 컬럼 지정
     search_fields = ['description']  # 검색 박스 추가
     list_per_page = 1  # 페이지네이션 튜플 개수 설정
 
