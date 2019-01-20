@@ -3,13 +3,7 @@
     <a href="{%url 'products:lecture_list' %}">
         <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
         온라인 강의</a> >
-    {% if content.category.title == "엔트리" %}
-    <a href="{% url 'products:content_category_list' pk=content.category.pk %}"> {{content.category.title}}</a> >
-    {% elif content.category.title == "메이커" %}
-    <a href="{% url 'products:content_category_list' pk=content.category.pk %}"> {{content.category.title}}</a> >
-    {% elif content.category.title == "스크래치" %}
-    <a href="{% url 'products:content_category_list' pk=content.category.pk %}"> {{content.category.title}}</a> >
-    {% endif %}
+    <a href="{{category.get_absolute_url}}"> {{category.title}}</a> >
     <a href="{%url 'products:content_information' pk=content.pk %}"> {{content.title}}</a>
 
 </div>

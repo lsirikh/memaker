@@ -22,51 +22,13 @@
         {% if content_list.count > 0%}
         {% for content in content_list %}
         <div class="col-sm-6 col-md-4">
-            <div class="thumbnail" align="center">
-                <img src="{{content.image.first.thumbnail.url}}"
-                     alt="...">
-                <div class="caption">
-                    <h4>
-                        {% if content.recommend == 1 %}
-                            <span class="label label-success">{{content.get_recommend_display}}</span>
-                        {% elif content.recommend == 2 %}
-                            <span class="label label-warning">{{content.get_recommend_display}}</span>
-                        {% endif %}
-                        {{ content.title|truncatechars:23 }}
-                    </h4>
-                    <p>{{ content.description|truncatechars:55 }}</p>
-
-                    <p align="center">
-                        {% if content.category.section == '상품'%}
-                        <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
-                           role="button">구경하기</a>
-                        <a href="{{content.product_set.first.link}}" class="btn btn-default" role="button" target="_blank">구매하기</a>
-                        {% elif content.category.section == '강좌'%}
-                        <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
-                           role="button">수강하기</a>
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
+            {% include 'includes/card_content_display.html' %}
         </div>
 
         {% endfor %}
         {% else %}
         <div class="col-md-12" align="center">
-            <div class="well well-lg" align="center"
-                 style="max-width:auto;height:auto;text-align:center;margin-left:-8px;">
-                <div class="me_title3_nopadding">
-                    {% if section == '상품' %}
-                    상품 준비중입니다.<br>
-                    항상 더 나은 교육 콘텐츠품 및 교보재로 찾아가는 미메이커가 되겠습니다.<br>
-                    감사합니다.
-                    {% elif section == '강좌' %}
-                    강좌 준비중입니다.<br>
-                    항상 더 나은 교육 강좌와 콘텐츠로 찾아가는 미메이커가 되겠습니다.<br>
-                    감사합니다.
-                    {% endif %}
-                </div>
-            </div>
+            {% include 'includes/blank_content.html' %}
         </div>
         {%endif%}
 

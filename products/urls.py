@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from products import views
-from django.urls import path
+from django.urls import path, re_path
 
 app_name = 'products'
 urlpatterns = [
@@ -25,13 +25,19 @@ urlpatterns = [
     # /products/lecture-list/
     path('lecture-list/', views.LectureListView.as_view(),
          name='lecture_list'),
-    # /products/category-list/4/
-    path('category-list/<int:pk>/', views.ContentCategoryListView.as_view(),
+    # /products/category-list/엔트리/
+    # 한글로 slug:'엔트리' dispatch 에러 나타남
+    # path('category-list/<str:category_slug>/', views.ContentCategoryListView.as_view(),
+    #      name='content_category_list'),
+    re_path('category-list/(?P<category_slug>[-\w]+)/$', views.ContentCategoryListView.as_view(),
          name='content_category_list'),
 
-    # /products/content/4/information
-    path('content/<int:pk>/information/', views.ContentInformationView.as_view(),
+    # /products/content/미메이커-코딩보드/information
+    # path('content/<int:pk>/information/', views.ContentInformationView.as_view(),
+    #      name='content_information'),
+    re_path(r'^content/(?P<pk>[0-9]+)/information/$', views.ContentInformationView.as_view(),
          name='content_information'),
+
     # /products/content/4/review
     path('content/<int:pk>/review/', views.ContentReviewView.as_view(),
          name='content_review'),

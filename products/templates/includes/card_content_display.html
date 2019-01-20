@@ -1,0 +1,25 @@
+<div class="thumbnail" align="center">
+    <img src="{{content.image.first.thumbnail.url}}" alt="...">
+    <div class="caption">
+        <h4>
+            {% if content.recommend == 1 %}
+            <span class="label label-success">{{content.get_recommend_display}}</span>
+            {% elif content.recommend == 2 %}
+            <span class="label label-warning">{{content.get_recommend_display}}</span>
+            {% endif %}
+            {{ content.title|truncatechars:23 }}
+        </h4>
+        <p>{{ content.description|truncatechars:55 }}</p>
+        <p align="center">
+            {% if content.category.section == '상품'%}
+            <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
+               role="button">구경하기</a>
+            <a href="{{content.product_set.first.link}}" class="btn btn-default" role="button"
+               target="_blank">구매하기</a>
+            {% elif content.category.section == '강좌'%}
+            <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
+               role="button">수강하기</a>
+            {% endif %}
+        </p>
+    </div>
+</div>

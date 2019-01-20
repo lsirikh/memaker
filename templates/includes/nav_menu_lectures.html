@@ -1,0 +1,10 @@
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+   aria-expanded="false">온라인 강의<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+    <li><a href="{% url 'products:lecture_list'%}">온라인 강의</a></li>
+    <li class="divider"></li>
+    <li class="dropdown-header">세부항목</li>
+    <li><a href="{% url 'products:content_category_list' category_slug='엔트리' %}">엔트리</a></li>
+    <li><a href="{% url 'products:content_category_list' category_slug='메이커' %}">메이커</a></li>
+    <li><a href="{% url 'products:content_category_list' category_slug='스크래치' %}">스크래치</a></li>
+</ul>

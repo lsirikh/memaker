@@ -1,0 +1,11 @@
+<div class="row-fluid">
+    <div class="col-md-12" align="center">
+        <div class="btn-group" role="group" aria-label="...">
+
+            {% for category in category_list %}
+            <a href="{{ category.get_absolute_url }}" class="btn btn-primary" role="button">{{category.title}}</a>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>

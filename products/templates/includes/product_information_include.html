@@ -3,13 +3,7 @@
     <a href="{%url 'products:product_list' %}">
         <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
         교재와 교보재</a> >
-    {% if content.category.title == "코딩보드"%}
-    <a href="{% url 'products:content_category_list' pk=4 %}">{{content.category.title}}</a> >
-    {% elif content.category.title == "조립키트" %}
-    <a href="{% url 'products:content_category_list' pk=3 %}">{{content.category.title}}</a> >
-    {% elif content.category.title == "교재" %}
-    <a href="{% url 'products:content_category_list' pk=2 %}">{{content.category.title}}</a> >
-    {% endif %}
+    <a href="{{category.get_absolute_url}}"> {{category.title}}</a> >
     <a href="{%url 'products:content_information' pk=content.pk %}">{{content.title}}</a>
 
 </div>

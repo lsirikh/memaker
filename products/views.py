@@ -177,6 +177,7 @@ class ProductListView(ListView):
         kwargs['has_previous_index'] = has_previous_index
 
         kwargs['section'] = '상품'
+        kwargs['category_list'] = self.category_list
         kwargs['selected_base_page'] = 'base_products.html'
         ##########################################################
 
@@ -184,11 +185,8 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         print("ProductListView is started")
+        self.category_list = Category.objects.filter(section='상품')
         queryset = Content.objects.filter(category__section='상품', isShow = True)
-        # print("queryset")
-        # print(queryset)
-        # print(queryset.first())
-        # print(queryset.first().product)
         return queryset
 
 
@@ -243,12 +241,14 @@ class LectureListView(ListView):
         kwargs['has_previous_index'] = has_previous_index
 
         kwargs['section'] = '강좌'
+        kwargs['category_list'] = self.category_list
         kwargs['selected_base_page'] = 'base_lectures.html'
         ##########################################################
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
         print("LectureListView is started")
+        self.category_list = Category.objects.filter(section='강좌')
         queryset = Content.objects.filter(category__section='강좌', isShow = True)
         return queryset
 
@@ -303,6 +303,7 @@ class ContentCategoryListView(ListView):
         kwargs['has_next_index'] = has_next_index
         kwargs['has_previous_index'] = has_previous_index
 
+        kwargs['category_list'] = self.category_list
         kwargs['category'] = self.category
         if self.category.section == '강좌':
             print("강좌선택")
@@ -316,7 +317,9 @@ class ContentCategoryListView(ListView):
 
     def get_queryset(self):
         print("ContentCategoryListView is started")
-        self.category = get_object_or_404(Category, pk=self.kwargs.get('pk'))
+
+        self.category = get_object_or_404(Category, slug=self.kwargs.get('category_slug'))
+        self.category_list = Category.objects.filter(section=self.category.section)
         print(self.category)
         queryset = Content.objects.filter(category=self.category, isShow = True)
         return queryset
@@ -368,7 +371,10 @@ class ContentInformationView(DetailView):
     def get_context_data(self, **kwargs):
         print("ContentInformationView is started")
         context = super().get_context_data(**kwargs)
+        #self.content = get_object_or_404(Content, slug=self.kwargs.get('content_slug'))
         self.content = get_object_or_404(Content, pk=self.kwargs.get('pk'))
+        category = get_object_or_404(Category, slug=self.content.category.slug)
+        category_list = Category.objects.filter(section=category.section)
         content = self.content
         #content.file.first().file_extension()
         try:
@@ -384,6 +390,8 @@ class ContentInformationView(DetailView):
 
         kwargs['content'] = self.content
         kwargs['content_list'] = Content.objects.all()
+        kwargs['category'] = category
+        kwargs['category_list'] = category_list
         if self.content.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
@@ -404,6 +412,9 @@ class ContentReviewView(ListView):
 
         ##########################################################
         # paginator의 오브젝트를 context 데이터에서 갖고 온다.
+        category = get_object_or_404(Category, slug=self.content.category.slug)
+        category_list = Category.objects.filter(section=category.section)
+
         context = super().get_context_data(**kwargs)
         paginator = context['paginator']
         print(paginator)
@@ -457,6 +468,8 @@ class ContentReviewView(ListView):
             kwargs['isRegistered'] = False
 
         kwargs['content'] = self.content
+        kwargs['category'] = category
+        kwargs['category_list'] = category_list
         if self.content.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
@@ -484,6 +497,9 @@ class ContentVideoView(ListView):
         print("ContentVideoView is started")
         ##########################################################
         # paginator의 오브젝트를 context 데이터에서 갖고 온다.
+        category = get_object_or_404(Category, slug=self.content.category.slug)
+        category_list = Category.objects.filter(section=category.section)
+
         context = super().get_context_data(**kwargs)
         #print("context : "+str(context))
         paginator = context['paginator']
@@ -539,6 +555,8 @@ class ContentVideoView(ListView):
 
         kwargs['content'] = self.content
         kwargs['video'] = self.video
+        kwargs['category'] = category
+        kwargs['category_list'] = category_list
         if self.content.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
@@ -563,6 +581,8 @@ class ContentVideoView(ListView):
 def content_review_add_view(request, pk):
     print("content_review_add_view is started")
     content = get_object_or_404(Content, pk=pk)
+    category = get_object_or_404(Category, slug=content.category.slug)
+    category_list = Category.objects.filter(section=category.section)
     appraisal_list = content.appraisal_set.order_by('-created_at')
 
     if request.method == 'POST':
@@ -587,6 +607,8 @@ def content_review_add_view(request, pk):
     return render(request, 'products/content_review_add.html',
                   {'content': content,
                    'appraisal_list': appraisal_list,
+                   'category_list': category_list,
+                   'category': category,
                    'form': form,
                    'selected_base_page': selected_base_page,
                    })
@@ -614,6 +636,8 @@ def content_review_remove_view(request, pk, pk_appraisal):
 def video_add_reply_view(request, pk, pk_video):
     print("video_add_reply_view is started")
     content = get_object_or_404(Content, pk=pk)
+    category = get_object_or_404(Category, slug=content.category.slug)
+    category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
     reply_list = ReplyChapter.objects.filter(video=video).order_by('-order')
 
@@ -627,7 +651,8 @@ def video_add_reply_view(request, pk, pk_video):
             reply.user = request.user
             reply.save()
             return redirect('products:content_video',
-                            pk=pk, pk_video=pk_video,
+                            pk=pk,
+                            pk_video=pk_video,
                             )
     else:
 
@@ -657,6 +682,8 @@ def video_add_reply_view(request, pk, pk_video):
                    'video': video,
                    'reply_list': reply_list,
                    'form': form,
+                   'category_list': category_list,
+                   'category': category,
                    'isRegistered': isRegistered,
                    'selected_base_page': selected_base_page,
                    })
@@ -666,7 +693,9 @@ def video_add_reply_view(request, pk, pk_video):
 @login_required(login_url="accounts:login")
 def video_remove_reply_view(request, pk, pk_video, pk_reply):
     print("video_remove_reply_view is started")
-    #content = get_object_or_404(Content, pk=pk)
+    content = get_object_or_404(Content, pk=pk)
+    category = get_object_or_404(Category, slug=content.category.slug)
+    category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
     selected_reply = get_object_or_404(ReplyChapter, pk=pk_reply)
     reply_list = ReplyChapter.objects.filter(video=video).order_by('-order')
@@ -700,6 +729,8 @@ def video_remove_reply_view(request, pk, pk_video, pk_reply):
 def video_edit_reply_view(request, pk, pk_video, pk_reply):
     print("video_edit_reply_view is started")
     content = get_object_or_404(Content, pk=pk)
+    category = get_object_or_404(Category, slug=content.category.slug)
+    category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
     reply_list = ReplyChapter.objects.filter(video=video).order_by('-order')
     reply_order = ReplyChapter.objects.get(pk=pk_reply).order
@@ -817,6 +848,8 @@ def video_edit_reply_view(request, pk, pk_video, pk_reply):
                    'video': video,
                    'reply_list': reply_list,
                    'pk_reply': pk_reply,
+                   'category_list': category_list,
+                   'category': category,
                    'form': form,
                    'page_range': page_range,
                    'next_index': next_index,
@@ -832,6 +865,8 @@ def video_edit_reply_view(request, pk, pk_video, pk_reply):
 def video_reply_to_reply_view(request, pk, pk_video, pk_reply):
     print("video_reply_to_reply_view is started")
     content = get_object_or_404(Content, pk=pk)
+    category = get_object_or_404(Category, slug=content.category.slug)
+    category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
     reply_list = ReplyChapter.objects.filter(video=video).order_by('-order')
     reply_order = ReplyChapter.objects.get(pk=pk_reply).order
@@ -959,6 +994,8 @@ def video_reply_to_reply_view(request, pk, pk_video, pk_reply):
                    'video': video,
                    'reply_list': reply_list,
                    'pk_reply': pk_reply,
+                   'category_list': category_list,
+                   'category': category,
                    'form': form,
                    'page_range': page_range,
                    'next_index': next_index,

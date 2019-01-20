@@ -1,0 +1,11 @@
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+   aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+    <li><a href="{% url 'products:product_list'%}">교재와 교보재</a></li>
+    <li class="divider"></li>
+    <li class="dropdown-header">세부항목</li>
+    <li><a href="{% url 'products:content_category_list' category_slug='코딩보드' %}">코딩보드 및 센서</a></li>
+    <li><a href="{% url 'products:content_category_list' category_slug='조립키트' %}">조립 키트</a></li>
+    <li><a href="{% url 'products:content_category_list' category_slug='언플러그드' %}">언플러그드</a></li>
+    <li><a href="{% url 'products:content_category_list' category_slug='교재' %}">교재</a></li>
+</ul>

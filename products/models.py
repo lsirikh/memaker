@@ -5,6 +5,7 @@ from imagekit.processors import Thumbnail
 from ckeditor_uploader.fields import RichTextUploadingField
 
 from django.db.models.signals import pre_save
+from django.urls import reverse
 from memaker.utils import unique_slug_generator
 
 import os
@@ -23,6 +24,10 @@ class Category(models.Model):
 
     def __str__(self):
         return '{0}-{1}'.format(self.title, self.section)
+
+    def get_absolute_url(self):
+        return reverse('products:content_category_list',
+                       args=[self.slug])
 
     class Meta:
         ordering = ('section',)

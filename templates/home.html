@@ -3,43 +3,21 @@
 {% block menu %}
 
 <!--------------------------------------------메뉴 시작------------------------------------------------------>
-<li><a href="/intro">미메이커는?</a></li>
-<li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-       aria-expanded="false">교재와 교보재 <span class="caret"></span></a>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="{% url 'products:product_list'%}">교재와 교보재</a></li>
-        <li class="divider"></li>
-        <li class="dropdown-header">세부항목</li>
-        <li><a href="{% url 'products:content_category_list' pk=4 %}">코딩보드 및 센서</a></li>
-        <li><a href="{% url 'products:content_category_list' pk=3 %}">조립 키트</a></li>
-        <li><a href="{% url 'products:content_category_list' pk=2 %}">언플러그드</a></li>
-        <li><a href="{% url 'products:content_category_list' pk=1 %}">교재</a></li>
-    </ul>
+<li>
+    <!--인트로-->
+    {% include 'includes/nav_menu_intro.html' %}
 </li>
 <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-       aria-expanded="false">온라인 강의<span class="caret"></span></a>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="{% url 'products:lecture_list'%}">온라인 강의</a></li>
-        <li class="divider"></li>
-        <li class="dropdown-header">세부항목</li>
-        <li><a href="{% url 'products:content_category_list' pk=5 %}">엔트리</a></li>
-        <li><a href="{% url 'products:content_category_list' pk=7 %}">메이커</a></li>
-        <li><a href="{% url 'products:content_category_list' pk=6 %}">스크래치</a></li>
-    </ul>
+    <!--교보재 및 교재-->
+    {% include 'includes/nav_menu_products.html' %}
 </li>
 <li class="dropdown">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-       aria-expanded="false">공유게시판<span class="caret"></span></a>
-    <ul class="dropdown-menu" role="menu">
-        <li><a href="/boards">공유게시판</a></li>
-        <li class="divider"></li>
-        <li class="dropdown-header">세부항목</li>
-        <li><a href="{%url 'boards:board_topic' pk=1%}">코딩 강의</a></li>
-        <li><a href="{%url 'boards:board_topic' pk=2%}">코딩 보드</a></li>
-        <li><a href="{%url 'boards:board_topic' pk=3%}">3D모델링 및 출력</a></li>
-    </ul>
+    <!--강좌-->
+    {% include 'includes/nav_menu_lectures.html' %}
+</li>
+<li class="dropdown">
+    <!--게시판-->
+    {% include 'includes/nav_menu_boards.html' %}
 </li>
 <!--------------------------------------------메뉴 종료------------------------------------------------------>
 
@@ -135,7 +113,7 @@
                                 창의력이 필요한 4차 산업혁명시대 자녀와 학생의 창의력을 코딩하세요!
                             </div>
                             <br>
-                            <p><a class="btn btn-lg btn-info" href="{% url 'products:content_category_list' pk=4 %}"
+                            <p><a class="btn btn-lg btn-info" href="{% url 'products:content_category_list' category_slug='코딩보드' %}"
                                   role="button">구매하기</a>
                             </p>
                         </div>
@@ -155,7 +133,7 @@
                                 다양한 미메이커 프로젝트 키트를 활용하여 자신만의 로봇 코딩을 만들어 보세요.
                             </div>
                             <br>
-                            <p><a class="btn btn-lg btn-info" href="{% url 'products:content_category_list' pk=4 %}"
+                            <p><a class="btn btn-lg btn-info" href="{% url 'products:content_category_list' category_slug='조립키트' %}"
                                   role="button">구경하기</a></p>
                         </div>
                     </div>
