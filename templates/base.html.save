@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{%block title%}만들면서 배우는 코딩 교육 서비스 '미메이커'{%endblock%}</title>
+
+
+    <!-- Bootstrap core CSS -->
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!--<link href="{% static 'bootstrap/css/bootstrap-theme.min.css' %}" rel="stylesheet">-->
+    <link href="{% static 'bootstrap/js/bootstrap.min.js' %}" rel="stylesheet">
+
+    <script src="{% static 'bootstrap/js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/infinite.min.js' %}"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+    <!-- Custom styles for this template -->
+    <link href="{% static 'bootstrap/css/carousel.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% block extrastyle %}{% endblock %}"/>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+
+<!--------------------------------------------메뉴 시작------------------------------------------------------>
+<div class="row">
+    <div class="navbar-wrapper">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#navbar"
+                            aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="/" class="navbar-brand">
+                        <img class="d-inline-block align-top" alt="Brand"
+                             src="{% static 'img/memaker_logo_ver3.png'%}"></a>
+
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        {%block menu%}{%endblock menu%}
+                        {% if request.user.is_superuser %}
+                        <li><a href="/admin">Admin Setting</a></li>
+                        {% endif %}
+                    </ul>
+                    <!-- login side -->
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if request.user.is_authenticated %}
+                        <li><a href="{% url 'accounts:index'%}"><span class="glyphicon glyphicon-user"></span>
+                            {{request.user}}</a></li>
+                        <li><a href="{% url 'accounts:logout'%}"><span class="glyphicon glyphicon-log-in"></span>
+                            Logout</a>
+                        </li>
+                        {% else %}
+                        <li><a href="{% url 'accounts:register'%}"><span class="glyphicon glyphicon-user"></span>
+                            Sign
+                            Up</a></li>
+                        <li><a href="{% url 'accounts:login'%}?next={{ request.path|urlencode }}"><span
+                                class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        {% endif%}
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+
+    </div>
+</div>
+
+<!--------------------------------------------메뉴 종료------------------------------------------------------>
+
+
+{%block jumbotron%}{%endblock jumbotron%}
+{%block inner_menu%}{%endblock inner_menu%}
+
+
+{%block content%}{%endblock%}
+<!--<div id="container">
+</div>-->
+
+<br>
+<br>
+<!-- FOOTER -->
+
+<footer>
+    {% block footer %}{% endblock %}
+    <style type="text/css">
+
+
+    .jumbo_text {
+        color: white;
+    
+}
+
+    .navbar {
+        min-height: 30px;
+        margin-bottom: 0px;
+    }
+
+
+
+    .table-borderless > tbody > tr > td,
+    .table-borderless > tbody > tr > th,
+    .table-borderless > tfoot > tr > td,
+    .table-borderless > tfoot > tr > th,
+    .table-borderless > thead > tr > td,
+    .table-borderless > thead > tr > th,
+    .table-borderless > thead > tr > th {
+        border: none;
+        color:#FDFEFE;
+    }
+    .table-borderless > tbody > tr > th > a,
+    .table-borderless > tbody > tr > td > a,
+    .table-borderless > thead > tr > td > a,
+    .table-borderless > thead > tr > th > a {
+        color:#FDFEFE;
+    }
+
+    .table-striped > thead > tr > td,
+    .table-striped > thead > tr > th,
+    .table-striped > thead > tr > th{
+      background-color: #EBDEF0;
+    }
+
+    .me_title0,
+    .me_title1,
+    .me_title2,
+    .me_title3,
+    .me_title4,
+    .me_title5
+    {
+    padding: 15px;
+    }
+
+    .company_info,
+    .company_help {
+        color:#FDFEFE;
+    }
+
+
+
+     div.scrollmenu {
+      background-color: #FAFAFA;
+      overflow: auto;
+      white-space: nowrap;
+    }
+
+    div.scrollmenu a {
+      display: inline-block;
+      text-align: center;
+    }
+
+
+    div.scrollmenu a .panel:hover {
+       div.scrollmenu a .panel .panel-heading{
+        background-color: #D0A9F5;
+      }
+      background-color: #D0A9F5;
+    }
+
+
+
+
+    @media screen and (min-width: 601px) {
+           .navbar-wrapper .navbar {
+                padding-right: 15%;
+                padding-left: 15%;
+            }
+
+
+          .me_badge {
+            max-height : 150px;
+          }
+          .company_info {
+            font-size: 13px;
+          }
+          .company_help {
+            font-size: 13px;
+          }
+
+
+
+
+          .panel-heading{
+            font-size : 20px;
+          }
+          .panel-body{
+            font-size : 15px;
+          }
+
+          .me_jumbotron_title{
+            font-size: 30px;
+            font-weight: bold;
+          }
+          .me_jumbotron_subtitle{
+            font-size: 20px;
+          }
+
+          .me_title0{
+            font-size: 35px;
+          }
+          .me_title1{
+            font-size: 30px;
+          }
+          .me_title2{
+            font-size: 25px;
+          }
+          .me_title3{
+            font-size: 20px;
+          }
+          .me_title4{
+            font-size: 18px;
+          }
+          .me_title5{
+            font-size: 15px;
+          }
+
+          .me_title0_nopadding{
+            font-size: 35px;
+          }
+          .me_title1_nopadding{
+            font-size: 30px;
+          }
+          .me_title2_nopadding{
+            font-size: 25px;
+          }
+          .me_title3_nopadding{
+            font-size: 20px;
+          }
+          .me_title4_nopadding{
+            font-size: 18px;
+          }
+          .me_title5_nopadding{
+            font-size: 15px;
+          }
+
+
+          .table {
+                font-size: 15px;
+          }
+          .pagination{
+                font-size: 12px;
+          }
+
+
+
+          .img-rounded{
+                object-fit:cover;
+                width:100%;
+          }
+
+          .jumbotron{
+                margin-top: -25px;
+                z-index: -1;
+                whidth: 100%;
+                height: auto;
+                opacity: 0.8;
+                 display: block;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+                color : #A4A4A4;
+          }
+
+          .jumbotron .container {
+                position: relative;
+          }
+
+          .file_icon{
+            max-width:100%;
+            height:auto!important;
+          }
+
+
+
+    }
+
+
+
+    @media screen and (max-width: 600px) {
+      .file_icon{
+        max-width:100%;
+        height:auto!important;
+      }
+
+      .image > img{
+        max-width:100%;
+        height:auto!important;
+      }
+      p > img{
+        max-width:100%;
+        height:auto!important;
+      }
+
+
+      .me_badge {
+        max-height : 100px;
+      }
+      .company_info {
+        font-size: 9px;
+      }
+      .company_help {
+        font-size: 9px;
+      }
+
+
+      .jumbo_text {
+        font-size: 15px;
+      }
+
+
+
+      .panel-heading{
+        font-size : 15px;
+      }
+      .panel-body{
+        font-size : 12px;
+      }
+
+
+      .me_jumbotron_title{
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .me_jumbotron_subtitle{
+        font-size: 13px;
+      }
+
+      .me_title0{
+        font-size: 25px;
+      }
+      .me_title1{
+        font-size: 23px;
+      }
+      .me_title2{
+        font-size: 20px;
+      }
+      .me_title3{
+        font-size: 18px;
+      }
+      .me_title4{
+        font-size: 15px;
+      }
+      .me_title5{
+        font-size: 13px;
+      }
+
+      .me_title0_nopadding{
+        font-size: 25px;
+      }
+      .me_title1_nopadding{
+        font-size: 23px;
+      }
+      .me_title2_nopadding{
+        font-size: 20px;
+      }
+      .me_title3_nopadding{
+        font-size: 18px;
+      }
+      .me_title4_nopadding{
+        font-size: 15px;
+      }
+      .me_title5_nopadding{
+        font-size: 13px;
+      }
+
+
+
+    .table > tbody ,
+    .table > tbody ,
+    .table > tfoot ,
+    .table > tfoot  {
+        font-size: 10px;
+      }
+    .table > thead,
+    .table > thead,
+    .table > thead {
+        font-size: 9px;
+    }
+    .pagination{
+        font-size: 9px;
+    }
+    .btn {
+        padding:6px 8px;
+        font-size:100%;
+        line-height: 1;
+    }
+
+    .img-rounded{
+        object-fit:cover;
+        height:35px;
+    }
+
+    .jumbotron{
+        margin-top:-25px;
+        z-index: -1;
+        width: auto;
+        height: 250px;
+        background-position: center;
+        opacity: 0.7;
+        display: block;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+
+        color : #A4A4A4;
+      }
+
+      .jumbotron .container {
+          position: relative;
+
+      }
+
+
+
+
+
+}
+
+
+
+
+
+
+    </style>
+    <div class="row">
+        <div class="container-fluid" id="footer" style="background:#8E44AD;">
+            <br>
+            <br>
+            <div class="container">
+
+                <div class="col-md-4" align="center">
+                    <span><img class="me_badge" src="{% static 'img/memaker_logo.png' %}"></span>
+                    <span></span>
+                    <span><img class="me_badge" src="{% static 'img/2018_hiseoul.png' %}" alt="하이서울어워드"></span>
+                </div>
+                <div class="col-md-8">
+
+                    <table class="table table-borderless">
+                        <thead>
+                        <tr>
+                            <th class="col-md-2 col-xs-2"><a href="{% url 'intro:index'%}">소개</a><br></th>
+                            <th class="col-md-2 col-xs-2"><a href="#">제품</a><br></th>
+                            <th class="col-md-2 col-xs-2"><a href="#">강의</a></th>
+                            <th class="col-md-3 col-xs-3"><a href="{% url 'boards:index'%}">게시판</a></th>
+                            <th class="col-md-3 col-xs-3"><a href="#">채널</a><br></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="#" style="color:#FDFEFE;">코딩보드 및 센서</a>
+                            </td>
+                            <td>
+                                <a href="#" style="color:#FDFEFE;">엔트리</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'boards:board_topic' pk=1%}" style="color:#FDFEFE;">코딩 강의 게시판</a>
+                            </td>
+                            <td>
+                                <a href="https://www.youtube.com/channel/UCO9KRKx0byocVrz3Zmh9mjw"
+                                   style="color:#FDFEFE;">
+                                    미메이커 유투브
+                                </a>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="#">조립 키트</a>
+                            </td>
+                            <td>
+                                <a href="#">메이커</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'boards:board_topic' pk=2%}" style="color:#FDFEFE;">미메이커 코딩보드 게시판</a>
+                            </td>
+                            <td>
+                                <a href="https://www.facebook.com/www.memaker.co.kr/">미메이커 페이스북</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="#">언플러그드</a>
+                            </td>
+                            <td>
+                                <a href="#">스크래치</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'boards:board_topic' pk=3%}" style="color:#FDFEFE;">3D모델링 및 출력 게시판</a>
+                            </td>
+                            <td>
+                                <a href="https://blog.naver.com/openfingers">미메이커 블로그</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="#">교재</a>
+                            </td>
+                            <td></td>
+                            <td>
+                                <a href="">미메이커 브로셔</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <hr>
+                <div class="company_info col-md-8">
+                    회사명 : (주)오픈핑거스 | 대표 : 이기호 | 이메일 : openfingers@openfingers.com<br>
+                    대표전화 : 031 365 5315 | 팩스 : 031 365 5317 | 카카오톡ID : 미메이커<br>
+                    사업자등록번호 : 708-88-00591 | 통신판매업등록번호 : 2017-경기안산-0903<br>
+                    주소 : 경기도 안산시 단원구 연수원로 87 중소기업연수원 창의관 109
+                </div>
+                <div class="company_help col-md-4" style="color:#FDFEFE;">
+                    학습지원센터 031-365-5315<br><br>
+                    © 2017 Openfingers. All rights reserved.
+                </div>
+            </div>
+            <br>
+
+        </div>
+    </div>
+
+</footer>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="{% static 'bootstrap/js/vendor/holder.js' %}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="{% static 'bootstrap/js/ie10-viewport-bug-workaround.js' %}"></script>
+
+
+</body>
+
+</html>
