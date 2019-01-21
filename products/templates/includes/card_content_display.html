@@ -12,12 +12,12 @@
         <p>{{ content.description|truncatechars:55 }}</p>
         <p align="center">
             {% if content.category.section == '상품'%}
-            <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
+            <a href="{% url 'products:content_information' content_slug=content.slug %}" class="btn btn-primary"
                role="button">구경하기</a>
             <a href="{{content.product_set.first.link}}" class="btn btn-default" role="button"
                target="_blank">구매하기</a>
             {% elif content.category.section == '강좌'%}
-            <a href="{% url 'products:content_information' pk=content.pk %}" class="btn btn-primary"
+            <a href="{% url 'products:content_information' content_slug=content.slug %}" class="btn btn-primary"
                role="button">수강하기</a>
             {% endif %}
         </p>

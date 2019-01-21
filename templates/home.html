@@ -245,7 +245,7 @@
                     </h4>
                     <p>{{ lecture.description|truncatechars:55 }}</p>
                     <p align="center">
-                        <a href="{% url 'products:content_information' pk=lecture.pk %}" class="btn btn-primary" role="button">수강하기</a>
+                        <a href="{% url 'products:content_information' content_slug=lecture.slug %}" class="btn btn-primary" role="button">수강하기</a>
                     </p>
                 </div>
             </div>
@@ -273,7 +273,7 @@
                     </h4>
                     <p>{{ product.description|truncatechars:55 }}</p>
                     <p align="center">
-                        <a href="{% url 'products:content_information' pk=product.pk %}" class="btn btn-primary"
+                        <a href="{% url 'products:content_information' content_slug=product.slug %}" class="btn btn-primary"
                            role="button">구경하기</a>
                         <a href="{{product.product_set.first.link}}"
                            class="btn btn-default"

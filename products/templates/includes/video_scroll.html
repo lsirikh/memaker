@@ -9,7 +9,7 @@
     <div class="scrolling-wrapper">
         <div class="scrollmenu">
             {% for video in content.lecture_set.first.video_set.all %}
-            <a href="{% url 'products:content_video' pk=content.pk pk_video=video.pk %}#video">
+            <a href="{% url 'products:content_video' content_slug=content.slug pk_video=video.pk %}#video">
                 <div class="panel panel-success" style="margin:5px;">
                     <div class="panel-heading">{{forloop.counter}}강</div>
                     <div class="panel-body" style="width:150px;min-height:80px;">

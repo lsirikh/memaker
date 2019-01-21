@@ -4,7 +4,7 @@
         <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
         교재와 교보재</a> >
     <a href="{{category.get_absolute_url}}"> {{category.title}}</a> >
-    <a href="{%url 'products:content_information' pk=content.pk %}">{{content.title}}</a>
+    <a href="{%url 'products:content_information' content_slug=content.slug %}">{{content.title}}</a>
 
 </div>
 <hr>
@@ -87,7 +87,7 @@
 
         {% if isRegistered == True%}
         <div class="col-md-6 col-xs-12">
-            <a href="{% url 'products:content_information_favorite_add' pk=content.pk %}"
+            <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
                class="btn btn-primary btn-block"
                role="button"
                disabled="disabled"
@@ -98,7 +98,7 @@
         </div>
         {% else %}
         <div class="col-md-6 col-xs-12">
-            <a href="{% url 'products:content_information_favorite_add' pk=content.pk %}"
+            <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
                class="btn btn-primary btn-block"
                role="button"
                style="margin:5px;"

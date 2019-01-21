@@ -1,22 +1,22 @@
 <ul class="nav nav-tabs" role="tablist" id="myTab">
     {% if content.category.section == "상품" %}
     <li role="presentation">
-        <a href="{% url 'products:content_information' pk=content.pk %}#intro"
+        <a href="{% url 'products:content_information' content_slug=content.slug %}#intro"
            aria-controls="home"
            role="tab">상품설명</a></li>
     <li role="presentation" class="active">
-        <a href="{% url 'products:content_review' pk=content.pk %}#review"
+        <a href="{% url 'products:content_review' content_slug=content.slug %}#review"
            aria-controls="review" role="tab">리뷰</a></li>
     {% elif content.category.section == "강좌"%}
     <li role="presentation">
-        <a href="{% url 'products:content_information' pk=content.pk %}#intro"
+        <a href="{% url 'products:content_information' content_slug=content.slug %}#intro"
            aria-controls="home"
            role="tab">강의소개</a></li>
     <li role="presentation" class="active">
-        <a href="{% url 'products:content_review' pk=content.pk %}#review"
+        <a href="{% url 'products:content_review' content_slug=content.slug %}#review"
            aria-controls="review" role="tab">리뷰</a></li>
     <li role="presentation">
-        <a href="{% url 'products:content_video' pk=content.pk pk_video=content.lecture_set.first.video_set.first.pk %}#video"
+        <a href="{% url 'products:content_video' content_slug=content.slug pk_video=content.lecture_set.first.video_set.first.pk %}#video"
            aria-controls="video" role="tab">
             비디오</a></li>
     {% endif %}

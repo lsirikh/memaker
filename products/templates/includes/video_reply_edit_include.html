@@ -1,5 +1,7 @@
-{% if reply.pk != pk_reply%}
+{% if reply.pk != pk_reply %}
+reply.pk = {{reply.pk}} 와 pk_reply = {{pk_reply}}
 {% include 'includes/video_reply_include.html' %}
 {% else %}
+test matching
 {% include 'includes/form_for_reply.html' %}
 {% endif %}

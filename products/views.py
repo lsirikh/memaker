@@ -56,17 +56,17 @@ logger = logging.getLogger(__name__)
 #        return context
 
 @login_required(login_url="accounts:login")
-def content_information_favorite_add_view(request, pk):
+def content_information_favorite_add_view(request, content_slug):
     # UserProfile.objects.get을 통해 싱글 오브젝트 retrive하기
     userprofile = UserProfile.objects.get(user__username=request.user)
-    requested_content = Content.objects.get(pk=pk)
+    requested_content = Content.objects.get(slug=content_slug)
     # 관심 상품 등록 과정
     try:
         userprofile.favorite.add(requested_content)
     except:
         print("관심상품 등록는 중에 오류가 발생했습니다.")
 
-    return redirect('products:content_information', pk=pk)
+    return redirect('products:content_information', content_slug=content_slug)
 
 
 # @login_required(login_url="accounts:login")
@@ -83,10 +83,10 @@ def content_information_favorite_add_view(request, pk):
 #     return redirect('products:content_product_review', pk=pk)
 
 @login_required(login_url="accounts:login")
-def content_information_favorite_sub_view(request, pk):
+def content_information_favorite_sub_view(request, content_slug):
     # UserProfile.objects.get을 통해 싱글 오브젝트 retrive하기
     userprofile = UserProfile.objects.get(user__username=request.user)
-    requested_content = Content.objects.get(pk=pk)
+    requested_content = Content.objects.get(slug=content_slug)
 
     try:
         # 관심상품 등록 해제.....
@@ -367,15 +367,20 @@ class ContentCategoryListView(ListView):
 class ContentInformationView(DetailView):
     model = Content
     template_name = 'products/content_information.html'
+    #slug_field = 'slug'
+    slug_url_kwarg = 'content_slug'
 
     def get_context_data(self, **kwargs):
         print("ContentInformationView is started")
-        context = super().get_context_data(**kwargs)
+        #context = super().get_context_data(**kwargs)
+        print(self.object)
         #self.content = get_object_or_404(Content, slug=self.kwargs.get('content_slug'))
-        self.content = get_object_or_404(Content, pk=self.kwargs.get('pk'))
-        category = get_object_or_404(Category, slug=self.content.category.slug)
+        #self.content = get_object_or_404(Content, pk=self.kwargs.get('pk'))
+
+        category = get_object_or_404(Category, slug=self.object.category.slug)
         category_list = Category.objects.filter(section=category.section)
-        content = self.content
+
+        content = self.object
         #content.file.first().file_extension()
         try:
             selected_user = content.userprofile_set.get(user=self.request.user)
@@ -388,14 +393,14 @@ class ContentInformationView(DetailView):
             print("등록안된 사용자")
             kwargs['isRegistered'] = False
 
-        kwargs['content'] = self.content
+        #kwargs['content'] = self.content   #DetailView에서 retrieve
         kwargs['content_list'] = Content.objects.all()
         kwargs['category'] = category
         kwargs['category_list'] = category_list
-        if self.content.category.section == '강좌':
+        if self.object.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
-        elif self.content.category.section == '상품':
+        elif self.object.category.section == '상품':
             print("상품선택")
             kwargs['selected_base_page'] = 'base_products.html'
         return super().get_context_data(**kwargs)
@@ -412,6 +417,8 @@ class ContentReviewView(ListView):
 
         ##########################################################
         # paginator의 오브젝트를 context 데이터에서 갖고 온다.
+        print("self.content from get_queryset : "+str(self.content))
+
         category = get_object_or_404(Category, slug=self.content.category.slug)
         category_list = Category.objects.filter(section=category.section)
 
@@ -480,8 +487,8 @@ class ContentReviewView(ListView):
 
     def get_queryset(self):
 
-        self.content = get_object_or_404(Content, pk=self.kwargs.get('pk'))
-        queryset = self.content.appraisal_set.order_by('-created_at')
+        self.content = get_object_or_404(Content, slug=self.kwargs.get('content_slug')) #content 클래스는 여기 ListView에 부록 개념
+        queryset = self.content.appraisal_set.order_by('-created_at')  #리뷰 튜플은 생성된 날짜 역순으로 뽑아오도록 설정
         print(str(queryset))
 
         return queryset
@@ -568,7 +575,7 @@ class ContentVideoView(ListView):
 
     def get_queryset(self):
         print("ContentVideoView is started in get_queryset")
-        self.content = get_object_or_404(Content, pk=self.kwargs.get('pk'))
+        self.content = get_object_or_404(Content, slug=self.kwargs.get('content_slug'))
         self.video = get_object_or_404(Video, pk=self.kwargs.get('pk_video'))
         reply_list = self.video.replychapter_set.order_by('-order')
         queryset = reply_list
@@ -578,9 +585,9 @@ class ContentVideoView(ListView):
 
 
 @login_required(login_url="accounts:login")
-def content_review_add_view(request, pk):
+def content_review_add_view(request, content_slug):
     print("content_review_add_view is started")
-    content = get_object_or_404(Content, pk=pk)
+    content = get_object_or_404(Content, slug=content_slug)
     category = get_object_or_404(Category, slug=content.category.slug)
     category_list = Category.objects.filter(section=category.section)
     appraisal_list = content.appraisal_set.order_by('-created_at')
@@ -593,7 +600,7 @@ def content_review_add_view(request, pk):
             appraisal.user = request.user
             appraisal.save()
             return redirect('products:content_review',
-                            pk=pk
+                            content_slug=content_slug
                             )
     else:
         if content.category.section == '강좌':
@@ -615,9 +622,12 @@ def content_review_add_view(request, pk):
 
 
 @login_required(login_url="accounts:login")
-def content_review_remove_view(request, pk, pk_appraisal):
+def content_review_remove_view(request, content_slug, pk_appraisal):
     print("content_review_remove_view is started")
-    content = get_object_or_404(Content, pk=pk)
+
+    pk_appraisal = int(pk_appraisal)
+
+    content = get_object_or_404(Content, slug=content_slug)
     appraisal = get_object_or_404(Appraisal, pk=pk_appraisal)
 
     if appraisal.user == request.user:
@@ -626,16 +636,19 @@ def content_review_remove_view(request, pk, pk_appraisal):
         except:
             print("삭제할 appraisal이 존재하지 않습니다.")
 
-    return redirect('products:content_review', pk=content.pk)
+    return redirect('products:content_review', content_slug=content.slug)
 
 
 
 
 
 @login_required(login_url="accounts:login")
-def video_add_reply_view(request, pk, pk_video):
+def video_add_reply_view(request, content_slug, pk_video):
     print("video_add_reply_view is started")
-    content = get_object_or_404(Content, pk=pk)
+
+    pk_video = int(pk_video)
+
+    content = get_object_or_404(Content, slug=content_slug)
     category = get_object_or_404(Category, slug=content.category.slug)
     category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
@@ -651,7 +664,7 @@ def video_add_reply_view(request, pk, pk_video):
             reply.user = request.user
             reply.save()
             return redirect('products:content_video',
-                            pk=pk,
+                            content_slug=content_slug,
                             pk_video=pk_video,
                             )
     else:
@@ -691,9 +704,14 @@ def video_add_reply_view(request, pk, pk_video):
 
 
 @login_required(login_url="accounts:login")
-def video_remove_reply_view(request, pk, pk_video, pk_reply):
+def video_remove_reply_view(request, content_slug, pk_video, pk_reply):
     print("video_remove_reply_view is started")
-    content = get_object_or_404(Content, pk=pk)
+
+    # re_path trans args는 문자형으로 받는 듯함, int형 캐스팅 필요
+    pk_video = int(pk_video)
+    pk_reply = int(pk_reply)
+
+    content = get_object_or_404(Content, slug=content_slug)
     category = get_object_or_404(Category, slug=content.category.slug)
     category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
@@ -720,20 +738,32 @@ def video_remove_reply_view(request, pk, pk_video, pk_reply):
             print("Reply deletion error")
 
     return redirect('products:content_video',
-                    pk=pk,
+                    content_slug=content_slug,
                     pk_video=pk_video,
                     )
 
 
 @login_required(login_url="accounts:login")
-def video_edit_reply_view(request, pk, pk_video, pk_reply):
+def video_edit_reply_view(request, content_slug, pk_video, pk_reply):
     print("video_edit_reply_view is started")
-    content = get_object_or_404(Content, pk=pk)
+
+    #re_path trans args는 문자형으로 받는 듯함, int형 캐스팅 필요
+    pk_video = int(pk_video)
+    pk_reply = int(pk_reply)
+
+    content = get_object_or_404(Content, slug=content_slug)
     category = get_object_or_404(Category, slug=content.category.slug)
     category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
     reply_list = ReplyChapter.objects.filter(video=video).order_by('-order')
     reply_order = ReplyChapter.objects.get(pk=pk_reply).order
+
+    print(str(content))
+    print(str(category))
+    print(str(category_list))
+    print(str(video))
+    print(str(reply_list))
+    print(str(reply_order))
 
     # 수정을 위한 해당 Post ritrieve 과정
     selected_reply = get_object_or_404(ReplyChapter, pk=pk_reply)
@@ -805,7 +835,7 @@ def video_edit_reply_view(request, pk, pk_video, pk_reply):
 
             base_url = reverse('products:content_video',
                                kwargs={
-                                   'pk': pk,
+                                   'content_slug': content_slug,
                                    'pk_video': pk_video,
                                })
             query_string = urlencode({'page': number_for_page})
@@ -862,9 +892,14 @@ def video_edit_reply_view(request, pk, pk_video, pk_reply):
                   )
 
 @login_required(login_url="accounts:login")
-def video_reply_to_reply_view(request, pk, pk_video, pk_reply):
+def video_reply_to_reply_view(request, content_slug, pk_video, pk_reply):
     print("video_reply_to_reply_view is started")
-    content = get_object_or_404(Content, pk=pk)
+
+    # re_path trans args는 문자형으로 받는 듯함, int형 캐스팅 필요
+    pk_video = int(pk_video)
+    pk_reply = int(pk_reply)
+
+    content = get_object_or_404(Content, slug=content_slug)
     category = get_object_or_404(Category, slug=content.category.slug)
     category_list = Category.objects.filter(section=category.section)
     video = get_object_or_404(Video, pk=pk_video)
@@ -951,7 +986,7 @@ def video_reply_to_reply_view(request, pk, pk_video, pk_reply):
 
             base_url = reverse('products:content_video',
                                kwargs={
-                                   'pk': pk,
+                                   'content_slug': content_slug,
                                    'pk_video': pk_video,
                                })
             query_string = urlencode({'page': number_for_page})

@@ -15,11 +15,11 @@
                     <h4>{{ lecture.title|truncatechars:22 }}</h4>
                     <p>{{ lecture.description|truncatechars:40 }}</p>
                     <div align="center"><span>
-                            <a href="{% url 'products:content_information' lecture.pk%}" class="btn btn-primary"
+                            <a href="{% url 'products:content_information' content_slug=lecture.slug %}" class="btn btn-primary"
                                role="button">수강하기</a>
                         </span>
                         <span>
-                            <a href="{% url 'products:content_information_favorite_sub' lecture.pk%}" class="btn btn-warning"
+                            <a href="{% url 'products:content_information_favorite_sub' content_slug=lecture.slug %}" class="btn btn-warning"
                                role="button">관심해제</a>
                         </span></div>
                 </div>
@@ -52,11 +52,11 @@
                     <h4>{{ product.title|truncatechars:22 }}</h4>
                     <p>{{ product.description|truncatechars:40 }}</p>
                     <p align="center"><span>
-                            <a href="{% url 'products:content_information' product.pk%}" class="btn btn-primary"
+                            <a href="{% url 'products:content_information' content_slug=product.slug %}" class="btn btn-primary"
                                role="button">상세보기</a>
                         </span>
                         <span>
-                            <a href="{% url 'products:content_information_favorite_sub' product.pk%}" class="btn btn-warning"
+                            <a href="{% url 'products:content_information_favorite_sub' content_slug=product.slug %}" class="btn btn-warning"
                                role="button">관심해제</a>
                         </span></p>
                 </div>

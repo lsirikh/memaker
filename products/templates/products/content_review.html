@@ -82,7 +82,7 @@
                                     <p>{{appraisal.message}}
                                         {% if request.user == appraisal.user %}
                                         <small><a
-                                                href="{% url 'products:content_review_remove' pk=content.pk pk_appraisal=appraisal.pk %}#review">
+                                                href="{% url 'products:content_review_remove' content_slug=content.slug pk_appraisal=appraisal.pk %}#review">
                                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
                                         </small>
                                         {% endif%}
@@ -117,7 +117,7 @@
 
                     <div class="row">
                         <div class="col-xs-12 col-md-push-10 col-md-2">
-                            <a href="{% url 'products:content_review_add' pk=content.pk %}#review"
+                            <a href="{% url 'products:content_review_add' content_slug=content.slug %}#review"
                                class="btn btn-success btn-block">리뷰남기기</a>
                         </div>
                     </div>

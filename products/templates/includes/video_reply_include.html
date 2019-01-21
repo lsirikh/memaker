@@ -43,20 +43,20 @@
             </div>
             {% if request.user == reply.user%}
             <div class="col-md-offset-4 col-md-2 col-md-2 col-xs-3">
-                <a href="{% url 'products:content_video_reply_remove' pk=content.pk pk_video=video.pk pk_reply=reply.pk %}#review"
+                <a href="{% url 'products:content_video_reply_remove' content_slug=content.slug pk_video=video.pk pk_reply=reply.pk %}#review"
                    class="btn btn-success btn-block">삭 제</a>
             </div>
             <div class="col-md-2 col-xs-3">
-                <a href="{% url 'products:content_video_reply_edit' pk=content.pk pk_video=video.pk pk_reply=reply.pk %}#{{reply.order}}"
+                <a href="{% url 'products:content_video_reply_edit' content_slug=content.slug pk_video=video.pk pk_reply=reply.pk %}#{{reply.order}}"
                    class="btn btn-success btn-block">수 정</a>
             </div>
             <div class="col-md-2 col-xs-3">
-                <a href="{% url 'products:content_video_reply_to_reply' pk=content.pk pk_video=video.pk pk_reply=reply.pk %}#{{reply.order}}"
+                <a href="{% url 'products:content_video_reply_to_reply' content_slug=content.slug pk_video=video.pk pk_reply=reply.pk %}#{{reply.order}}"
                    class="btn btn-success btn-block">댓 글</a>
             </div>
             {% else%}
             <div class="col-md-offset-8 col-md-2 col-xs-9">
-                <a href="{% url 'products:content_video_reply_to_reply' pk=content.pk pk_video=video.pk pk_reply=reply.pk %}#{{reply.order}}"
+                <a href="{% url 'products:content_video_reply_to_reply' content_slug=content.slug pk_video=video.pk pk_reply=reply.pk %}#{{reply.order}}"
                    class="btn btn-success btn-block">댓 글</a>
             </div>
             {% endif%}
