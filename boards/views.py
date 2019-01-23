@@ -151,6 +151,7 @@ class TopicListView(ListView):
         return queryset
 
 
+
 # topic list를 보여주는 class view 사용하지 않음
 #class BoardsTopicView(DetailView):
     # print("BoardsTopicView is started")

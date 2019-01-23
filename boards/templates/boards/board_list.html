@@ -7,8 +7,8 @@
 
 <div class="container">
     <div class="me_title2 col-md-12 co-xs-12"><a href="{%url 'boards:index'%}">
-        <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 공유게시판</a> > <a
-            href="{%url 'boards:board_topic' pk=board.pk%}">{{board.name}}</a></div>
+        <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 공유게시판</a> >
+        <a href="{{board.get_absolute_url}}">{{board.name}}</a></div>
 
     <div class="panel panel-success">
         <table class="table table-striped">

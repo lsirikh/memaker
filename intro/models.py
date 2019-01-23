@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Intro(models.Model):
@@ -13,3 +14,9 @@ class Intro(models.Model):
     def delete(self, *args, **kwargs):
         self.image.delete()
         super(Intro, self).delete(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('intro:index')
+
+    class Meta:
+        ordering = ['id']

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils import timezone
@@ -18,6 +19,12 @@ class Board(models.Model):
     def get_last_topic(self):
         return Topic.objects.filter(topic__board=self).order_by('-updated_at', '-created_at')
 
+    def get_absolute_url(self):
+        return reverse('boards:board_topic',
+                       args=[self.pk])
+
+    class Meta:
+        ordering = ['-id']
 
 
 class Topic(models.Model):
@@ -33,7 +40,12 @@ class Topic(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('boards:board_content',
+                       args=[self.board.pk, self.pk])
 
+    class Meta:
+        ordering = ['-created_at']
 
 
 class Post(models.Model):

@@ -15,34 +15,64 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from memaker import views #add for landingpage
+from memaker import views  # add for landingpage
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from ckeditor_uploader.urls import views as uploader_views
 
-app_name='memaker'
+from django.contrib.sitemaps.views import sitemap
+from boards.sitemaps import StaticBoardsSitemap, BoardSitemap, TopicSitemap
+from products.sitemaps import (
+    StaticProductsSitemap,
+    CategorySitemap,
+    ContentSitemap,
+    VideoSitemap,
+    AppraisalSitemap
+)
+
+from intro.sitemaps import StaticIntroSitemap
+from memaker.sitemaps import StaticSitemap
+
+
+sitemaps = {
+    'static': StaticSitemap,
+    'static_intro': StaticIntroSitemap,
+    'static_products': StaticProductsSitemap,
+    'static_boards': StaticBoardsSitemap,
+    'board': BoardSitemap,
+    'topic': TopicSitemap,
+    'category': CategorySitemap,
+    'content': ContentSitemap,
+    'video': VideoSitemap,
+    'appraisal': AppraisalSitemap,
+}
+
+app_name = 'memaker'
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('_nested_admin/', include('nested_admin.urls')),
+                  path('admin/', admin.site.urls),
+                  path('_nested_admin/', include('nested_admin.urls')),
 
-    path('ckeditor/', include('ckeditor_uploader.urls')),
-    #path('ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
-    #path('ckeditor/browse/', uploader_views.browse, name='ckeditor_browse'),
+                  path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
+                       name='django.contrib.sitemaps.views.sitemap'),
 
-#    re_path(r'^r/$', views.login_redirect, name='login_redirect'),
-    path('', views.HomeView.as_view(), name='home'),
-    path('google2cea96b33d0c202f.html/', views.GoogleView.as_view()),
-    path('google640e077116d2555d.html/', views.GoogleView2nd.as_view()),
-    path('navere8566efa5b506b61efd740303a95e363.html/', views.NaverView.as_view()),
-    path('robots.txt/', views.NaverRobot.as_view()),
-    path('polls/', include('polls.urls')),
-    path('intro/', include('intro.urls')),
-    path('products/', include('products.urls')),
-    path('lectures/', include('lectures.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('boards/', include('boards.urls')),
+                  path('ckeditor/', include('ckeditor_uploader.urls')),
+                  # path('ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
+                  # path('ckeditor/browse/', uploader_views.browse, name='ckeditor_browse'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  #    re_path(r'^r/$', views.login_redirect, name='login_redirect'),
+                  path('', views.HomeView.as_view(), name='home'),
+                  path('google2cea96b33d0c202f.html/', views.GoogleView.as_view()),
+                  path('google640e077116d2555d.html/', views.GoogleView2nd.as_view()),
+                  path('navere8566efa5b506b61efd740303a95e363.html/', views.NaverView.as_view()),
+                  path('robots.txt/', views.NaverRobot.as_view()),
+                  path('polls/', include('polls.urls')),
+                  path('intro/', include('intro.urls')),
+                  path('products/', include('products.urls')),
+                  path('lectures/', include('lectures.urls')),
+                  path('accounts/', include('accounts.urls')),
+                  path('boards/', include('boards.urls')),
+
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

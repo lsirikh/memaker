@@ -41,7 +41,7 @@ urlpatterns = [
     re_path(r'^withdrawal/$', account_views.withdrawal_view, name="withdrawal"),
     re_path(r'^withdrawal/done$', account_views.withdrawal_done_view, name="withdrawal_done"),
     re_path(r'^register/$', account_views.register_view, name="register"),
-    re_path(r'^account_activation_sent/$', account_views.account_activation_sent, name='account_activation_sent'),
+    re_path(r'^account-activation-sent/$', account_views.account_activation_sent, name='account_activation_sent'),
     re_path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
             account_views.activate, name='activate'),
 
@@ -50,20 +50,20 @@ urlpatterns = [
 
     # path('password_change/', account_views.change_password_view, name='password_change'),
 
-    path('find_id/', account_views.find_id_view, name='find_id'),
+    path('find-id/', account_views.find_id_view, name='find_id'),
 
-    path('password_change/', PasswordChangeView.as_view(
+    path('password-change/', PasswordChangeView.as_view(
         form_class = PasswordChangeForm,
         success_url=reverse_lazy('accounts:password_change_done'),
         template_name='accounts/password_change.html',
     ), name='password_change'),
 
-    path('password_change/done/', PasswordChangeDoneView.as_view(
+    path('password-change/done/', PasswordChangeDoneView.as_view(
         template_name='accounts/password_change_done.html',
     ), name='password_change_done'),
 
     # reset password urls
-    path('password_reset/',
+    path('password-reset/',
          views.PasswordResetView.as_view(
              # success_url=reverse_lazy('accounts:password_reset_done'),
              #from_email ='help@openfingers.com',
@@ -72,14 +72,17 @@ urlpatterns = [
              email_template_name='accounts/password_reset_email.html',
              subject_template_name='accounts/password_reset_subject.txt'
          ), name='password_reset'),
-    path('password_reset/done/', views.PasswordResetDoneView.as_view(
+
+    path('password-reset/done/', views.PasswordResetDoneView.as_view(
         template_name='accounts/password_reset_done.html'
     ), name='password_reset_done'),
-    path('password_reset/confirm/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(
+
+    path('password-reset/confirm/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(
         template_name='accounts/password_reset_confirm.html',
         success_url=reverse_lazy('accounts:password_reset_complete')
     ), name='password_reset_confirm'),
-    path('password_reset/confirm/done/', views.PasswordResetCompleteView.as_view(
+
+    path('password-reset/confirm/done/', views.PasswordResetCompleteView.as_view(
         template_name='accounts/password_reset_complete.html',
     ), name='password_reset_complete')
 

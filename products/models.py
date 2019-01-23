@@ -93,9 +93,15 @@ class Content(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('products:content_information',
+                       args=[self.slug])
+
     class Meta:
         ordering = ('title',)
         index_together = (('id', 'slug'),)
+
+
 
 
 
@@ -133,6 +139,9 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ('id',)
 
 class Product(models.Model):
 

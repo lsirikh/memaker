@@ -3,7 +3,7 @@
         <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
         공유게시판</a> >
     <a href="{%url 'boards:board_topic' pk=board.pk%}">{{board.name}}</a> >
-    <a href="{% url 'boards:board_content' pk=board.id topic_pk=topic.id  %}">{{topic.title|truncatechars:20}}</a>
+    <a href="{{topic.get_absolute_url}}">{{topic.title|truncatechars:20}}</a>
 </div>
 <div class="panel panel-success">
     <div class="panel-heading">
