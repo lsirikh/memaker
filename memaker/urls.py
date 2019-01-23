@@ -22,6 +22,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from ckeditor_uploader.urls import views as uploader_views
 
 from django.contrib.sitemaps.views import sitemap
+from accounts.sitemaps import StaticAccountsSitemap
 from boards.sitemaps import StaticBoardsSitemap, BoardSitemap, TopicSitemap
 from products.sitemaps import (
     StaticProductsSitemap,
@@ -38,6 +39,7 @@ from memaker.sitemaps import StaticSitemap
 sitemaps = {
     'static': StaticSitemap,
     'static_intro': StaticIntroSitemap,
+    'static_accounts': StaticAccountsSitemap,
     'static_products': StaticProductsSitemap,
     'static_boards': StaticBoardsSitemap,
     'board': BoardSitemap,
@@ -53,8 +55,7 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('_nested_admin/', include('nested_admin.urls')),
 
-                  path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
-                       name='django.contrib.sitemaps.views.sitemap'),
+                  path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 
                   path('ckeditor/', include('ckeditor_uploader.urls')),
                   # path('ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
