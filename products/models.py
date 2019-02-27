@@ -80,8 +80,9 @@ class Content(models.Model):
     description = models.CharField('간략설명', null=True, blank=True, max_length=300)  # 간략한 설명
     sample = models.URLField('샘플영상', null=True, blank=True)  # 샘플영상
 
-    cost = models.IntegerField('정가', null=True, blank=True, default=0)  # 가격
-    discount = models.IntegerField('할인가격', null=True, blank=True, default=0)  # 할인 가격
+    cost = models.PositiveIntegerField('정가', null=True, blank=True, default=0)  # 가격
+    discount = models.PositiveIntegerField('할인가격', null=True, blank=True, default=0)  # 할인 가격
+
     isSale = models.BooleanField('판매여부', null=True, blank=True, default=False)  # 판매 여부
     isShow = models.BooleanField('노출여부', null=True, blank=True, default=False) #노출여부
     isDiscount = models.BooleanField('할인', null=True, blank=True, default=False) #할인여부
@@ -148,6 +149,9 @@ class Product(models.Model):
     content = models.ForeignKey(Content, on_delete=models.CASCADE)  # Content와 ForeignKey 설정
     introduce = RichTextUploadingField('내용', max_length=8000) # 내용
     link = models.URLField('구매링크', default='', blank=True) # 네이버 구매 링크
+
+    stock = models.PositiveSmallIntegerField('재고', default=0) #제고 물건만 유의미
+
 
     def __str__(self):
         return '{0}-product({1})'.format(self.content, self.pk)

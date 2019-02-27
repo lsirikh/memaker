@@ -75,18 +75,21 @@
                     </ul>
                     <!-- login side -->
                     <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{% url 'cart:cart_detail'%}"><span class="glyphicon glyphicon-shopping-cart"></span>
+                            장바구니({{cart.isExist}})</a>
+                        </li>
                         {% if request.user.is_authenticated %}
                         <li><a href="{% url 'accounts:index'%}"><span class="glyphicon glyphicon-user"></span>
                             {{request.user}}</a></li>
                         <li><a href="{% url 'accounts:logout'%}"><span class="glyphicon glyphicon-log-in"></span>
-                            Logout</a>
+                            로그아웃</a>
                         </li>
                         {% else %}
                         <li><a href="{% url 'accounts:register'%}"><span class="glyphicon glyphicon-user"></span>
-                            Sign
-                            Up</a></li>
+                            회원가입</a>
+                        </li>
                         <li><a href="{% url 'accounts:login'%}?next={{ request.path|urlencode }}"><span
-                                class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                                class="glyphicon glyphicon-log-in"></span> 로그인</a></li>
                         {% endif%}
 
                     </ul>

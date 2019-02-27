@@ -13,7 +13,7 @@ from django.views import generic
 #
 #def detail(request, question_id):
 #    question = get_object_or_404(Question, pk=question_id)
-#    return render(request, 'polls/detail.html', {'question': question})
+#    return render(request, 'polls/cart_detail.html', {'question': question})
 #
 #def results(request, question_id):
 #    question = get_object_or_404(Question, pk=question_id)
@@ -35,7 +35,7 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     model = Question
-    template_name = 'polls/detail.html'
+    template_name = 'polls/cart_detail.html'
 
 class ResultsView(generic.DetailView):
     model = Question
@@ -50,7 +50,7 @@ def vote(request, question_id):
         seleceted_choice= question.choice_set.get(pk=request.POST['choice'])
     except(KeyError, Choice.DoesNotExist):
         #설문투표 폼을 다시 보여준다.
-        return render(request, 'polls/detail.html', {
+        return render(request, 'polls/cart_detail.html', {
             'question':question,
             'error_message':"You didn't select a choice",
 

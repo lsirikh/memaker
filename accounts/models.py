@@ -28,20 +28,23 @@ class UserProfile(models.Model):
     )
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to= user_directory_path, blank=True, default='account_image/account_pic_default.png')
+    image = models.ImageField('사진', upload_to= user_directory_path, blank=True, default='account_image/account_pic_default.png')
     thumbnail = ImageSpecField(
         source='image',
         processors=[Thumbnail(240, 240)],
         format='JPEG',
         options={'quality': 80})
-    email_confirmed = models.BooleanField(default=False)
-    description = models.CharField(max_length=200, blank=True, null=True)
-    address = models.CharField(max_length=200, blank=True, null=True)
-    phone = models.IntegerField(blank=True, null=True)
-    birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
-    route = models.CharField(max_length=5, choices=REGISTER_ROUTE, null=True, blank=True)
-    agree = models.BooleanField(default=False)
+    email_confirmed = models.BooleanField('이메일검증', default=False)
+    description = models.CharField('본인소개', max_length=200, blank=True, null=True)
+    postal_code = models.CharField('우편번호', max_length=20, blank=True, null=True)
+    address = models.CharField('주소', max_length=200, blank=True, null=True)
+    extraAddress = models.CharField('참조주소', max_length=200, blank=True, null=True)
+    detailAddress = models.CharField('상세주소', max_length=200, blank=True, null=True)
+    phone = models.PositiveIntegerField('전화번호', blank=True, null=True)
+    birth = models.DateField('생년월일', null=True, blank=True)
+    gender = models.CharField('성별', max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    route = models.CharField('가입경로', max_length=5, choices=REGISTER_ROUTE, null=True, blank=True)
+    agree = models.BooleanField('정보제공동의', default=False)
     favorite = models.ManyToManyField('products.Content', blank=True)
 
     #favorite_product = models.ManyToManyField('products.Product', blank=True)

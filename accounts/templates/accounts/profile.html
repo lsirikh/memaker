@@ -26,8 +26,11 @@
                     {% if user_profile.phone %}
                     <li style="padding:5px;"><div class="me_title3">연락처 : {{ user_profile.phone}}</div></li>
                     {% endif %}
+                    {% if user_profile.postal_code %}
+                    <li style="padding:5px;"><div class="me_title3">우편번호 : {{ user_profile.postal_code}}</div></li>
+                    {% endif %}
                     {% if user_profile.address %}
-                    <li style="padding:5px;"><div class="me_title3">주 소 : {{ user_profile.address}}</div></li>
+                    <li style="padding:5px;"><div class="me_title3">주 소 : {{ user_profile.address}} {{ user_profile.detailAddress}}</div></li>
                     {% endif %}
                     {% if user_profile.description %}
                     <li style="padding:5px;"><div class="me_title3">소 개 : {{ user_profile.description}}</div></li>

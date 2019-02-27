@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.sites.models import Site
 from django.utils.http import urlsafe_base64_encode
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes
@@ -37,6 +38,17 @@ from accounts.forms import (
     FindIdForm
 )
 
+from cart.cart import Cart
+from cart.models import Cart as CM
+from cart.forms import CartAddContentForm
+
+import json
+from pprint import pprint
+
+from products.models import Content
+
+from decimal import *
+
 
 # --TemplateView
 
@@ -47,6 +59,7 @@ class AccountsIndexView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):  # get_context_data method 정의시, super() method 반드시 호출!
         context = super().get_context_data(**kwargs)
         #context['model_list'] = UserProfile.objects.all()
+
         user = auth.get_user(self.request)
         user_profile = UserProfile.objects.get(user__username=user)
         product_list = user_profile.favorite.filter(category__section="상품")
@@ -63,6 +76,7 @@ class AccountsIndexView(LoginRequiredMixin, TemplateView):
 
 @login_required(login_url="accounts:login")
 def index_view(request):
+
     print("accounts:index view execute")
     user = auth.get_user(request)
     user_profile = UserProfile.objects.get(user__username=user)
@@ -75,12 +89,21 @@ def index_view(request):
     model_list = UserProfile.objects.all()
     #model_list = UserProfile.objects.get(user__username =)
 
+
     #return render(request, 'accounts/profile.html', {'model_list': model_list})
     return render(request, 'accounts/dash_board.html', {'user_profile': user_profile, 'user':user})
 
 
 def login_view(request):
     print("login view execute")
+    try:
+        # 테스트시 오류 발생
+        current_site = Site.objects.get(name='memaker.co.kr')
+        #current_site = get_current_site(request)
+        print("current_site : ", current_site)
+        print("current_site.domain : ", current_site.domain)
+    except:
+        print("current_site 할당 실패!!!")
 
     ################로그인 된 경우 redirect######################
     if auth.get_user(request).is_authenticated:
@@ -111,6 +134,51 @@ def login_view(request):
                     login(request, user)
                     # return HttpResponse('Authenticated successfully')
                     # previous 페이지로 redirect
+
+
+
+                    # 만약 Cart session에 물건이 담겨있으면, user db로 저장
+                    cart = Cart(request)
+                    if cart.isExist() > 0:
+                        for item in cart:
+                            #로그인 전 cart session에 담긴 품목을 content object로 불러온다.
+                            title = item['content']
+
+                            try:
+                                content = Content.objects.get(title=title)
+                                #content 데이터와 user 데이트를 이용하여 Cart model을 찾아본다.
+                                userCart = get_object_or_404(CM, user=user, content=content)
+                                print("카트DB에 있는 데이터")
+
+                                #기존 Cart DB에 있는 자료이면 수량을 더해주고 저장한다.
+                                userCart.quantity += int(item['quantity'])
+
+                            except:
+                                #content 데이터와 user 데이터로 검색해서 해당 Cart 데이터가 없으면 새로 만들어 준다.
+                                print("카트DB에 없는 데이터")
+                                userCart = CM.objects.create(user=user, content=content)
+                                userCart.quantity = int(item['quantity'])
+                                userCart.cost = int(item['cost'])
+
+                            #Cart DB에 저장을 한다.
+                            userCart.save()
+                        #session cart에 있던 내용을 모두 Cart DB로 옮기고 싹 한번 삭제하고, 초기화 한다.
+                        cart.clear()
+                        cart.__init__(request)
+
+                    #로그인 전 session cart에 데이터가 있던 없던,
+                    #Cart DB의 데이터를 user로 필터링해서 userCart로 할당한다.
+                    userCart = CM.objects.filter(user=user)
+
+                    #userCart를 이용해서 session cart에 새로 입력해주면서, Cart DB와 동기화기 시작된다.
+                    for cartItem in userCart:
+                        cart.add(content=cartItem.content,
+                                quantity=cartItem.quantity,
+                                update_quantity=False)
+                    print(cart.isExist)
+
+
+
                     prev_page = request.GET.get('next', '/')
                     print('login_view to previous url - ' + prev_page)
                     return HttpResponseRedirect(prev_page)
@@ -327,7 +395,13 @@ def register_view(request):
                 print("가입경로 선택 확인 에러")
                 pass
 
-            current_site = get_current_site(request)
+            try:
+                #테스트시 오류 발생
+                current_site = Site.objects.get(name='memaker.co.kr')
+                #current_site = get_current_site(request)
+            except:
+                print("current_site 할당 실패!!!")
+
             subject = '가입을 환영합니다. 만들면서 배우는 코딩교육 미메이커입니다. 링크를 이용하여 계정을 활성화하세요.'
             message = render_to_string('accounts/account_activation_email.html', {
                 'user': user,
@@ -378,8 +452,22 @@ def activate(request, uidb64, token):
 def profile_view(request):
     # UserProfile.objects.get을 통해 싱글 오브젝트 retrive하기
     user_profile = UserProfile.objects.get(user__username=request.user)
-    print(get_current_site(request))
+    #print(get_current_site(request))
     args = {'user': request.user, 'user_profile': user_profile}
+
+    cart = Cart(request)
+    if cart.isExist() > 0:
+        print("카트에 물건이 있습니다.")
+        print(cart.cart)
+        print(cart.get_total_cost())
+        # for item in cart:
+        #     item['update_quantity_form'] = CartAddContentForm(
+        #         initial={'quantity': item['quantity'],
+        #                  'update': True})
+        # print(cart)
+
+
+
     return render(request, 'accounts/profile.html', args)
 
 

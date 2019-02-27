@@ -45,7 +45,8 @@ class RegistrationForm(UserCreationForm):
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(max_length=30,
                                  label='이름',
-                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                 widget=forms.TextInput(attrs={'class': 'form-control'}),
+                                 help_text='실명을 입력해 주세요.')
     email = forms.EmailField(max_length=254,
                              label='이메일',
                              widget=forms.EmailInput(attrs={'class': 'form-control'}),
@@ -160,7 +161,10 @@ class ProfileEditForm(UserChangeForm):
         fields = ('image',
                   'gender',
                   'birth',
+                  'postal_code',
                   'address',
+                  'extraAddress',
+                  'detailAddress',
                   'phone',
                   'description',
                   'route',
@@ -209,11 +213,39 @@ class ProfileEditForm(UserChangeForm):
         required=False,
         help_text='01012345678 \'-\'를 제외한 숫자를 입력해주세요.',
         widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    postal_code = forms.CharField(
+        label='우편번호',
+        required=False,
+        help_text='배송이나 우편물 전달을 위해 정확한 주소를 기입해주세요.',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'postcode',
+            'placeholder': '우편번호',
+            'readonly': True
+        }))
     address = forms.CharField(
         label='주  소',
         required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id':'address',
+            'readonly':True
+        }))
+    extraAddress = forms.CharField(
+        label='참조주소',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'extraAddress',
+            'readonly':True}))
+    detailAddress = forms.CharField(
+        label='상세주소',
+        required=False,
         help_text='배송이나 우편물 전달을 위해 정확한 주소를 기입해주세요.',
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'detailAddress',
+        }))
     description = forms.CharField(
         label='자기소개',
         required=False,

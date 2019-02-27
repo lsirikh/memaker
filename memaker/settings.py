@@ -64,6 +64,8 @@ INSTALLED_APPS = [
     'lectures.apps.LecturesConfig',  # 추가
     'accounts.apps.AccountsConfig',  # 추가
     'boards.apps.BoardsConfig',  # 추가
+    'cart.apps.CartConfig', #쇼핑카트 추가
+    'orders.apps.OrdersConfig', #주문내역 처리 앱
 ]
 
 SITE_ID = 1
@@ -130,6 +132,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -245,6 +248,13 @@ LOGGING = {
 
 }
 
+
+
+############################### cart session #################################################
+CART_SESSION_ID = 'cart'
+
+
+###############################E-mail server setting##########################################
 # ses-smtp-user.20181231-105435
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

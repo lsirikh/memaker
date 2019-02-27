@@ -38,6 +38,11 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
+
+from cart.forms import CartAddContentForm
+
+
+
 # Create your views here.
 # -- Codes for logging
 import logging
@@ -370,6 +375,7 @@ class ContentInformationView(DetailView):
     #slug_field = 'slug'
     slug_url_kwarg = 'content_slug'
 
+
     def get_context_data(self, **kwargs):
         print("ContentInformationView is started")
         #context = super().get_context_data(**kwargs)
@@ -381,6 +387,8 @@ class ContentInformationView(DetailView):
         category_list = Category.objects.filter(section=category.section)
 
         content = self.object
+        cart_content_form = CartAddContentForm() #장바구니를 위한 Form 인스턴스 추가
+
         #content.file.first().file_extension()
         try:
             selected_user = content.userprofile_set.get(user=self.request.user)
@@ -397,6 +405,7 @@ class ContentInformationView(DetailView):
         kwargs['content_list'] = Content.objects.all()
         kwargs['category'] = category
         kwargs['category_list'] = category_list
+        kwargs['cart_content_form'] = cart_content_form
         if self.object.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
@@ -1041,3 +1050,4 @@ def video_reply_to_reply_view(request, content_slug, pk_video, pk_reply):
                    'selected_base_page': selected_base_page,
                    }
                   )
+

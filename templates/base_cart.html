@@ -1,0 +1,59 @@
+{%extends "base.html"%}
+
+
+{% load staticfiles %}
+
+{%block menu%}
+
+
+<!--------------------------------------------메뉴 시작------------------------------------------------------>
+<li class="active">
+    <!--인트로-->
+    {% include 'includes/nav_menu_intro.html' %}
+</li>
+<li class="dropdown">
+    <!--교보재 및 교재-->
+    {% include 'includes/nav_menu_products.html' %}
+</li>
+<li class="dropdown">
+    <!--강좌-->
+    {% include 'includes/nav_menu_lectures.html' %}
+</li>
+<li class="dropdown">
+    <!--게시판-->
+    {% include 'includes/nav_menu_boards.html' %}
+</li>
+<!--------------------------------------------메뉴 종료------------------------------------------------------>
+{%endblock menu%}
+{%block jumbotron%}
+{% load staticfiles%}
+<style type="text/css">
+.jumbotron{
+    background-image: url("{% static 'img/memaker_board.png'%}");
+}
+
+</style>
+<div class="row">
+    <div class="container-fluid">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container-fluid">
+                <div class="me_jumbotron_title" align="center">만들면서 배우는 코딩 교육 서비스 <br>'미메이커'</div>
+                <br>
+                <div class="me_jumbotron_subtitle" align="center">4차 산업혁명 시대 코딩 교육이 그 어느 때 보다도 중요해지고 있습니다.<br/>
+                    미메이커는 메이커 활동과 수학, 과학, 기술, 공학을 접목하여 재미있는 코딩교육 컨텐츠를 준비하고 있습니다. <br>
+                    미메이커에서 진행하는 차별화된 창의 교육 콘텐츠로 학생 교육에 활용해보세요.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%endblock jumbotron%}
+
+
+
+
+
+
+

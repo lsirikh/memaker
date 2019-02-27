@@ -24,7 +24,7 @@
         <strike> ￦ {{ content.cost|intcomma }}</strike><br>
         <span class="label label-danger">할인</span> ￦ {{ content.discount|intcomma }} 원
         {% else %}
-         ￦ {{ content.cost|intcomma }} 원
+        ￦ {{ content.cost|intcomma }} 원
         {% endif %}
     </div>
     <div class="section">
@@ -74,13 +74,28 @@
     </div>
     <br>
     <!-- Botones de compra -->
+    <div class="section" style="padding-bottom:5px;">
+        <div class="me_title4_nopadding">
+            <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 장바구니
+        </div>
+        <form action="{% url 'cart:cart_add' content.id %}" method="post">
+            {% csrf_token %}
+            {{ cart_content_form }}
+            <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-shopping-cart"
+                 aria-hidden="true"></span> 장바구니 넣기
+            </button>
+        </form>
+    </div>
+    <br>
+
 
     <div class="row">
         <div class="col-md-6 col-xs-12">
             <a href="{{content.product_set.first.link}}" target="_blank"
                class="btn btn-success btn-block"
                style="margin:5px;"
-            ><span class="glyphicon glyphicon-shopping-cart"
+            ><span class="glyphicon glyphicon-credit-card"
                    aria-hidden="true"></span> 구매하러가기
             </a>
         </div>

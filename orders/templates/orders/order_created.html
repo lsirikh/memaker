@@ -1,69 +1,72 @@
-{% extends "accounts/index.html" %}
-{% load i18n static %}
-{% block accounts %}
-{% load staticfiles%}
-<div class="row">
+{% extends "base_order.html" %}
 
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="me_title1">회원 정보</div>
-            </div>
-        </div>
-        <div class="panel-body">
-            <p>다음 정보의 내용을 변경해주세요.</p>
-            <form action="{% url 'accounts:edit_profile'%}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {% for field in user_form %}
-                <p>
-                    {{ field.label_tag }}<br>
-                    {{ field }}
-                    {% if field.help_text %}
-                    <small style="color: grey">{{ field.help_text }}</small>
-                    {% endif %}
-                    {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
-                {% endfor %}
-                </p>
+{% block title %}
+미메이커 '결제하기'
+{% endblock %}
 
-                {% endfor %}
-                <!--#다음 우편번호 소스 코드는 -->
-                <!--#postcode, address, extraAddress, detailAddress의 -->
-                <!--#모든 정보가 갖춰져야 정상적으로 작동한다.-->
-                {% for field in profile_form %}
-                {% if field.label == '우편번호' %}
-                <br>{{ field.label_tag }}
-                <button type="button" class="btn btn-success" onclick="execDaumPostcode()">우편번호 찾기</button>
-                <br>
-                <br>{{ field }}
-                {% else %}
-                {% if field.label == '참조주소'%}
-                <br>{{ field }}
-                {% else %}
-                <br>{{ field.label_tag }}
-                <br>{{ field }}
-                {% endif %}
-                {% endif %}
-                {% if field.help_text %}
-                <small style="color: grey">{{ field.help_text }}</small>
-                <br>
-                {% endif %}
-                {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
-                {% endfor %}
+{% block content %}
+<div class="container">
 
-                {% endfor %}
-                <button type="submit" class="btn btn-primary">변경하기</button>
-            </form>
+    <div class="col-md-6">
+        <div class="me_title3_nopadding">주문내역</div>
+        <p>{{username}} 님께서 주문하신 상품의 내역과 금액입니다.</p>
+        <ul>
+            {% for item in cart %}
+            <li>
+                {{ item.quantity }} x {{ item.content.title }}
+                <span>￦{{ item.total_cost }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <p>전체 금액: ￦{{ cart.get_total_cost }}</p>
+    </div>
+    <div class="col-md-6">
+        <div class="me_title2_nopadding">주문하기</div>
+        <p>주문자의 상세 정보를 입력해 주세요.</p>
+        <form action="{% url 'orders:order_create'%}" method="post" class="order-form">
+            {% csrf_token %}
+            <!--#다음 우편번호 소스 코드는 -->
+            <!--#postcode, address, extraAddress, detailAddress의 -->
+            <!--#모든 정보가 갖춰져야 정상적으로 작동한다.-->
+            {% for field in form %}
+            {% if field.label == '우편번호' %}
+            <br>{{ field.label_tag }}
+            <button type="button" class="btn btn-success" onclick="execDaumPostcode()">우편번호 찾기</button>
             <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <p style="color:#CCD1D1;">*회원을 탈퇴하고 싶습니다.</p>
-            <a href="{%url 'accounts:withdrawal' %}" class="btn btn-default" role="button">회원탈퇴</a>
-        </div>
+            <br>{{ field }}
+            {% else %}
+            {% if field.label == '참조주소'%}
+            <br>{{ field }}
+            {% else %}
+            <br>{{ field.label_tag }}
+            <br>{{ field }}
+            {% endif %}
+            {% endif %}
+            {% if field.help_text %}
+            <small style="color: grey">{{ field.help_text }}</small><br>
+            {% endif %}
+            {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
+
+            {% endfor %}
+
+            <!--<label for="name">이름</label>-->
+            <!--<input type="text" class="form-control" name="name">-->
+            <!--<label for="email">이메일</label>-->
+            <!--<input type="email" class="form-control" name="email"><br>-->
+            <!--<label for="postcode">주소</label>-->
+            <!--<input type="text" class="form-control" id="postcode" placeholder="우편번호" readonly><br>-->
+
+            <!--<br>-->
+            <!--<br>-->
+            <!--<input type="text" class="form-control" id="address" placeholder="주소" readonly><br>-->
+            <!--<input type="text" class="form-control" id="extraAddress" placeholder="참고항목" readonly><br>-->
+            <!--<input type="text" class="form-control" id="detailAddress" placeholder="상세주소"><br>-->
+            <!--<label for="infoSave">정보적용</label>-->
+            <!--<input type="checkbox" id="infoSave"><br>-->
+            <br><button type="submit" class="btn btn-primary">주문하기</button>
+        </form>
     </div>
 </div>
 
@@ -162,5 +165,10 @@
         element_layer.style.left = (((window.innerWidth || document.documentElement.clientWidth) - width)/2 - borderWidth) + 'px';
         element_layer.style.top = (((window.innerHeight || document.documentElement.clientHeight) - height)/2 - borderWidth) + 'px';
     }
+
+
+
+
+
 </script>
-{% endblock accounts %}
+{% endblock %}

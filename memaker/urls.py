@@ -35,7 +35,6 @@ from products.sitemaps import (
 from intro.sitemaps import StaticIntroSitemap
 from memaker.sitemaps import StaticSitemap
 
-
 sitemaps = {
     'static': StaticSitemap,
     'static_intro': StaticIntroSitemap,
@@ -73,6 +72,8 @@ urlpatterns = [
                   path('lectures/', include('lectures.urls')),
                   path('accounts/', include('accounts.urls')),
                   path('boards/', include('boards.urls')),
+                  path('cart/', include('cart.urls', namespace='cart')),
+                  path('orders/', include('orders.urls', namespace='orders')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

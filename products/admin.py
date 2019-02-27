@@ -118,11 +118,18 @@ class ProductInline(nested_admin.NestedTabularInline):  # 테이블 형식
     max_num = 1
 
 class ProductAdmin(nested_admin.NestedModelAdmin):
-    fields = ['introduce', 'link',]
-    list_display = ('get_introduce', 'pk', 'link',)
+    fields = ['introduce', 'link', 'stock']
+    list_display = ('get_title', 'get_category', 'link', 'stock')
+    list_editable = ['stock',]
 
     def get_introduce(self, obj):
         return str(obj.introduce)[0:30]
+
+    def get_title(self, obj):
+        return str(obj.content.title)
+
+    def get_category(self, obj):
+        return str(obj.content.category)
 
 
 class ContentAdmin(nested_admin.NestedModelAdmin):
@@ -162,13 +169,21 @@ class ContentAdmin(nested_admin.NestedModelAdmin):
     #inlines = [ProductInline]
     inlines = [LectureInline, ProductInline]
     list_display = ('title',
+                    'category',
+                   # 'get_section',
+                    'recommend',
+                    'cost',
+                    'isDiscount',
+                    'discount',
+                    'get_stock',
+                    'isShow',
+                    'isSale',
                     'slug',
                     'added',
                     'updated',
-                    'category',
-                    'get_section',
-                    'isSale', )  # 레코드 리스트 컬럼 지정
-    search_fields = ['description']  # 검색 박스 추가
+                    )  # 레코드 리스트 컬럼 지정
+    list_editable = ['cost', 'isSale', 'isDiscount', 'discount','isShow', 'recommend',]
+    search_fields = ['title', 'description']  # 검색 박스 추가
     list_per_page = 10  # 페이지네이션 튜플 개수 설정
     prepopulated_fields = {'slug': ('title',)}
 
@@ -190,6 +205,12 @@ class ContentAdmin(nested_admin.NestedModelAdmin):
 
     def get_section(self, obj):
         return str(obj.category.section)
+
+    def get_stock(self, obj):
+        if obj.category.section == '상품':
+            return obj.product_set.first().stock
+        else:
+            return '해당없음'
 
 
 admin.site.register(Content, ContentAdmin)
