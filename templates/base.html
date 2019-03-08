@@ -29,6 +29,10 @@
 
     <link rel="stylesheet" type="text/css" href="{% block extrastyle %}{% endblock %}"/>
 
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,
   maximum-scale=1.0, minimum-scale=1.0">
@@ -40,6 +44,7 @@
       gtag('js', new Date());
 
       gtag('config', 'UA-132446468-1');
+
     </script>
     <link rel="shortcut icon" href="{% static 'favicon/favicon.png' %}"/>
 
@@ -75,7 +80,8 @@
                     </ul>
                     <!-- login side -->
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{% url 'cart:cart_detail'%}"><span class="glyphicon glyphicon-shopping-cart"></span>
+                        <li><a href="{% url 'cart:cart_detail'%}"><span
+                                class="glyphicon glyphicon-shopping-cart"></span>
                             장바구니({{cart.isExist}})</a>
                         </li>
                         {% if request.user.is_authenticated %}
@@ -131,7 +137,13 @@
         margin-bottom: 0px;
     }
 
-
+    th,td {
+        text-align: center;
+    }
+    table{
+        margin-left: auto;
+        margin-right: auto;
+    }
 
     .table-borderless > tbody > tr > td,
     .table-borderless > tbody > tr > th,
@@ -459,6 +471,7 @@
 
 
 }
+
 
 
 

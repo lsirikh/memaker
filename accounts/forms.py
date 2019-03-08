@@ -6,6 +6,7 @@ from django.contrib.auth.forms import (
     UserChangeForm)
 
 from accounts.models import UserProfile
+from django.core.validators import RegexValidator
 
 
 class LoginForm(forms.Form):
@@ -40,6 +41,8 @@ class WithdrawalForm(UserChangeForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class RegistrationForm(UserCreationForm):
+
+
     username = forms.CharField(max_length=30,
                                label='아이디',
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -78,6 +81,8 @@ class RegistrationForm(UserCreationForm):
             user.save()
 
         return user
+
+
 
 class RegistrationProfileForm(UserChangeForm):
     def __init__(self, *args, **kargs):
@@ -207,8 +212,11 @@ class ProfileEditForm(UserChangeForm):
         required=False,
         help_text='ex)1994-02-22',
         widget=forms.DateInput(attrs={'class': 'form-control'}))
-    phone = forms.IntegerField(
-        max_value=9999999999,
+
+    numeric = RegexValidator(r'^[0-9]*$', '숫자만 허용됩니다.')
+
+    phone = forms.CharField(
+        validators=[numeric],
         label='휴대전화',
         required=False,
         help_text='01012345678 \'-\'를 제외한 숫자를 입력해주세요.',

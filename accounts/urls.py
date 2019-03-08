@@ -30,6 +30,8 @@ from accounts import views as account_views
 from accounts.forms import PasswordChangeForm
 
 app_name = 'accounts'
+
+
 urlpatterns = [
     # /accounts/
     # re_path(r'^', include('django.contrib.auth.urls')),
@@ -49,6 +51,12 @@ urlpatterns = [
     re_path(r'^profile/edit/$', account_views.edit_profile_view, name="edit_profile"),
 
     # path('password_change/', account_views.change_password_view, name='password_change'),
+
+    re_path(r'^order/$', account_views.order_status_view, name="order_status"),
+    # re_path(r'^order/detail$', account_views.order_detail_view, name="order_detail"),
+    # re_path(r'^order/edit$', account_views.order_edit_view, name="order_edit"),
+
+
 
     path('find-id/', account_views.find_id_view, name='find_id'),
 

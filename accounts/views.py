@@ -46,6 +46,7 @@ import json
 from pprint import pprint
 
 from products.models import Content
+from orders.models import Order
 
 from decimal import *
 
@@ -535,6 +536,17 @@ def change_password_view(request):
         'form': form
     })
 
+@login_required(login_url="accounts:login")
+def order_status_view(request):
+    print("order_status_view")
+    user = auth.get_user(request)
+    order_list = Order.objects.filter(name=user.first_name)
+    #order_title = order_list.first()
+
+    return render(request, 'accounts/order_status.html', {
+
+        'order_list': order_list
+    })
 
 ##not used for user to change the password
 def password_change_done(request):

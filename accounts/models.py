@@ -40,7 +40,7 @@ class UserProfile(models.Model):
     address = models.CharField('주소', max_length=200, blank=True, null=True)
     extraAddress = models.CharField('참조주소', max_length=200, blank=True, null=True)
     detailAddress = models.CharField('상세주소', max_length=200, blank=True, null=True)
-    phone = models.PositiveIntegerField('전화번호', blank=True, null=True)
+    phone = models.CharField('전화번호', max_length=20, blank=True, null=True)
     birth = models.DateField('생년월일', null=True, blank=True)
     gender = models.CharField('성별', max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     route = models.CharField('가입경로', max_length=5, choices=REGISTER_ROUTE, null=True, blank=True)

@@ -5,11 +5,59 @@
 {% endblock %}
 
 {% block content %}
+<script>
+    var IMP = window.IMP; // 생략해도 괜찮습니다.
+    IMP.init("imp64225880"); // "imp00000000" 대신 발급받은 "가맹점 식별코드"를 사용합니다.
+    const IMP = window.IMP; // 생략해도 괜찮습니다.
+
+    function requestPay() {
+    // IMP.request_pay(param, callback) 호출
+    alert("결제 호출");
+    IMP.request_pay({ // param
+        pg: "html5_inicis",
+        pay_method: "card",
+        merchant_uid: "{{order_no}}",
+        {% for item in cart|slice:":1"%}
+            {% if cart.isExist > 1 and forloop.first %}
+                name: "{{item.content.title}} 외 {{cart.isExist|add:'-1'}}",
+            {% elif cart.isExist == 1 and forloop.first %}
+                name: "{{item.content.title}}",
+            {% endif %}
+        {% endfor%}
+        amount: {{totalCost}},
+        buyer_email: "{{email}}",
+        buyer_name: "{{name}}",
+        buyer_tel: "{{phone}}",
+        buyer_addr: "{{address}} {{extraAddress}} {{detailAddress}}",
+        buyer_postcode: "{{postal_code}}"
+        }, function (rsp) { // callback
+            if (rsp.success) {
+                alert("결제 성공");
+                ...,
+                // 결제 성공 시 로직,
+                ...
+            } else {
+                alert("결제 실패");
+                ...,
+                // 결제 실패 시 로직,
+                ...
+            }
+        });
+    }
+
+</script>
 <div class="container">
 
     <div class="col-md-6">
         <div class="me_title3_nopadding">주문내역</div>
         <p>{{username}} 님께서 주문하신 상품의 내역과 금액입니다.</p>
+        {% for item in cart|slice:":1"%}
+            {% if cart.isExist > 1 and forloop.first %}
+                상품주문명:"{{item.content.title}} 외 {{cart.isExist|add:'-1'}}",
+            {% elif cart.isExist == 1 and forloop.first %}
+                상품주문명:"{{item.content.title}}",
+            {% endif %}
+        {% endfor%}
         <ul>
             {% for item in cart %}
             <li>
@@ -43,7 +91,8 @@
             {% endif %}
             {% endif %}
             {% if field.help_text %}
-            <small style="color: grey">{{ field.help_text }}</small><br>
+            <small style="color: grey">{{ field.help_text }}</small>
+            <br>
             {% endif %}
             {% for error in field.errors %}
             <p style="color: red">{{ error }}</p>
@@ -65,8 +114,10 @@
             <!--<input type="text" class="form-control" id="detailAddress" placeholder="상세주소"><br>-->
             <!--<label for="infoSave">정보적용</label>-->
             <!--<input type="checkbox" id="infoSave"><br>-->
-            <br><button type="submit" class="btn btn-primary">주문하기</button>
+            <br>
+            <button type="submit" class="btn btn-primary">주문하기</button>
         </form>
+        <button onclick="requestPay()">결제하기</button>
     </div>
 </div>
 
@@ -165,6 +216,7 @@
         element_layer.style.left = (((window.innerWidth || document.documentElement.clientWidth) - width)/2 - borderWidth) + 'px';
         element_layer.style.top = (((window.innerHeight || document.documentElement.clientHeight) - height)/2 - borderWidth) + 'px';
     }
+
 
 
 

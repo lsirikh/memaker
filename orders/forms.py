@@ -1,5 +1,6 @@
 from django import forms
 from orders.models import Order
+from django.core.validators import RegexValidator, DecimalValidator
 
 class OrderCreateForm(forms.ModelForm):
     class Meta:
@@ -13,16 +14,30 @@ class OrderCreateForm(forms.ModelForm):
                   'infoSave'
                   ]
 
+    numeric = RegexValidator(r'^[0-9]*$', '숫자만 허용됩니다.')
+
+    # def clean(self):
+    #     cleaned_data = super(OrderCreateForm, self).clean()
+    #
+    # def clean_phone(self):
+    #     phone = self.cleaned_data['phone']
+    #     print(phone)
+    #     try:
+    #         DecimalValidator(phone)
+    #         print("숫자로 된 전화번호가 맞습니다.")
+    #     except:
+    #         print("숫자로 된 전화번호가 아닙니다.")
+    #         raise forms.ValidationError("전화번호가 올바르지 않습니다.")
 
     name = forms.CharField(
         label='이름',
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'readonly': True})
-    )
-    phone = forms.IntegerField(
-        max_value=9999999999,
+            'readonly': True}))
+
+    phone = forms.CharField(
+        validators=[numeric],
         label='휴대전화',
         required=True,
         help_text='01012345678 \'-\'를 제외한 숫자를 입력해주세요.',
@@ -74,7 +89,9 @@ class OrderCreateForm(forms.ModelForm):
 class NewOrderCreateForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['name',
+        fields = [
+                    'order_no',
+                    'name',
                   'phone',
                   'postal_code',
                   'address', #자동완성 주소
@@ -83,12 +100,15 @@ class NewOrderCreateForm(forms.ModelForm):
                   'infoSave'
                   ]
 
+    order_no = forms.CharField(required=True,
+                                widget=forms.HiddenInput)
 
     name = forms.CharField(
         label='이름',
         required=True,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
+
     phone = forms.IntegerField(
         max_value=9999999999,
         label='휴대전화',
