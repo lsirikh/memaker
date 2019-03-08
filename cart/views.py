@@ -112,19 +112,20 @@ def cart_remove(request, content_id):
 def cart_detail(request):
 
     cart = Cart(request)
-    user = auth.get_user(request)
-    admin = User.objects.get(is_superuser=True)
-    dbCart = CM.objects.filter(user=user)
-    message = "session cart({0})와 user DB cart({1}) 일치 여부 :{2}".format(dbCart.count(), cart.isExist(), dbCart.count()==cart.isExist())
-    if(dbCart.count() is not cart.isExist()):
-        admin.email_user("일치 여부 확인", message, from_email='openfingers@openfingers.com')
-    else:
-        print("session cart and DB cart are synchronized")
-    pprint(cart)
-    for item in cart:
-        item['update_quantity_form'] = CartAddContentForm(
-            initial={'quantity': item['quantity'],
-                     'update': True})
+    if auth.get_user(request).is_authenticated:
+        user = auth.get_user(request)
+        admin = User.objects.get(is_superuser=True)
+        dbCart = CM.objects.filter(user=user)
+        message = "session cart({0})와 user DB cart({1}) 일치 여부 :{2}".format(dbCart.count(), cart.isExist(), dbCart.count()==cart.isExist())
+        if(dbCart.count() is not cart.isExist()):
+            admin.email_user("일치 여부 확인", message, from_email='openfingers@openfingers.com')
+        else:
+            print("session cart and DB cart are synchronized")
+        pprint(cart)
+        for item in cart:
+            item['update_quantity_form'] = CartAddContentForm(
+                initial={'quantity': item['quantity'],
+                         'update': True})
 
     return render(request, 'cart/cart_detail.html',
                   {
