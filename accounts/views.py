@@ -48,7 +48,14 @@ from pprint import pprint
 from products.models import Content
 from orders.models import Order
 
+from orders.tasks import order_created
+
 from decimal import *
+
+from iamporter import Iamporter
+
+import datetime
+from django.utils import timezone
 
 
 # --TemplateView
@@ -539,13 +546,51 @@ def change_password_view(request):
 @login_required(login_url="accounts:login")
 def order_status_view(request):
     print("order_status_view")
+
+    client = Iamporter(imp_key="1286359584086938",
+                       imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
+
+    print(client.imp_auth.token)
+
+    payment_list = []
+    order_list = []
+
+
     user = auth.get_user(request)
-    order_list = Order.objects.filter(name=user.first_name)
-    #order_title = order_list.first()
+    print(user.order.count())
+    for order_item in user.order.all():
+        payment = client.find_payment(merchant_uid=order_item.order_no)
+        # print(payment['status'])
+        if payment['pay_method'] == 'vbank':
+            dt = datetime.datetime.fromtimestamp(payment['vbank_date'])  # convert to datetime
+            print(dt)
+            payment['vbank_date'] = dt
+
+
+        # 지속적 검사를 통한 결제상태 확인
+        if order_item.paid is not payment['status']:
+            order_item.paid = payment['status']
+            order_item.save()
+
+        payment_list.append(payment)
+        # print(order_item.user.email)
+
+    # client.find_payment(merchant_uid="me20190311000028")
+
+    # print(payment)
+    # status = payment['status']
+    # receipt_url = payment['receipt_url']
+    user = auth.get_user(request)
+    order_list = Order.objects.filter(user=user)
+
+
+
+
 
     return render(request, 'accounts/order_status.html', {
-
-        'order_list': order_list
+        'data' : zip(order_list, payment_list),
+        # 'order_list': order_list,
+        # 'payment_list': payment_list
     })
 
 ##not used for user to change the password

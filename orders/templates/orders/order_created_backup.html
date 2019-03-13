@@ -6,6 +6,75 @@
 {% load staticfiles %}
 {% load humanize %}
 {% block content %}
+<script>
+    <!--// 생략해도 괜찮습니다.-->
+    var IMP = window.IMP;
+    <!--// "imp00000000" 대신 발급받은 "가맹점 식별코드"를 사용합니다.-->
+    <!--//실제 상점아이디 기반의 식별코드-->
+    IMP.init("imp64225880");
+    <!--//테스트 아이디 기반의 식별코드-->
+    <!--//IMP.init("INIBillTst");-->
+
+    function requestPay() {
+    <!--// IMP.request_pay(param, callback) 호출-->
+    <!--// validation check-->
+
+
+        IMP.request_pay({
+        <!--// param-->
+            pg: "html5_inicis",
+            pay_method: "vbank",
+            merchant_uid: "{{order_no}}",
+            {% for item in cart|slice:":1"%}
+                {% if cart.isExist > 1 and forloop.first %}
+                    name: "{{item.content.title}} 외 {{cart.isExist|add:'-1'}}",
+                {% elif cart.isExist == 1 and forloop.first %}
+                    name: "{{item.content.title}}",
+                {% endif %}
+            {% endfor%}
+            amount: {{totalCost}}+get_fee(),
+            buyer_email: "{{email}}",
+            buyer_name: "{{name}}",
+            buyer_tel: "{{phone}}",
+            buyer_addr: "{{address}} {{extraAddress}} {{detailAddress}}",
+            buyer_postcode: "{{postal_code}}"
+            }, function (rsp) {
+                if (rsp.success) {
+                    alert('결제과정 성공');
+                        $('#order-form').submit(function(event){
+                            <!--event.preventDefault(); //prevent default action-->
+                            <!--//get form action url-->
+                            var post_url = $(this).attr("action");
+                            <!--//get form GET/POST method-->
+                            var request_method = $(this).attr("method");
+                            <!--//Encode form elements for submission-->
+                            var form_data = $(this).serialize()+'&imp_uid='+'rsp.imp_uid';
+                            alert(post_url + ' ' + request_method + ' ' + form_data);
+                            jQuery.ajax({
+                                    url: post_url , // 가맹점 서버
+                                    method: request_method,
+                                    data: form_data
+                                }).done(function (data) {
+                                    alert('DB입력 성공');
+                                });
+                            });
+
+                } else {
+                    alert("결제가 완료되지 않았습니다.(사유: " +  rsp.error_msg + " )");
+                }
+        });
+    }
+
+    $(function() {
+        $('#form-submit').click(function() {
+            requestPay();
+        });
+
+    });
+
+
+
+</script>
 <div class="container">
     <div class="me_title2_nopadding">주문하기</div>
     <div class="container">
@@ -69,12 +138,9 @@
             <!--#postcode, address, extraAddress, detailAddress의 -->
             <!--#모든 정보가 갖춰져야 정상적으로 작동한다.-->
             {% for field in form %}
-                {% if forloop.first %}
-                <div class="col-md-6">
+            {% if field.label == '배송료' %}
+            <div class="col-md-6">
                 <div class="me_title2_nopadding">결제 정보</div>
-                {% endif %}
-
-                {% if forloop.counter <= 3 %}
                 <div class="col-md-12">
                     <br>{{ field.label_tag }}
                     <br>{{ field }}
@@ -86,17 +152,38 @@
                     <p style="color: red">{{ error }}</p>
                     {% endfor %}
                 </div>
-                    {% if forloop.counter == 3 %}
-                    </div>
-                    <div class="col-md-6">
-                            <div class="me_title2_nopadding">주문자 정보</div>
-                    {% endif %}
-                {% else %}
-
-                {% if field.label == '우편번호' %}
+                {% elif field.label == '요청사항' %}
                 <div class="col-md-12">
                     <br>{{ field.label_tag }}
-                    <input type="button" class="btn btn-success" onclick="execDaumPostcode()" value="우편번호 찾기"/>
+                    <br>{{ field }}
+                    {% if field.help_text %}
+                    <small style="color: grey">{{ field.help_text }}</small>
+                    <br>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% elif field.label == '이름'%}
+            <div class="col-md-6">
+                <div class="me_title2_nopadding">주문자 정보</div>
+                <div class="col-md-12">
+                    <br>{{ field.label_tag }}
+                    <br>{{ field }}
+                    {% if field.help_text %}
+                    <small style="color: grey">{{ field.help_text }}</small>
+                    <br>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                {% elif field.label == '우편번호' %}
+                <div class="col-md-12">
+                    <br>{{ field.label_tag }}
+                    <button type="button" class="btn btn-success" onclick="execDaumPostcode()">우편번호 찾기</button>
                     <br>
                     <br>{{ field }}
                     {% if field.help_text %}
@@ -131,17 +218,14 @@
                     {% endfor %}
                 </div>
                 {% endif %}
-                        {% if forloop.last %}
-                    </div>
-                        {% endif%}
-                {% endif %}
                 {% endfor %}
             </div>
             <br>
             <div class="col-md-offset-6">
-                <input type="submit" class="btn btn-primary pull-right" value="주문하기" id="form-submit"/>
+                <button  class="btn btn-primary pull-right" id="form-submit">
+                    주문하기
+                </button>
             </div>
-
         </form>
 
 
@@ -158,98 +242,18 @@
 
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
-    <!--// 생략해도 괜찮습니다.-->
-    var IMP = window.IMP;
-    <!--// "imp00000000" 대신 발급받은 "가맹점 식별코드"를 사용합니다.-->
-    <!--//실제 상점아이디 기반의 식별코드-->
-    IMP.init("imp64225880");
-    <!--//테스트 아이디 기반의 식별코드-->
-    <!--//IMP.init("INIBillTst");-->
-
-    function requestPay() {
-    <!--// IMP.request_pay(param, callback) 호출-->
-    <!--// validation check-->
-
-        IMP.request_pay({
-        <!--// param-->
-            pg: "html5_inicis",
-            pay_method: $('#method').val(),
-            merchant_uid: "{{order_no}}",
-            {% for item in cart|slice:":1"%}
-                {% if cart.isExist > 1 and forloop.first %}
-                    name: "{{item.content.title}} 외 {{cart.isExist|add:'-1'}}",
-                {% elif cart.isExist == 1 and forloop.first %}
-                    name: "{{item.content.title}}",
-                {% endif %}
-            {% endfor%}
-            amount: {{totalCost}}+get_fee(),
-            buyer_email: "{{email}}",
-            buyer_name: "{{name}}",
-            buyer_tel: "{{phone}}",
-            buyer_addr: "{{address}} {{extraAddress}} {{detailAddress}}",
-            buyer_postcode: "{{postal_code}}"
-            }, function (rsp) {
-                if (rsp.success) {
-                        <!--//get form action url-->
-                        var post_url = $('#order-form').attr("action");
-                        <!--//get form GET/POST method-->
-                        var request_method = $('#order-form').attr("method");
-                        <!--//Encode form elements for submission-->
-                        var form_data = $('#order-form').serialize()+'&imp_uid='+rsp.imp_uid;
-                        <!--alert('form_data : '+form_data);-->
-                        jQuery.ajax({
-                            url: post_url , // 가맹점 서버
-                            method: request_method,
-                            data: form_data
-                            }).done(function (data) {
-
-                        });
-                        if (confirm('주문내역을 확인하시겠습니까?')){
-                                window.location.href = "{% url 'accounts:order_status' %}";
-                        }else{
-                                window.location.href = "/";
-                        }
-
-
-                } else {
-                    alert("결제가 완료되지 않았습니다.(사유: " +  rsp.error_msg + " )");
-                }
-        });
-    }
-
-    $(document).on('submit', '#order-form', function(e){
-        e.preventDefault();
-        var form_data = $(this).serialize();
-
-        <!--validator(form_data);-->
-        if (confirm('결제를 진행하시겠습니까?')){
-                requestPay();
-        }else{
-            alert('결제가 취소되었습니다.');
-        }
-
-    });
-
-    function validator(data){
-        alert(data);
-    }
-
-
-
 
     $(document).ready(function() {
         <!--변수를 선언합니다.-->
 
          fee = get_fee();
          show_fee(fee);
-
     });
-
 
     $(function(){
         set_fee();
-
     });
+
 
     function set_fee(){
         $("#delivery_fee").change(function() {

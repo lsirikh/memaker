@@ -269,3 +269,7 @@ EMAIL_HOST_USER = 'openfingers@openfingers.com'
 with open(os.path.join(BASE_DIR, 'static', 'email_key.txt')) as e:
     EMAIL_HOST_PASSWORD = e.read().strip()
 DEFAULT_FROM_EMAIL = 'help@openfingers.com'
+##############################################################################################
+
+
+CELERY_BROKER_URL = 'amqp://localhost'
