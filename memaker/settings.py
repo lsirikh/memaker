@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'easy_thumbnails',
     'widget_tweaks',
+    'bootstrap_modal_forms', # 20190314추가
 
     'ckeditor',
     'ckeditor_uploader',

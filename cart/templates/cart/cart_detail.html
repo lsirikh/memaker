@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+<style>
+    #cart_table td {
+        vertical-align:middle;
+    }
+</style>
 <div class="container">
 
     <div class="me_title2 col-md-12 co-xs-12">
@@ -16,7 +21,7 @@
             <span class="glyphicon glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
             장바구니</a></div>
     <div class="panel panel-success">
-        <table class="table table-striped cart">
+        <table class="table table-striped cart" id="cart_table">
             <thead class="thead-inverse">
             <tr>
                 <th class="col-md-1 col-xs-2">사진</th>
@@ -75,12 +80,7 @@
         </table>
     </div>
     <div class="col-md-12 co-xs-12">
-        <div class="col-md-8"></div>
-        <div class="col-md-2">
-            <a href="{{prev_page}}" class="btn btn-success btn-block" role="button">
-                    되돌아가기
-            </a>
-        </div>
+        <div class="col-md-10"></div>
         <div class="col-md-2">
             {% if cart.isExist > 0 %}
             <a href="{% url 'orders:order_create' %}" class="btn btn-primary btn-block" role="button">

@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.conf import settings
 #from shop.models import Product 변경해야 됨
 from products.models import Content
+import json
 
 
 class Cart(object):

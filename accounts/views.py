@@ -22,6 +22,8 @@ from django.utils.encoding import force_text
 from django.contrib.auth.hashers import check_password
 from accounts.tokens import account_activation_token
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 #from accounts.utils.handle_upload_file import handle_uploaded_file
 
 from django.contrib.auth.models import User
@@ -46,9 +48,9 @@ import json
 from pprint import pprint
 
 from products.models import Content
-from orders.models import Order
-
-from orders.tasks import order_created
+from orders.models import Order, OrderCancel, OrderDelivery, ImportInfo
+from orders.forms import OrderCancelForm
+from accounts.tasks import order_notified, order_canceled
 
 from decimal import *
 
@@ -57,6 +59,10 @@ from iamporter import Iamporter
 import datetime
 from django.utils import timezone
 
+
+from django.db.models import Q
+from itertools import chain
+import os
 
 # --TemplateView
 
@@ -547,50 +553,91 @@ def change_password_view(request):
 def order_status_view(request):
     print("order_status_view")
 
+    # 아임포트 API 오브젝트 활용하여 미메이커 상점 정보 인스턴스 생성
     client = Iamporter(imp_key="1286359584086938",
                        imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
 
-    print(client.imp_auth.token)
-
-    payment_list = []
-    order_list = []
+    # print(client.imp_auth.token)
+    # 상품테스트를 위해서 개별 merchant_uid활용 검색
 
 
+    # request 오브젝트에서 유저 정보 확보
     user = auth.get_user(request)
-    print(user.order.count())
-    for order_item in user.order.all():
-        payment = client.find_payment(merchant_uid=order_item.order_no)
-        # print(payment['status'])
-        if payment['pay_method'] == 'vbank':
-            dt = datetime.datetime.fromtimestamp(payment['vbank_date'])  # convert to datetime
-            print(dt)
-            payment['vbank_date'] = dt
+
+    # 해당 유저가 보유한 모든 주문정보 확보
+    order_list = user.order.all()
 
 
-        # 지속적 검사를 통한 결제상태 확인
-        if order_item.paid is not payment['status']:
-            order_item.paid = payment['status']
-            order_item.save()
 
-        payment_list.append(payment)
-        # print(order_item.user.email)
+    # 페이지네이션을 위한 주문 정보 리스트 할당
+    order_list = order_list
 
-    # client.find_payment(merchant_uid="me20190311000028")
+    # 현재 페이지 정보 확보
+    page = request.GET.get('page', 1)
+    print('requested page information : {}'.format(page))
+    current_page = int(page) if page else 1
+    paginator = Paginator(order_list, 5)
 
-    # print(payment)
-    # status = payment['status']
-    # receipt_url = payment['receipt_url']
-    user = auth.get_user(request)
-    order_list = Order.objects.filter(user=user)
+    # pagenator의 페이지당 인덱스 수를 5로 설정한다.
+    page_numbers_range = 5  # Display only 5 page numbers
+    # set max_index as "int" from the length of paginator.page_range
+    # print(type(paginator.page_range))
+    # print(type(len(paginator.page_range)))
+    max_index = len(paginator.page_range)
+    print('max_index :{}'.format(max_index))
 
+    start_index = int((current_page - 1) / page_numbers_range) * page_numbers_range
+    end_index = start_index + page_numbers_range
+    print("start_index({0}) = int((current_page({1}) - 1) / page_numbers_range({2})) * page_numbers_range({3})".format(
+        start_index,
+        current_page,
+        page_numbers_range,
+        page_numbers_range))
+
+
+    ##next index checking and last index setting##
+    if end_index >= max_index:
+        end_index = max_index
+        has_next_index = False
+    else:
+        has_next_index = True
+
+    ####previous index checking#####
+    if (start_index + 1) > 1:
+        has_previous_index = True
+    else:
+        has_previous_index = False
+
+    print("end_index : {}".format(end_index))
+
+
+    #데이터 처리된 paginator 변수들 처리
+    page_range = paginator.page_range[start_index:end_index]
+    next_index = start_index + page_numbers_range + 1
+    previous_index = (start_index + 1) - page_numbers_range
+
+    try:
+        order_list = paginator.page(page)
+    except PageNotAnInteger:
+        # fallback to the first page
+        order_list = paginator.page(1)
+    except EmptyPage:
+        # probably the user tried to add a page number
+        # in the url, so we fallback to the last page
+        order_list = paginator.page(paginator.num_pages)
 
 
 
 
     return render(request, 'accounts/order_status.html', {
-        'data' : zip(order_list, payment_list),
-        # 'order_list': order_list,
-        # 'payment_list': payment_list
+        'order_list' : order_list,
+        'cancelForm' : OrderCancelForm(),
+        'data_list' : order_list,
+        'page_range': page_range,
+        'next_index': next_index,
+        'previous_index': previous_index,
+        'has_next_index': has_next_index,
+        'has_previous_index': has_previous_index,
     })
 
 ##not used for user to change the password

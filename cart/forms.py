@@ -14,6 +14,7 @@ class CartAddContentForm(forms.Form):
     quantity = forms.IntegerField(
         label='수량',
         widget=forms.NumberInput(attrs={
+            'id':'quantity',
             'name':'quantity',
             'value':'1',
             'min': '1',

@@ -1,23 +1,9 @@
 from django import forms
-from orders.models import Order
+from orders.models import Order, OrderCancel
 from django.core.validators import RegexValidator, DecimalValidator
 
-class OrderCreateForm(forms.ModelForm):
-    class Meta:
-        model = Order
-        fields = [
-                'method',
-                'delivery_fee',  # 배송비 정보
-                'note',  # 배송시 유의사항
-                'name',
-                'phone',
-                'email',
-                'postal_code',
-                'address', #자동완성 주소
-                'extraAddress', #자동완성 참조주소
-                'detailAddress',  # 세부 주소내용
-                'infoSave'
-                  ]
+
+class OrderCreateForm(forms.Form):
 
     DELIVERY_FEE = (
         ('001', '일반배송(2,500원)'),
@@ -97,15 +83,18 @@ class OrderCreateForm(forms.ModelForm):
     name = forms.CharField(
         label='이름',
         required=True,
+        help_text='배송받는 분의 성함을 입력해주세요.',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'readonly': True}))
+            'id': 'name',
+            }))
 
     email = forms.CharField(
         label='이메일',
         required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
+            'id': 'email',
             'readonly': True}))
 
     phone = forms.CharField(
@@ -115,7 +104,10 @@ class OrderCreateForm(forms.ModelForm):
         max_length=11,
         help_text='01012345678 \'-\'를 제외한 숫자를 입력해주세요.',
         widget=forms.TextInput(attrs={
-            'class': 'form-control'}))
+            'class': 'form-control',
+            'placeholder':'01012345678',
+            'id':'phone'
+        }))
 
     postal_code = forms.IntegerField(
         label='우편번호',
@@ -137,7 +129,6 @@ class OrderCreateForm(forms.ModelForm):
 
     extraAddress = forms.CharField(
         label='참조주소',
-        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'id': 'extraAddress',
@@ -147,7 +138,6 @@ class OrderCreateForm(forms.ModelForm):
         label='상세주소',
         required=True,
         help_text='나머지 주소를 입력해주세요.',
-
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'id':'detailAddress'}))
@@ -159,75 +149,31 @@ class OrderCreateForm(forms.ModelForm):
         widget=forms.CheckboxInput()
     )
 
-class NewOrderCreateForm(forms.ModelForm):
+class OrderCancelForm(forms.ModelForm):
     class Meta:
-        model = Order
+        model = OrderCancel
         fields = [
-                    'order_no',
-                    'name',
-                  'phone',
-                  'postal_code',
-                  'address', #자동완성 주소
-                  'extraAddress', #자동완성 참조주소
-                  'detailAddress', #세부 주소내용
-                  'infoSave'
+                  'merchant_uid',
+                  'note',
                   ]
 
-    order_no = forms.CharField(required=True,
-                                widget=forms.HiddenInput)
-
-    name = forms.CharField(
-        label='이름',
+    #데이터는 order id(pk)형태로 넘겨 받고 view에서 foreignKey연결
+    merchant_uid = forms.CharField(
         required=True,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
+        label='주문번호',
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id':'merchant_uid',
+            'readonly':True}))
 
-    phone = forms.IntegerField(
-        max_value=9999999999,
-        label='휴대전화',
+    note = forms.CharField(
+        label='취소사유',
         required=True,
-        help_text='01012345678 \'-\'를 제외한 숫자를 입력해주세요.',
-        widget=forms.NumberInput(attrs={
+        max_length=100,
+        min_length=10,
+        help_text="취소하시는 사유를 반드시 작성해주세요.",
+        widget=forms.Textarea(attrs={
+            'rows': 3,
+            'id': 'note',
             'class': 'form-control'}))
-
-    postal_code = forms.IntegerField(
-        label='우편번호',
-        required=True,
-        help_text='우편번호를 입력하세요.',
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'id': 'postcode',
-            'placeholder': '우편번호',
-            'readonly': True}))
-
-    address = forms.CharField(
-        label='주소',
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'id':'address',
-            'readonly':True}))
-
-    extraAddress = forms.CharField(
-        label='참조주소',
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'id': 'extraAddress',
-            'readonly':True}))
-
-    detailAddress = forms.CharField(
-        label='상세주소',
-        required=True,
-        help_text='나머지 주소를 입력해주세요.',
-
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'id':'detailAddress'}))
-
-    infoSave = forms.BooleanField(
-        label='회원정보 반영',
-        required=False,
-        help_text="반영된 정보로 이후 결제에 활용됩니다.",
-        widget=forms.CheckboxInput()
-    )

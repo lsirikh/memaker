@@ -4,14 +4,18 @@
 {% load staticfiles%}
 {% load humanize %}
 
-
+<style>
+    #board_table td {
+        vertical-align:middle;
+    }
+</style>
 <div class="container">
     <div class="me_title2 col-md-12 co-xs-12"><a href="{%url 'boards:index'%}">
         <span class="glyphicon glyphicon glyphicon-bullhorn" aria-hidden="true"></span> 공유게시판</a> >
         <a href="{{board.get_absolute_url}}">{{board.name}}</a></div>
 
     <div class="panel panel-success">
-        <table class="table table-striped">
+        <table class="table table-striped" id="board_table">
             <thead class="thead-inverse">
             <tr>
                 <th class="col-md-6 col-xs-6">주제</th>
@@ -23,7 +27,7 @@
             <tbody>
             {% for topic in topic_list %}
             <tr>
-                <td>
+                <td style="text-align:left;">
                     <a href="{% url 'boards:board_content' pk=topic.board.id topic_pk=topic.id %}">
                         {{ topic.title }}({{topic.post.count|default:"0"}})
                     </a>

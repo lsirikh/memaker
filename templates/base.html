@@ -34,6 +34,9 @@
     <!-- iamport.payment.js -->
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
+    <!-- You can alternatively load the minified version -->
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no,
   maximum-scale=1.0, minimum-scale=1.0">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -80,7 +83,7 @@
                     </ul>
                     <!-- login side -->
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{% url 'cart:cart_detail'%}"><span
+                        <li><a href="{% url 'cart:cart_detail'%}" id="cart_count"><span
                                 class="glyphicon glyphicon-shopping-cart"></span>
                             장바구니({{cart.isExist}})</a>
                         </li>
@@ -166,6 +169,7 @@
     .table-striped > thead > tr > th,
     .table-striped > thead > tr > th{
       background-color: #EBDEF0;
+
     }
 
     .me_title0,
@@ -295,6 +299,11 @@
                 object-fit:cover;
                 width:100%;
           }
+          <!--.profile {-->
+                <!--width:40%;-->
+          <!--}-->
+          /////게시판 내용의 부분
+
 
           .jumbotron{
                 margin-top: -25px;
@@ -440,6 +449,14 @@
     .img-rounded{
         object-fit:cover;
         height:35px;
+    }
+    .profile{
+        object-fit:cover;
+        height:60px;
+    }
+
+    .board-content-title{
+        padding: 0px 0px 0px 10px;
     }
 
     .jumbotron{

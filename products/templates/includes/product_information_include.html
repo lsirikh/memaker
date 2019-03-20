@@ -21,10 +21,11 @@
     </div>
     <div class="me_title5_nopadding">
         {% if content.isDiscount %}
-        <strike> ￦ {{ content.cost|intcomma }}</strike><br>
-        <span class="label label-danger">할인</span> ￦ {{ content.discount|intcomma }} 원
+            <span class="label label-danger">할인</span>
+            <span><strike> ￦ {{ content.cost|intcomma }}</strike></span>&nbsp;▶&nbsp;
+            <span>￦ {{ content.discount|intcomma }} 원</span>
         {% else %}
-        ￦ {{ content.cost|intcomma }} 원
+            <span>￦ {{ content.cost|intcomma }} 원</span>
         {% endif %}
     </div>
     <div class="section">
@@ -78,10 +79,10 @@
         <div class="me_title4_nopadding">
             <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 장바구니
         </div>
-        <form action="{% url 'cart:cart_add' content.id %}" method="post">
+        <form action="{% url 'cart:cart_add' content.id %}" method="post" id="cart_quatity_form">
             {% csrf_token %}
             {{ cart_content_form }}
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" id="cart_button">
             <span class="glyphicon glyphicon-shopping-cart"
                  aria-hidden="true"></span> 장바구니 넣기
             </button>
@@ -91,17 +92,15 @@
 
 
     <div class="row">
-        <div class="col-md-6 col-xs-12">
-            <a href="{{content.product_set.first.link}}" target="_blank"
-               class="btn btn-success btn-block"
-               style="margin:5px;"
+        <div class="col-md-4 col-xs-12">
+            <button type="button" class="btn btn-success btn-block"
+                    onclick="" style="margin:5px;" id="direct_buy"
             ><span class="glyphicon glyphicon-credit-card"
-                   aria-hidden="true"></span> 구매하러가기
-            </a>
+                   aria-hidden="true"></span> 바로구매
+            </button>
         </div>
-
         {% if isRegistered == True%}
-        <div class="col-md-6 col-xs-12">
+        <div class="col-md-4 col-xs-12">
             <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
                class="btn btn-primary btn-block"
                role="button"
@@ -112,7 +111,7 @@
             </a>
         </div>
         {% else %}
-        <div class="col-md-6 col-xs-12">
+        <div class="col-md-4 col-xs-12">
             <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
                class="btn btn-primary btn-block"
                role="button"
@@ -122,6 +121,14 @@
             </a>
         </div>
         {% endif %}
+        <div class="col-md-4 col-xs-12">
+            <a href="{{content.product_set.first.link}}" target="_blank"
+               class="btn btn-success btn-block"
+               style="margin:5px;"
+            ><span class="glyphicon glyphicon-credit-card"
+                   aria-hidden="true"></span> 네이버구매
+            </a>
+        </div>
 
     </div>
     <br>

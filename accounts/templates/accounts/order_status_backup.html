@@ -35,8 +35,9 @@
                 <tr>
                     <td rowspan="{{order.orderItem.count|add:2}}">
                         <p>{{order.created}}</p>
+                        <p>{{order.imp_uid}}</p>
                         <p>주문번호 : {{ order.merchant_uid }}</p>
-                        <p class="totalCost{{order.merchant_uid}}" id="{{order.importInfo.amount}}">결제금액 : ￦{{ order.importInfo.amount|intcomma }}원</p>
+                        <p>결제금액 : ￦{{ order.importInfo.amount|intcomma }}원</p>
                             {% if order.orderDelivery.delivery_fee == '001'%}
                                 <p>(배송비 : 2,500원 포함)</p>
                             {% elif order.orderDelivery.delivery_fee == '002' %}
@@ -81,7 +82,7 @@
                                         결제실패</p>
                                     {% endif %}
                                 <p>배송 : {{order.orderDelivery.get_delivery_status_display}}</p>
-                                <p id="confirm_status{{order.merchant_uid}}">구매 : {{order.get_confirm_display}}</p>
+                                <p id="confirm_status{{forloop.parentloop.counter}}">구매 : {{order.get_confirm_display}}</p>
                             </td>
                     </tr>
                     {% else %}
@@ -101,11 +102,11 @@
                 <tr>
                     <td colspan="3">
                         {% if order.importInfo.pay_method == 'card' %}
-                            <p class="payMethod{{order.merchant_uid}}" id="card">결제방법 : 카드결제({{order.importInfo.card_name}}:{{order.importInfo.apply_num}})</p>
+                            <p>결제방법 : 카드결제({{order.importInfo.card_name}}:{{order.importInfo.apply_num}})</p>
                         {% elif order.importInfo.pay_method == 'trans' %}
-                            <p class="payMethod{{order.merchant_uid}}" id="trans">결제방법 : 계좌이체 </p>
+                            <p>결제방법 : 계좌이체 </p>
                         {% elif order.importInfo.pay_method == 'vbank' %}
-                            <p class="payMethod{{order.merchant_uid}}" id="vbank">결제방법 : 가상계좌 </p>
+                            <p>결제방법 : 가상계좌 </p>
                             {% if order.importInfo.status == 'ready'%}
                             <p>은행 : {{order.importInfo.vbank_name}} /
                             계좌번호 : {{order.importInfo.vbank_num}} /
@@ -123,21 +124,84 @@
                         <!--결제가 된 상태에서 구매결정이 미정인 상태에서만 결제취소와 구매결정이 가능해야함-->
                         {% if order.importInfo.status == 'paid'%}
                             {% if order.confirm == '001'%}
-                                <button type="button" class="btn btn-danger btn_cancel" name="payment_cancel" id="payment_cancel" value="{{ order.merchant_uid }}">구매취소</button>
-                                <button type="button" class="btn btn-info btn_confirm" name="payment_confirm" id="payment_confirm" value="{{ order.merchant_uid }}">구매결정</button>
+                                <button type="button" class="btn btn-danger btn_cancel" name="{{ order.merchant_uid }}" id="payment_cancel" value="{{ forloop.counter }}">구매취소</button>
+                                <button type="button" class="btn btn-info btn_confirm" name="{{ order.merchant_uid }}" id="payment_confirm" value="{{ forloop.counter }}">구매결정</button>
                             {% else %}
-                                <button type="button" class="btn btn-danger disabled">구매취소</button>
-                                <button type="button" class="btn btn-info disabled">구매결정</button>
+                                <button type="button" class="btn btn-danger disabled" name="{{ order.merchant_uid }}" id="payment_cancel" value="{{ forloop.counter }}" >구매취소</button>
+                                <button type="button" class="btn btn-info disabled" name="{{ order.merchant_uid }}" id="payment_confirm" value="{{ forloop.counter }}">구매결정</button>
                             {% endif %}
                         {% else %}
-                            <button type="button" class="btn btn-danger disabled">구매취소</button>
-                            <button type="button" class="btn btn-info disabled">구매결정</button>
+                            <button type="button" class="btn btn-danger disabled" name="{{ order.merchant_uid }}" id="payment_cancel" value="{{ forloop.counter }}" >구매취소</button>
+                            <button type="button" class="btn btn-info disabled" name="{{ order.merchant_uid }}" id="payment_confirm" value="{{ forloop.counter }}">구매결정</button>
                         {% endif %}
                         {% if order.orderDelivery.delivery_status == '003' or order.orderDelivery.delivery_status == '004' %}
                             <button type="button" class="btn btn-warning btn_delivery" name="{{ order.orderDelivery.delivery_agent }}" id="{{ order.merchant_uid }}" value="{{ order.orderDelivery.delivery_code }}">배송정보</button>
                         {% endif %}
                     </td>
                 </tr>
+
+            <div class="modal fade" id="cancelModal{{forloop.counter}}" role="dialog">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">주문번호({{order.merchant_uid}}) 취소</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form action="{% url 'orders:order_cancel' %}" method="post" class="cancel-form" id="cancel-form{{forloop.counter}}">
+                        <p>미메이커 결제취소를 원하시면 아래 취소사유를 10자 이상 작성 해주시면 감사드리겠습니다.</p>
+                        {% if order.importInfo.pay_method == 'vbank' or order.importInfo.pay_method == 'trans' %}
+                        <p style="color:red;"> 무통장입금 또는 실시간 계좌이체를 진행하신 고객께서는 이체 수수료(500~1000원)을 제외한 금액을 환불 받으실 수 있습니다.</p>
+                            {% if order.importInfo.status == 'paid'%}
+                            <p style="color:red;"> 취소사유와 더불어 환불받으실 은행/예금주/계좌번호를 입력해주세요.</p>
+                                <p style="color:red;"> 환불 예상금액 : {{order.totalCost|intcomma}}원 - 500원(수수료) = {{order.totalCost|add:"-500"|intcomma}}원</p>
+                                {% if order.orderDelivery.delivery_status == '001' or order.orderDelivery.delivery_status == '002'%}
+                                {% else %}
+                                    <p style="color:red;">상품은 반드시 선결제하셔서 배송하셔야 합니다.</p>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                        <p style="color:red;"> 카드 결제 취소는 취소일로 2~3일간 정산 처리가 소요될 수 있습니다. 이점 양해 바랍니다. 감사합니다.</p>
+                        {% endif %}
+                        {% csrf_token %}
+                        {% for field in cancelForm %}
+                             {% if field.label == '주문번호' %}
+                                <br>{{ field.label_tag }}
+                                <br>
+                                <input type="text" name="merchant_uid" class="form-control" id="merchant_uid" value="{{ order.merchant_uid }}" maxlength="100" required="" readonly>
+                             {% else %}
+                                <br>{{ field.label_tag }}
+                                <br>
+                                <br>{{ field }}
+                             {% endif %}
+
+                                {% if field.help_text %}
+                                <small style="color: grey">{{ field.help_text }}</small>
+                                <br>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                        {% endfor %}
+                        <div class="modal-footer">
+                           <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                           <button type="submit" class="btn btn-primary" >제출</button>
+                        </div>
+                    </form>
+                      <script type='text/javascript'>
+                         $(document).ready(function() {
+                           $("#cancel-form{{forloop.counter}}").submit(function(e){
+                                e.preventDefault(e);
+                                order_cancel('{{ order.merchant_uid }}', '{{forloop.counter}}');
+                            });
+                        });
+                      </script>
+                  </div>
+
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
             {% endfor %}
                 <tr>
                     <!--테이블 마무리를 위한 tr 설정-->
@@ -216,41 +280,6 @@
     {% endif %}
 </div>
 
-<div class="modal fade cancelModal" id="cancelModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title cancelTitle" ></h4>
-      </div>
-      <div class="modal-body cancelBody">
-        <form action="{% url 'orders:order_cancel' %}" method="post" class="cancel-form" id="cancel-form">
-            <p>미메이커 결제취소를 원하시면 아래 취소사유를 10자 이상 작성 해주시면 감사드리겠습니다.</p>
-            <p class="cancelExplain"></p>
-            {% csrf_token %}
-            {% for field in cancelForm %}
-                    <br>{{ field.label_tag }}
-                    <br>
-                    <br>{{ field }}
-                    {% if field.help_text %}
-                    <small style="color: grey">{{ field.help_text }}</small>
-                    <br>
-                    {% endif %}
-                    {% for error in field.errors %}
-                    <p style="color: red">{{ error }}</p>
-                    {% endfor %}
-            {% endfor %}
-            <div class="modal-footer cancelFooter">
-               <button type="button" class="btn btn-default cancelModal" data-dismiss="modal">취소</button>
-               <button type="submit" class="btn btn-primary cancelModal">제출</button>
-            </div>
-        </form>
-      </div>
-
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
 <div class="modal fade deliveryModal" id="deliveryModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -271,109 +300,116 @@
 
 
 <script>
+    function order_cancel(merchant_uid, num){
+        id='#cancel-form'+num;
+        var form_data = $(id).serialize();
+        <!--validator(form_data);-->
+        <!--//get form action url-->
+        var post_url = $(id).attr("action");
+        <!--//get form GET/POST method-->
+        var request_method = $(id).attr("method");
+        <!--//Encode form elements for submission-->
+        var form_data = $(id).serialize();
+        <!--var form_data = form_data+'&order='+merchant_uid;-->
+        <!--alert('form_data : '+form_data);-->
+
+        <!--var data = $(id).serializeArray().reduce(function(obj, item) {-->
+            <!--obj[item.name] = item.value;-->
+            <!--return obj;-->
+        <!--}, {});-->
+        <!--alert(data['merchant_uid']);-->
+        <!--alert(data['note']);-->
+
+
+
+
+        <!--var data2 = $(id).serializeArray();-->
+        <!--var error_free =true;-->
+
+        <!--for( var input in data2){-->
+            <!--var element = $(id+"_"+data2[input]['name']);-->
+            <!--var valid = element.hasClass("valid");-->
+            <!--var error_element=$("span", element.parent());-->
+            <!--if (!valid){error_element.removeClass("error").addClass("error_show"); error_free=false;}-->
+            <!--else { error_element.removeClass("error_show").addClass("error");}-->
+        <!--}-->
+        <!--if(!error_free){-->
+            <!--alert('에러입니다.');-->
+        <!--}else{-->
+            <!--alert('에러가 아닙니다.');-->
+        <!--}-->
+
+        <!--if(data['note'] == ''){-->
+            <!--alert('취소사유는 반드시 필요합니다.');-->
+            <!--$(id+' textarea[name=note]').val("aasdklfjsa");-->
+        <!--}-->
+        jQuery.ajax({
+            url: post_url , // 가맹점 서버
+            method: request_method,
+            data: form_data,
+            success: function(response){ // 통신 성공시
+                if(response.result){
+                    result = '구매 : '+response.confirm;
+                    $('#confirm_status'+num).text(result);
+                }else{
+                    alert("구매 취소에 문제가 발생했습니다. 직접 처리를 위해 문의바랍니다.")
+                }
+                $('#myModal'+num).modal("hide");
+            },
+            error: function(request, status, error){ // 통신 실패시
+                alert("구매 취소에 문제가 발생했습니다. 직접 처리를 위해 문의바랍니다.")
+            },
+            }).done(function (data) {
+
+                window.location.href = "{% url 'accounts:order_status' %}";
+
+            }).fail(function(data) {
+                alert("문제발생");
+            });;
+
+
+    }
+
+
+
 
     $(function(){
-        $("#cancel-form").submit(function(e){
-                    e.preventDefault(e);
-                    $('.cancelModel, button[type="submit"]').addClass("disabled");
-                    var data = $(this).serializeArray().reduce(function(obj, item) {
-                        obj[item.name] = item.value;
-                        return obj;
-                    }, {});
-                    merchant_uid = data['merchant_uid'];
-                    //alert(data['note']);
-                    var form_data = $(this).serialize();
-                    //get form action url
-                    var post_url = $(this).attr("action");
-                    //get form GET/POST method
-                    var request_method = $(this).attr("method");
-                    //Encode form elements for submission
-                    var form_data = $(this).serialize();
-
-                    jQuery.ajax({
-                        url: post_url , // 가맹점 서버
-                        method: request_method,
-                        data: form_data,
-                        success: function(response){ // 통신 성공시
-                            if (response.result){
-                                result = '구매 : '+response.confirm;
-                                $('#confirm_status'+merchant_uid).text(result);
-                                $('.btn_cancel, button[value=merchant_uid]').addClass("disabled");
-                                $('.btn_confirm, button[value=merchant_uid]').addClass("disabled");
-                            }
-                            $('.cancelModal').modal("hide");
-
-                        },
-                        error: function(request, status, error){ // 통신 실패시
-                            alert("구매 취소에 문제가 발생했습니다. 직접 처리를 위해 문의바랍니다.")
-                        },
-                    }).done(function (data) {
-                        <!--//동적 결과물 제시 페이지 request 없음-->
-
-                    }).fail(function(data) {
-                        alert("문제발생");
-                    });
-        });
-
-
-        //주문 취소 버튼 클릭 동작
         $('.btn_cancel').click(function(){
-            var name = this.name;
-            var merchant_uid = this.value;
+            var type = this.id;
+            var order_num = this.name;
+            var num = this.value;
 
-            question = '주문번호('+merchant_uid+')의 구매를 취소하시겠습니까?';
+            question = '주문번호('+order_num+')의 구매를 취소하시겠습니까?';
             if (confirm(question)){
-                //cancelModal에 제목 붙이기
-                $('.cancelTitle').text('주문번호('+merchant_uid+')의 상품 취소');
-                //취소설명에 내용 붙이기
-                totalCost=$('.totalCost'+merchant_uid).attr('id');
-                return_totalCost = totalCost-500;
-                content='';
-                payMethod=$('.payMethod'+merchant_uid).attr('id');
-                if (payMethod == 'card'){
-                    content='<p style="color:red;"> 카드 결제 취소는 취소일로 2~3일간 정산 처리가 소요될 수 있습니다. 이점 양해 바랍니다. 감사합니다.</p>';
-                }else{
-                    content+='<p style="color:red;"> 무통장입금 또는 실시간 계좌이체를 진행하신 고객께서는 이체 수수료(500~1000원)을 제외한 금액을 환불 받으실 수 있습니다.</p>';
-                    content+='<p style="color:red;"> 취소사유와 더불어 환불받으실 은행/예금주/계좌번호를 입력해주세요.</p>';
-                    content+='<p style="color:red;"> 환불 예상금액 : '+totalCost+'원 - 500원(수수료) = '+return_totalCost +'원</p>'
-                    content+='<p style="color:red;"> 상품은 반드시 선결제하셔서 배송하셔야 합니다.</p>'
-                }
-
-                $('.cancelExplain').html(content);
-                //주문번호에 주문번호 붙이기
-                $('#merchant_uid').val(merchant_uid);
-                //주문 취소 modal 띄우기
-                $(".cancelModal").modal();
+                $("#cancelModal"+num).modal();
             }
 
         });
 
-        //주문 확정 버튼 동작
-        $('.btn_confirm').click(function(){
-            var name = this.name;
-            var merchant_uid = this.value;
 
-            question = '주문번호('+merchant_uid+')의 구매를 결정하시겠습니까?';
+        $('.btn_confirm').click(function(){
+            var type = this.id;
+            var order_num = this.name;
+            var num = this.value;
+            message = type+' '+order_num+' '+num;
+            question = '주문번호('+order_num+')의 구매를 결정하시겠습니까?';
             if (confirm(question)){
                     $.ajax({
                         url: '{% url 'orders:order_confirm' %}' , // 가맹점 서버
                         method: 'POST',
-                        data: {'merchant_uid':merchant_uid, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                        data: {'merchant_uid':order_num, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
                         dataType: "json",
                         success: function(response){ // 통신 성공시
                             alert('구매를 감사드립니다.');
                             result = '구매 : '+response.confirm;
-                            $('#confirm_status'+merchant_uid).text(result);
-                            $('.btn_cancel, button[value=merchant_uid]').addClass("disabled");
-                            $('.btn_confirm, button[value=merchant_uid]').addClass("disabled");
+                            $('#confirm_status'+num).text(result);
                         },
                         error: function(request, status, error){ // 통신 실패시 - 로그인 페이지 리다이렉트
                             alert("로그인이 필요합니다.")
                             window.location.replace("/accounts/login/")
                         },
-                    }).done(function (data) {
-                        //동적 결과물 제시 페이지 request 없음
-
+                        }).done(function (data) {
+                            window.location.href = "{% url 'accounts:order_status' %}";
                     });
             }
         });
@@ -381,17 +417,17 @@
 
 
 
-        // 배송정보와 배송추적 tracking-api
+        <!--// 배송정보와 배송추적 tracking-api-->
         $(".btn_delivery").click(function() {
             var myKey = "Zqdg8a21TwxE1w5I2VDwdw"; // sweet tracker에서 발급받은 자신의 키 넣는다.
             var t_code = this.name;
             var t_invoice = this.value;
             var merchant_uid = this.id;
-            //modal table initialize
+            <!--modal table initialize-->
             $('#deliveryData').html('');
             $('#deliveryDetail').html('');
 
-            //alert('myKey:'+myKey+' t_code:'+t_code+' t_invoice:'+t_invoice);
+            <!--alert('myKey:'+myKey+' t_code:'+t_code+' t_invoice:'+t_invoice);-->
 
             $.ajax({
                 type:"GET",
@@ -402,24 +438,24 @@
                     var myInvoiceData = "";
                     if(data.status == false){
                         myInvoiceData += ('<tr>');
-                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#AB95D4;">'+"에러"+'</td>');
+                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#FF66CC;">'+"에러"+'</td>');
                         myInvoiceData += ('<th>'+data.msg+'</td>');
                         myInvoiceData += ('</tr>');
                     }else{
                         myInvoiceData += ('<tr>');
-                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#AB95D4;">'+"보내는사람"+'</td>');
+                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#FF66CC;">'+"보내는사람"+'</td>');
                         myInvoiceData += ('<th>'+data.senderName+'</td>');
                         myInvoiceData += ('</tr>');
                         myInvoiceData += ('<tr>');
-                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#AB95D4;">'+"제품정보"+'</td>');
+                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#FF66CC;">'+"제품정보"+'</td>');
                         myInvoiceData += ('<th>'+data.itemName+'</td>');
                         myInvoiceData += ('</tr>');
                         myInvoiceData += ('<tr>');
-                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#AB95D4;">'+"송장번호"+'</td>');
+                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#FF66CC;">'+"송장번호"+'</td>');
                         myInvoiceData += ('<th>'+data.invoiceNo+'</td>');
                         myInvoiceData += ('</tr>');
                         myInvoiceData += ('<tr>');
-                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#AB95D4;">'+"주소지"+'</td>');
+                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#FF66CC;">'+"주소지"+'</td>');
                         myInvoiceData += ('<th>'+data.receiverAddr+'</td>');
                         myInvoiceData += ('</tr>');
                     }
