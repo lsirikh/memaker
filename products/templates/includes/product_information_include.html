@@ -79,7 +79,7 @@
         <div class="me_title4_nopadding">
             <span class="glyphicon glyphicon glyphicon-hand-right" aria-hidden="true"></span> 장바구니
         </div>
-        <form action="{% url 'cart:cart_add' content.id %}" method="post" id="cart_quatity_form">
+        <form action="{% url 'cart:cart_add' content.id %}" method="post" id="cart_quantity_form">
             {% csrf_token %}
             {{ cart_content_form }}
             <button type="submit" class="btn btn-primary" id="cart_button">

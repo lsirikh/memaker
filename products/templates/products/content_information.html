@@ -94,7 +94,7 @@
     });
 
 
-    $(document).on('submit', '#cart_quatity_form', function(e){
+    $(document).on('submit', '#cart_quantity_form', function(e){
         e.preventDefault();
         var form_data = $(this).serialize();
         var data = $(this).serializeArray().reduce(function(obj, item) {
@@ -106,7 +106,32 @@
         result=validator_form(data);
         if (result) {
             if (confirm('장바구니에 담으시겠습니까?')){
-                cartAdd();
+                <!--//get form action url-->
+                var post_url = $(this).attr("action");
+                <!--//get form GET/POST method-->
+                var request_method = $(this).attr("method");
+                <!--//Encode form elements for submission-->
+                var form_data = $(this).serialize();
+                <!--alert('form_data : '+form_data);-->
+                jQuery.ajax({
+                    url: post_url , // 가맹점 서버
+                    method: request_method,
+                    data: form_data,
+                    dataType:'json',
+                    success: function(response){ // 통신 성공시
+                        html_content ="<span class='glyphicon glyphicon-shopping-cart'></span> 장바구니("
+                        +response.quantity+")";
+                        $('#cart_count').html(html_content);
+                        if (confirm('장바구니로 바로가시겠습니까?')){
+                        window.location.href = "{% url 'cart:cart_detail'%}";
+                        }
+                    },
+                    error: function(request, status, error){ // 통신 실패시
+                        alert("장바구니에 물건을 추가하는 중에 발생했습니다.")
+                    },
+                    }).done(function (data) {
+
+                });
             }
         }
 
@@ -138,35 +163,6 @@
         return result
     }
 
-    function cartAdd(){
-
-        <!--//get form action url-->
-        var post_url = $('#cart_quatity_form').attr("action");
-        <!--//get form GET/POST method-->
-        var request_method = $('#cart_quatity_form').attr("method");
-        <!--//Encode form elements for submission-->
-        var form_data = $('#cart_quatity_form').serialize();
-        <!--alert('form_data : '+form_data);-->
-        jQuery.ajax({
-            url: post_url , // 가맹점 서버
-            method: request_method,
-            data: form_data,
-            dataType:'json',
-            success: function(response){ // 통신 성공시
-                html_content ="<span class='glyphicon glyphicon-shopping-cart'></span> 장바구니("
-                +response.quantity+")";
-                $('#cart_count').html(html_content);
-                if (confirm('장바구니로 바로가시겠습니까?')){
-                window.location.href = "{% url 'cart:cart_add' content.id %}";
-                }
-            },
-            error: function(request, status, error){ // 통신 실패시
-                alert("장바구니에 물건을 추가하는 중에 발생했습니다.")
-            },
-            }).done(function (data) {
-
-        });
-    }
 </script>
 
 {% endblock content %}
