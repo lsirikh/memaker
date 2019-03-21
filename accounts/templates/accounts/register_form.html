@@ -25,7 +25,7 @@
                             {{ field.label_tag }}<br>
                             {{ field }}
                             {% if field.help_text %}
-                            <small style="color: grey">{{ field.help_text }}</small>
+                            <small style="color: grey">{{ field.help_text|linebreaks }}</small>
                             {% endif %}
                             {% if messages and field.label == '이메일'%}
                         <p style="color: red">{{ messages }}</p>
@@ -41,7 +41,7 @@
                             {{ field.label_tag }}<br>
                             {{ field }}
                             {% if field.help_text %}
-                            <small style="color: grey">{{ field.help_text }}</small>
+                            <small style="color: grey">{{ field.help_text|linebreaks }}</small>
                             {% endif %}
 
                         </p>
@@ -52,12 +52,7 @@
 
 
                     <p class="row-alert">
-                    <ul>
-                        <li>비밀번호는 아이디 혹은 개인 정보와 유사하게 만들 수 없습니다.</li>
-                        <li>비밀번호는 최소 8자리 이상으로 구성하셔야 합니다.</li>
-                        <li>비밀번호는 간단한 규칙이나 일반적인 단어를 사용하 만들 수 없습니다.</li>
-                        <li>비밀번호는 숫자와 문자를 조합하여 만들어야 합니다.</li>
-                    </ul>
+
                     </p>
                     <br>
                     <p>아이디가 생각나지 않습니다.<a href="{% url 'accounts:find_id'%}">아이디 찾기</a></p>

@@ -89,11 +89,11 @@ def cart_add(request, content_id):
         # request 방식의 경우
         return redirect('cart:cart_detail')
     else:
-        print(dir(cart))
-        print(cart.__dict__)
-        print(cart.__dir__)
-        print(cart.cart)
-        print(cart.isExist())
+        # print(dir(cart))
+        # print(cart.__dict__)
+        # print(cart.__dir__)
+        # print(cart.cart)
+        # print(cart.isExist())
         quantity = str(cart.isExist())
         # for item in cart:
         #     print(item.content)
@@ -140,6 +140,7 @@ def cart_detail(request):
 
     cart = Cart(request)
     if auth.get_user(request).is_authenticated:
+        #####Authenticated user will be checked about cart count and dbCart count
         user = auth.get_user(request)
         admin = User.objects.get(is_superuser=True)
         dbCart = CM.objects.filter(user=user)
@@ -148,11 +149,14 @@ def cart_detail(request):
             admin.email_user("일치 여부 확인", message, from_email='openfingers@openfingers.com')
         else:
             print("session cart and DB cart are synchronized")
-        pprint(cart)
-        for item in cart:
-            item['update_quantity_form'] = CartAddContentForm(
-                initial={'quantity': item['quantity'],
-                         'update': True})
+
+
+    ########ananymous and authenticated user will be presented by the same way##########
+    pprint(cart)
+    for item in cart:
+        item['update_quantity_form'] = CartAddContentForm(
+            initial={'quantity': item['quantity'],
+                     'update': True})
 
     return render(request, 'cart/cart_detail.html',
                   {

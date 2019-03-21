@@ -324,7 +324,7 @@ def register_view(request):
     ##########################################################
 
     print("====register_view execute===")
-    messages = ""
+    messages = ''
 
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -368,7 +368,6 @@ def register_view(request):
                                    'form_profile': form_profile,
                                    'messages': messages,
                                    })
-
             messages = ''
             print("사용 가능한 이메일 주소.")
         except:
@@ -377,44 +376,40 @@ def register_view(request):
 
 
         if form.is_valid() and form_profile.is_valid():
-            #이메일 인증이 없는 형태의 회원 가입
-            #form.save()
-            #username = form.cleaned_data.get('username')
-            #raw_password = form.cleaned_data.get('password1')
-            #user = authenticate(username=username, password=raw_password)
-            #login(request, user)
-            #return HttpResponseRedirect('/')
 
             #이메일 인증이 가능한 회원 가입, 이메일을 인증해야 계정이 활성화 됨.
             user = form.save(commit=False)
             user.is_active = False
-
+            #초기 고객 데이터 저장 작업
             user.save()
-
-            #profile_data.route = form_profile.cleaned_data.get('route')
-            #form_profile.save()
 
             try:
                 profile_data = user.userprofile
+                # 가입동의 정보는 앞에서 미리 검증 했으므로, UserProfile 모델에 입력
+                profile_data.agree = form_profile.cleaned_data.get('agree')
+
+                #가입경로는 한번 검증 후 UserProfile 모델에 입력
                 get_route = form_profile.cleaned_data.get('route')
-                get_agree = form_profile.cleaned_data.get('agree')
                 if get_route is not "":
                     print("가입경로 선택 : "+str(get_route))
                     profile_data.route = get_route
-                    profile_data.agree = get_agree
-                    profile_data.save()
                 else:
                     print("가입경로 선택 안됨.....")
+
+                #UserProfile 모델 저장
+                profile_data.save()
+
             except:
                 print("가입경로 선택 확인 에러")
                 pass
 
             try:
                 #테스트시 오류 발생
-                current_site = Site.objects.get(name='memaker.co.kr')
-                #current_site = get_current_site(request)
+                current_site = get_current_site(request)
             except:
                 print("current_site 할당 실패!!!")
+                current_site = Site.objects.get(name='memaker.co.kr')
+
 
             subject = '가입을 환영합니다. 만들면서 배우는 코딩교육 미메이커입니다. 링크를 이용하여 계정을 활성화하세요.'
             message = render_to_string('accounts/account_activation_email.html', {
@@ -455,8 +450,9 @@ def activate(request, uidb64, token):
         user.userprofile.email_confirmed = True
         user.save()
         user.userprofile.save()
-        login(request, user)
-        return redirect('/')
+        # login(request, user)
+        #로그인은 로그인 페이지 에서 하도록 한다. 바로 로그인은 막는다.
+        return redirect('accounts:login')
     else:
         return render(request, 'accounts/account_activation_invalid.html')
 

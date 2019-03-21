@@ -57,7 +57,11 @@ class RegistrationForm(UserCreationForm):
                              help_text='사용 가능한 이메일을 입력해 주세요.')
 
     password1 = forms.CharField(label='비밀번호',
-                                widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+                                widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                help_text='*비밀번호는 아이디 혹은 개인 정보와 유사하게 만들 수 없습니다.\n' \
+                                          '*비밀번호는 최소 8자리 이상으로 구성하셔야 합니다.\n' \
+                                          '*비밀번호는 간단한 규칙이나 일반적인 단어를 사용하 만들 수 없습니다.\n' \
+                                          '*비밀번호는 숫자와 문자를 조합하여 만들어야 합니다.')
     password2 = forms.CharField(label='비밀번호 확인',
                                 widget=forms.PasswordInput(attrs={'class': 'form-control'}),
                                 help_text='비밀번호를 다시 한 번 입력해주세요.')

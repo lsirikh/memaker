@@ -47,5 +47,4 @@ class CartAddContentUserForm(forms.Form):
             'name': 'quantity',
             'value': '1',
             'min': '1',
-            'max': '100'}),
-    )
+            'max': '100',}))
