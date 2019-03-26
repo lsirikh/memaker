@@ -13,6 +13,10 @@ class Order(models.Model):
         ('002', '확정'),
         ('003', '취소'),
     )
+    RESULT_CAT = (
+        (True, '구매성공'),
+        (False, '구매실패'),
+    )
 
     user = models.ForeignKey(User, related_name='order', default='', on_delete=models.CASCADE)
 
@@ -27,7 +31,7 @@ class Order(models.Model):
 
     confirm = models.CharField('구매결정', max_length=4, choices=CONFIRM_CAT, default='001')
     isDirect= models.BooleanField('바로구매', default=False, null=True, blank=True)
-    result= models.BooleanField('구매상태', default=False, null=True, blank=True)
+    result= models.BooleanField('구매상태', choices=RESULT_CAT, default=False, null=True, blank=True)
 
     class Meta:
         ordering = ('-created',)

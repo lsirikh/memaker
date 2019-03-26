@@ -37,6 +37,7 @@
     background-image: url('../static/img/main_slide03_2000X500.png');
 }
 
+
 @media screen and (min-width: 601px) {
        .carousel {
             height: 400px;
@@ -57,6 +58,61 @@
             -moz-background-size: cover;
             -o-background-size: cover;
             background-size: cover;
+        }
+
+        .fade-in{
+            opacity:0;
+        }
+        .slide-in, .slide-in-menu{
+            margin-left:-10px;
+            max-width:100%;
+            opacity:0;
+        }
+        .increase-in{
+
+            align:center;
+            overflow:hidden;
+            width:90%;
+            height:90%;
+            opacity:0;
+        }
+
+        .increase-in:hover img{
+            transform:scale(1.1);
+            -webkit-transform:scale(1.1);
+            -moz-transform:scale(1.1);
+            -o-transform:scale(1.1);
+            -webkit-transition:.2s;
+            -moz-transition:.2s;
+            -ms-transition:.2s
+        }
+        .increase-in img{
+            transform:scale(1);
+            -webkit-transform:scale(1);
+            -moz-transform:scale(1);
+            -o-transform:scale(1);
+            -webkit-transition:.2s;
+            -moz-transition:.2s;
+            -ms-transition:.2s
+        }
+        .slide-in:hover{
+
+            transform:scale(1.1);
+            -webkit-transform:scale(1.1);
+            -moz-transform:scale(1.1);
+            -o-transform:scale(1.1);
+            -webkit-transition:.2s;
+            -moz-transition:.2s;
+            -ms-transition:.2s
+        }
+        .slide-in{
+            transform:scale(1);
+            -webkit-transform:scale(1);
+            -moz-transform:scale(1);
+            -o-transform:scale(1);
+            -webkit-transition:.2s;
+            -moz-transition:.2s;
+            -ms-transition:.2s
         }
 }
 @media screen and (max-width: 600px) {
@@ -80,6 +136,9 @@
             -o-background-size: cover;
             background-size: cover;
         }
+
+
+
 }
 
 
@@ -174,48 +233,48 @@
 
     <!-- Three columns of text below the carousel -->
     <div class="row">
-        <div class="col-lg-3" align="center">
+        <div class="col-lg-3 fade-in" align="center">
             <img class="img-circle"
                  src="{% static 'img/mathematics_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
             <div class="me_title1">수학이 있는 코딩</div>
-            <p>수학이 있는 코딩은 초등학교 중학교에서 배우는 산수, 수학 단원의 핵심내용을 코딩과 접목하여 학습하는 커리큘럼입니다.
+            <small>수학이 있는 코딩은 초등학교 중학교에서 배우는 산수, 수학 단원의 핵심내용을 코딩과 접목하여 학습하는 커리큘럼입니다.
                 단순하게 스크래치나 엔트리로 블록을 쌓고 게임을 하는 것이 아니라 그 속에 수학의 원리와 개념을 학습하는 코딩 교육과정이라고 할 수 있습니다.
-                (커리큘럼 준비중)
-            </p>
+                <br>(커리큘럼 준비중)
+            </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3" align="center">
+        <div class="col-lg-3 fade-in" align="center">
             <img class="img-circle"
                  src="{% static 'img/science_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
             <div class="me_title1">과학이 있는 코딩</div>
-            <p>과학이 있는 코딩은 교과서에서 다루는 주제 혹은 우리 일상생활에서 접할 수 있는 다양한 과학상식과 지식을 코딩으로 학습하는 커리큘럼입니다.
+            <small>과학이 있는 코딩은 교과서에서 다루는 주제 혹은 우리 일상생활에서 접할 수 있는 다양한 과학상식과 지식을 코딩으로 학습하는 커리큘럼입니다.
                 과학이 있는 코딩을 통해서 상상만으로 이해하기 힘들었던 다양한 원리와 개념을 익일 수 있습니다.
-                (커리큘럼 준비중)
-            </p>
+                <br>(커리큘럼 준비중)
+            </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3" align="center">
+        <div class="col-lg-3 fade-in" align="center">
             <img class="img-circle"
                  src="{% static 'img/technology_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
             <div class="me_title1">기술이 있는 코딩</div>
-            <p>기술이 있는 코딩은 단순한 스크래치, 엔트리와 같은 블록코딩의 범위를 넘나들며 다양한 코딩의 기술을 배우고 메이커의 지식을 학습하는 커리큘럼입니다.
+            <small>기술이 있는 코딩은 단순한 스크래치, 엔트리와 같은 블록코딩의 범위를 넘나들며 다양한 코딩의 기술을 배우고 메이커의 지식을 학습하는 커리큘럼입니다.
                 기술이 있는 코딩을 통해 진정한 프로그래머 그리고, 메이커를 향한 도약을 할 수 있습니다.
-                (커리큘럼 준비중)
-            </p>
+                <br>(커리큘럼 준비중)
+            </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3" align="center">
+        <div class="col-lg-3 fade-in" align="center">
             <img class="img-circle"
                  src="{% static 'img/engineering_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
             <div class="me_title1">공학이 있는 코딩</div>
-            <p>공학이 있는 코딩은 엔지니어의 사고방식을 바탕으로 코딩을 배워나가는 학습과정입니다.
+            <small>공학이 있는 코딩은 엔지니어의 사고방식을 바탕으로 코딩을 배워나가는 학습과정입니다.
                 미메이커의 온/오프라인 교육은 다양한 Computational Thinking을 학습할 수 있습니다. 창의 공학적 코딩의 세계로 초대합니다.
-                (커리큘럼 준비중)
-            </p>
+                <br>(커리큘럼 준비중)
+            </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
 
@@ -223,58 +282,64 @@
 </div>
 <br>
 <div class="container">
-    <div class="me_title1_nopadding">
+    <div class="me_title1_nopadding slide-in-menu">
         <a href="{% url 'products:lecture_list' %}">
             <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span>
-            추천 강의</a></div>
+            추천 강의</a>
     <hr>
+    </div>
+
 
     <div class="row">
         {% for lecture in lecture_list %}
-        <div class="col-sm-6 col-md-4" align="center">
+        <div class="col-sm-6 col-md-4 slide-in" align="center">
             <div class="thumbnail">
-                <img src="{{lecture.image.first.thumbnail.url}}" alt="...">
-                <div class="caption">
-                    <h4>
-                        {% if lecture.recommend == 1 %}
-                            <span class="label label-success">{{lecture.get_recommend_display}}</span>
-                        {% elif lecture.recommend == 2 %}
-                            <span class="label label-warning">{{lecture.get_recommend_display}}</span>
-                        {% endif %}
-                        {{ lecture.title|truncatechars:23 }}
-                    </h4>
-                    <p>{{ lecture.description|truncatechars:55 }}</p>
-                    {% if lecture.category.section == '상품'%}
-                    <p>
-                        <span>가격 : </span>
-                        {% if lecture.isDiscount %}
-                            <span class="label label-danger">할인</span>
-                            <span><strike> ￦ {{ lecture.cost|intcomma }}</strike></span>&nbsp;▶&nbsp;
-                            <span>￦ {{ lecture.discount|intcomma }} 원</span>
+                <a href="{% url 'products:content_information' content_slug=lecture.slug %}" style="text-decoration:none; !important">
+                    <img src="{{lecture.image.first.thumbnail.url}}" alt="...">
+                    <div class="caption">
+                        <h4>
+                            {% if lecture.recommend == 1 %}
+                                <span class="label label-success">{{lecture.get_recommend_display}}</span>
+                            {% elif lecture.recommend == 2 %}
+                                <span class="label label-warning">{{lecture.get_recommend_display}}</span>
+                            {% endif %}
+                            {{ lecture.title|truncatechars:23 }}
+                        </h4>
+                        <p>{{ lecture.description|truncatechars:55 }}</p>
+                        {% if lecture.category.section == '상품'%}
+                        <p>
+                            <span>가격 : </span>
+                            {% if lecture.isDiscount %}
+                                <span class="label label-danger">할인</span>
+                                <span><strike> ￦ {{ lecture.cost|intcomma }}</strike></span>&nbsp;▶&nbsp;
+                                <span>￦ {{ lecture.discount|intcomma }} 원</span>
+                            {% else %}
+                                <span>￦ {{ lecture.cost|intcomma }} 원</span>
+                            {% endif %}
+                        </p>
                         {% else %}
-                            <span>￦ {{ lecture.cost|intcomma }} 원</span>
+                            <!--인터넷 강의 무료-->
                         {% endif %}
-                    </p>
-                    {% else %}
-                        <!--인터넷 강의 무료-->
-                    {% endif %}
-                    <p align="center">
-                        <a href="{% url 'products:content_information' content_slug=lecture.slug %}" class="btn btn-primary" role="button">수강하기</a>
-                    </p>
+                        <p align="center">
+                            <a href="{% url 'products:content_information' content_slug=lecture.slug %}" class="btn btn-primary" role="button">수강하기</a>
+                        </p>
+                </a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <div class="me_title1_nopadding"><a href="{% url 'products:product_list' %}">
+    <div class="me_title1_nopadding slide-in-menu"><a href="{% url 'products:product_list' %}">
         <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
-        추천 제품</a></div>
+        추천 제품</a>
     <hr>
+    </div>
     <div class="row">
         {% for product in product_list %}
-        <div class="col-sm-6 col-md-4" align="center">
+        <div class="col-sm-6 col-md-4 slide-in" align="center">
             <div class="thumbnail">
+            <a href="{% url 'products:content_information' content_slug=product.slug %}" style="text-decoration:none; !important">
                 <img src="{{product.image.first.thumbnail.url}}" alt="...">
                 <div class="caption">
                     <h4>
@@ -303,12 +368,13 @@
                     <p align="center">
                         <a href="{% url 'products:content_information' content_slug=product.slug %}" class="btn btn-primary"
                            role="button">구경하기</a>
-                        <a href="{{product.product_set.first.link}}"
-                           class="btn btn-default"
-                           target="_blank"
-                           role="button">구매하기</a>
+                        <!--<a href="{{product.product_set.first.link}}"-->
+                           <!--class="btn btn-default"-->
+                           <!--target="_blank"-->
+                           <!--role="button">구매하기</a>-->
                     </p>
                 </div>
+            </a>
             </div>
         </div>
         {% endfor %}
@@ -317,24 +383,25 @@
 
 </div>
 <div class="container">
-    <div class="me_title1_nopadding">
+    <div class="me_title1_nopadding slide-in-menu">
         <a href="{%url 'intro:index'%}">
             <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
             서비스 특징 </a>
-    </div>
     <hr>
+    </div>
+
     <div class="row container-fluid">
-        <div class="col-sm-12 col-md-12" align="center">
+        <div class="col-sm-12 col-md-12 increase-in" align="center">
             <br>
             <img src="{% static 'img/특징_인강.png'%}" alt="Responsive image"
                  class="img-responsive img-thumbnail col-sm-12 col-md-push-2 col-md-8">
         </div>
-        <div class="col-sm-12 col-md-12" align="center">
+        <div class="col-sm-12 col-md-12 increase-in" align="center">
             <br>
             <img src="{% static 'img/특징_보드.png'%}" alt="Responsive image"
                  class="img-responsive img-thumbnail col-sm-12 col-md-push-2 col-md-8">
         </div>
-        <div class="col-sm-12 col-md-12" align="center">
+        <div class="col-sm-12 col-md-12 increase-in" align="center">
             <br>
             <img src="{% static 'img/특징_교재.png'%}" alt="Responsive image"
                  class="img-responsive img-thumbnail col-sm-12 col-md-push-2 col-md-8">
@@ -342,7 +409,58 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        /* 1 */
+        $(window).scroll( function(){
+            /* 2 */
+            $('.fade-in').each( function(i){
+                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_window = $(window).scrollTop() + $(window).height();
+                /* 3 */
+                if( bottom_of_window > bottom_of_object/2 ){
+                    $(this).animate({'opacity':'1'},500);
+                }
+            });
 
+            $('.slide-in').each( function(i){
+
+                var bottom_of_element = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_window = $(window).scrollTop() + $(window).height();
+
+                if( bottom_of_window > bottom_of_element ){
+
+                    $(this).animate({'opacity':'1', 'margin-left':'0px'},500);
+                }
+
+            });
+            $('.slide-in-menu').each( function(i){
+
+                var bottom_of_element = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_window = $(window).scrollTop() + $(window).height();
+
+                if( bottom_of_window > bottom_of_element ){
+
+                    $(this).animate({'opacity':'1', 'margin-left':'0px'},500);
+                }
+
+            });
+
+            $('.increase-in').each( function(i){
+
+                var bottom_of_element = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_window = $(window).scrollTop() + $(window).height();
+
+                if( bottom_of_window > bottom_of_element ){
+
+                    $(this).animate({'opacity':'1', 'width':'100%', 'height':'100%'},500);
+                }
+
+            });
+
+        });
+    });
+</script>
 {% endblock content %}
 
 

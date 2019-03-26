@@ -50,7 +50,6 @@ from pprint import pprint
 from products.models import Content
 from orders.models import Order, OrderCancel, OrderDelivery, ImportInfo
 from orders.forms import OrderCancelForm
-from accounts.tasks import order_notified, order_canceled
 
 from decimal import *
 

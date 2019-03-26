@@ -126,6 +126,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
                     'merchant_uid',
                     'imp_uid',
+                    'result',
                     'confirm',
                     # 'method',
                     # 'paid',

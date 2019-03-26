@@ -26,23 +26,22 @@ def order_created(order_id):
                   '\n만들면서 배우는 코딩교육서비스 미미에커 입니다.' \
                   '\n\n요청하신 {} 상품이 잘 주문접수되었습니다.\n\n'.format(order.user.first_name,
                                                                    order.orderItem.first().content)
-    # print(subject)
-    # print(message)
     mail_sent = send_mail(subject,
                           message,
                           'openfingers@openfingers.com',
                           [order.user.email])
 
-    if order.importInfo.status == 'paid':
-        # 운영자 확인용 메일 송부
-        auth_subject = '{}님께서 {}을 주문하셨습니다.(금액:{})'.format(order.user.first_name,
-                                                          order.orderItem.first().content,
-                                                          order.totalCost)
-        auth_message = '주문완료'
-        send_mail(auth_subject,
-                  auth_message,
-                  'openfingers@openfingers.com',
-                  ['openfingers@openfingers.com'])
+    # 운영자 통보를 별도로 알림
+    # if order.importInfo.status == 'paid':
+    #     # 운영자 확인용 메일 송부
+    #     auth_subject = '{}님께서 {}을 주문하셨습니다.(금액:{}) from order_created'.format(order.user.first_name,
+    #                                                       order.orderItem.first().content,
+    #                                                       order.totalCost)
+    #     auth_message = '주문완료'
+    #     send_mail(auth_subject,
+    #               auth_message,
+    #               'openfingers@openfingers.com',
+    #               ['openfingers@openfingers.com'])
 
     return mail_sent
 
@@ -82,6 +81,7 @@ def order_canceled(order_id):
                           'openfingers@openfingers.com',
                           [order.user.email])
 
+    # 운영자 통보를 함께 알림
     # 운영자 확인용 메일 송부
     auth_subject = '{}님께서 {}을 취소하셨습니다.(금액:{}, 결제수단:{})'.format(order.user.first_name,
                                                       order.orderItem.first().content,
