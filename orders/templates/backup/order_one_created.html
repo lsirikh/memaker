@@ -181,14 +181,18 @@
             pg: "html5_inicis",
             pay_method: $('#method').val(),
             merchant_uid: "{{merchant_uid}}",
+            //order_created와 order_one_created의 차이//
             name: "{{content.title}}",
+            ///////////////////////////////////////////
             amount: {{totalCost}}+get_fee(),
             tex_free: {{tex_free_cost}},
             buyer_email: buyer_email,
             buyer_name: buyer_name,
             buyer_tel: "{{phone}}",
             buyer_addr: "{{address}} {{extraAddress}} {{detailAddress}}",
-            buyer_postcode: "{{postal_code}}"
+            buyer_postcode: "{{postal_code}}",
+            //m_redirect_url: "http://www.memaker.co.kr/orders/create/mobile"
+            m_redirect_url: "http://127.0.0.1:8000/orders/create/mobile"
             }, function (rsp) {
                 if (rsp.success) {
                         <!--//get form action url-->

@@ -14,7 +14,7 @@ import time
 import datetime
 from iamporter import Iamporter
 
-from accounts.tasks import order_created, order_canceled, order_notified
+from orders.tasks import order_created, order_canceled
 from products.models import Content
 
 
@@ -59,180 +59,6 @@ def order_create_mobile(request):
 
 
 @login_required(login_url="accounts:login")
-def order_payment_confirm(request):
-    # 결제 성공 결과 GET 확인
-    # 성공과 실패에 따라서 다른 프로세스
-        # 성공
-        # merchant_uid, imp_uid GET 확인
-        # Import 인스턴스 생성후, 결과 find
-        # ImportInfo에 데이터 입력
-        # 메일 발송
-        # isDirect에 따른 구분
-            # 참
-                # 확인
-            # 거짓
-                # # clear the cart
-                # cart.clear()
-                # print("session cart is cleared")
-                # dbCart.delete()
-                # print("database cart is cleared")
-
-        # 실패
-        # merchant_uid GET 확인
-        # Order 쿼리 찾기
-        # 해당 쿼리 삭
-
-    print('order_payment_confirm')
-    # 유저의 정보를 retrieve한다.
-    user = auth.get_user(request)
-
-    success = request.POST.get('success')
-    if success == 'true' or success == 'True':
-        success = True
-    else:
-        success = False
-
-    merchant_uid=''
-    imp_uid=''
-    print('success:{}'.format(success))
-
-
-
-
-    if success:
-
-        merchant_uid = request.POST.get('merchant_uid')
-
-        client = Iamporter(imp_key="1286359584086938",
-                           imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
-
-        #############################PG사 및 import사의 DB가 반영될 것으로 예상되는 시간 딜레이##########################
-
-        imp_uid = request.POST.get('imp_uid')
-        print('imp_uid : ', imp_uid)
-
-        #아임포트 API로 구매 정보 들고오기
-        payment = client.find_payment(merchant_uid=merchant_uid, imp_uid=imp_uid)
-        paid = payment['status']
-        print('결제상태 : {}'.format(paid))
-
-        try:
-            print("payment['tex_free'] : {}".format(payment['tex_free']))
-        except:
-            print("payment['tex_free'] Non existence Error 발생")
-            pass
-
-        order = ''
-        importInfo =''
-
-        print('order 쿼리 호출')
-        try:
-            order=Order.objects.get(merchant_uid=merchant_uid)
-            order.imp_uid = imp_uid
-            order.result = True
-            importInfo = order.importInfo
-        except:
-            print("order 쿼리 호출 실패")
-
-        print('importInfo 데이터 입력')
-        ##########################################ImportInfo 데이터 입력##########################################
-        importInfo.amount = payment['amount']
-        importInfo.apply_num = payment['apply_num']
-        importInfo.bank_code = payment['bank_code']
-        importInfo.bank_name = payment['bank_name']
-        importInfo.buyer_addr = payment['buyer_addr']
-        importInfo.buyer_email = payment['buyer_email']
-        importInfo.buyer_name = payment['buyer_name']
-        importInfo.buyer_postcode = payment['buyer_postcode']
-        importInfo.buyer_tel = payment['buyer_tel']
-        importInfo.cancel_amount = payment['cancel_amount']
-        importInfo.cancel_history = payment['cancel_history']
-        importInfo.cancel_reason = payment['cancel_reason']
-        importInfo.cancel_receipt_urls = payment['cancel_receipt_urls']
-        importInfo.cancelled_at = payment['cancelled_at'] if payment['cancelled_at'] == 0 else datetime.datetime.fromtimestamp(payment['cancelled_at'])
-        importInfo.card_code = payment['card_code']
-        importInfo.card_name = payment['card_name']
-        importInfo.card_quota = payment['card_quota']
-        importInfo.cash_receipt_issued = payment['cash_receipt_issued']
-        importInfo.channel = payment['channel']
-        importInfo.currency = payment['currency']
-        importInfo.custom_data = payment['custom_data']
-        importInfo.escrow = payment['escrow']
-        importInfo.fail_reason = payment['fail_reason']
-        importInfo.failed_at = payment['failed_at'] if payment['failed_at']==0 else datetime.datetime.fromtimestamp(payment['failed_at'])
-        importInfo.imp_uid = payment['imp_uid']
-        importInfo.merchant_uid = payment['merchant_uid']
-        importInfo.name = payment['name']
-        importInfo.paid_at = payment['paid_at'] if payment['paid_at']==0 else datetime.datetime.fromtimestamp(payment['paid_at'])
-        importInfo.pay_method = payment['pay_method']
-        importInfo.pg_id = payment['pg_id']
-        importInfo.pg_provider = payment['pg_provider']
-        importInfo.pg_tid = payment['pg_tid']
-        importInfo.receipt_url = payment['receipt_url']
-        importInfo.status = payment['status']
-        importInfo.user_agent = payment['user_agent']
-        importInfo.vbank_code = payment['vbank_code']
-        importInfo.vbank_date = payment['vbank_date'] if payment['vbank_date']==0 else datetime.datetime.fromtimestamp(payment['vbank_date'])
-        importInfo.vbank_holder = payment['vbank_holder']
-        importInfo.vbank_issued_at = payment['vbank_issued_at'] if payment['vbank_issued_at']==0 else datetime.datetime.fromtimestamp(payment['vbank_issued_at'])
-        importInfo.vbank_name = payment['vbank_name']
-        importInfo.vbank_num = payment['vbank_num']
-        ######################################################################################################
-
-        print('order 및 importInfo 내용 DB 저장')
-        order.save()
-        importInfo.save()
-
-        if importInfo.status == 'paid':
-            ############## launch asynchronous task(이메일)#################
-            order_created.delay(order.id)
-            order_notified.delay(order.id)
-
-        # try:
-        #     isDirect = request.POST.get('isDirect')
-        # except:
-        #     print('isDirect가 확보되지 않았습니다. Mobile signal로 추정됩니다.')
-        #     isDirect = False
-        print('order.isDirect:{}'.format(order.isDirect))
-        print('order.isDirect type:{}'.format(type(order.isDirect)))
-        if not order.isDirect:
-            ########################################################
-            # 카트 세션의 정보와 dbCart의 정보를 retrieve한다.
-            cart = Cart(request)
-            dbCart = CM.objects.filter(user=user)
-
-            # clear the cart
-            cart.clear()
-            print("session cart is cleared")
-            dbCart.delete()
-            print("database cart is cleared")
-            ########################################################
-
-    else:
-        merchant_uid = request.POST.get('merchant_uid')
-        imp_uid = request.POST.get('imp_uid')
-        # 결제 실패를 쿼리에서 삭제하지 말자
-        # print('order 쿼리 호출')
-        # try:
-        #     order = Order.objects.get(merchant_uid=merchant_uid)
-        #     order.delete()
-        #     print("결제 실패로 Order 데이터 삭제")
-        # except:
-        #     print("order 쿼리 호출 실패")
-        success = False
-
-
-    context = {
-        'merchant_uid': merchant_uid,
-        'imp_uid': imp_uid,
-        'success': success,
-    }
-
-    return HttpResponse(json.dumps(context), content_type="application/json")
-
-
-
-@login_required(login_url="accounts:login")
 def order_initial_processing(request):
     print('order_initial_processing')
 
@@ -247,25 +73,15 @@ def order_initial_processing(request):
     tex_free_cost = 0
 
     isDirect = request.POST.get('isDirect')
-    if isDirect == 'True' or isDirect == 'true':
-        isDirect = True
-    else:
-        isDirect = False
-
-    print('isDirect : {}'.format(isDirect))
-
 
     #isDirect에 따라서 Cart방식으로 저장할지 Direct방식으로 저장할지 결정.
     if isDirect:
-        print('test1')
         ########################################################
         pk = request.POST.get('pk')
-        quantity = int(request.POST.get('quantity'))
+        quantity = request.POST.get('quantity')
 
         # Content모델을 들고와서 처리한다.
         content = get_object_or_404(Content, pk=pk)
-
-        print('pk:{}({}), quantity:{}'.format(content.title, pk, quantity))
 
         # 면세 제품의 정보를 확인한다.
         if content.category.title == '교재':
@@ -282,8 +98,6 @@ def order_initial_processing(request):
     else:
         ########################################################
         # 카트 세션의 정보와 dbCart의 정보를 retrieve한다.
-
-        print('test2')
         cart = Cart(request)
         dbCart = CM.objects.filter(user=user)
 
@@ -297,20 +111,19 @@ def order_initial_processing(request):
         ########################################################
 
 
-
     print("총 제품 비용 : {}원".format(totalCost))
 
-    #context데이터 미리 설정
-    success = False
-    merchant_uid = ''
+    print("no.{} order_one_create executed in orders.views.py".format(merchant_uid))
+
+    success = True
 
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         print("form was executed as the way of POST")
         if form.is_valid():
 
-            # client = Iamporter(imp_key="1286359584086938",
-            #                    imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
+            client = Iamporter(imp_key="1286359584086938",
+                               imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
 
             #############################PG사 및 import사의 DB가 반영될 것으로 예상되는 시간 딜레이##########################
             time.sleep(0.3)
@@ -331,9 +144,19 @@ def order_initial_processing(request):
             infoSave=form.cleaned_data.get('infoSave') #user_profile에 사용
 
             merchant_uid = request.POST.get('merchant_uid')
+            imp_uid = request.POST.get('imp_uid')
             print('merchant_uid : ', merchant_uid)
+            print('imp_uid : ', imp_uid)
 
+            #아임포트 API로 구매 정보 들고오기
+            payment = client.find_payment(imp_uid=imp_uid,merchant_uid=merchant_uid)
+            paid = payment['status']
+            print('결제상태 : {}'.format(paid))
 
+            try:
+                print("payment['tex_free'] : {}".format(payment['tex_free']))
+            except:
+                print("payment['tex_free'] Non existence Error 발생")
 
             def delivery_decide(x):
                 return {
@@ -350,6 +173,7 @@ def order_initial_processing(request):
             tex_free_cost = tex_free_cost
             print('최종금액 : ' + str(totalCost))
 
+
             if infoSave:
                 user_profile.phone = phone
                 user_profile.postal_code = postal_code
@@ -358,85 +182,76 @@ def order_initial_processing(request):
                 user_profile.detailAddress = detailAddress
                 user_profile.save()
 
+
+
             ################################Order 생성#############################
-            try:
-                order = Order.objects.create(user=user,
-                                             merchant_uid=merchant_uid,
-                                             # imp_uid=imp_uid,
-                                             totalCost=totalCost,
-                                             tex_free_cost=tex_free_cost,
-                                             isDirect=isDirect,
-                                             )
-            except:
-                print('Order 모델 생성 오류')
+            order = Order.objects.create(user=user,
+                                         merchant_uid=merchant_uid,
+                                         imp_uid=imp_uid,
+                                         totalCost=totalCost,
+                                         tex_free_cost=tex_free_cost,
+                                         )
 
             ################################ImportInfo 생성#############################
-            try:
-                importInfo = ImportInfo.objects.create(
-                    order = order,
-                    # amount = payment['amount'],
-                    # apply_num = payment['apply_num'],
-                    # bank_code = payment['bank_code'],
-                    # bank_name = payment['bank_name'],
-                    # buyer_addr = payment['buyer_addr'],
-                    # buyer_email = payment['buyer_email'],
-                    # buyer_name = payment['buyer_name'],
-                    # buyer_postcode = payment['buyer_postcode'],
-                    # buyer_tel = payment['buyer_tel'],
-                    # cancel_amount = payment['cancel_amount'],
-                    # cancel_history = payment['cancel_history'],
-                    # cancel_reason = payment['cancel_reason'],
-                    # cancel_receipt_urls = payment['cancel_receipt_urls'],
-                    # cancelled_at = payment['cancelled_at'] if payment['cancelled_at'] == 0 else datetime.datetime.fromtimestamp(payment['cancelled_at']),
-                    # card_code = payment['card_code'],
-                    # card_name = payment['card_name'],
-                    # card_quota = payment['card_quota'],
-                    # cash_receipt_issued = payment['cash_receipt_issued'],
-                    # channel = payment['channel'],
-                    # currency = payment['currency'],
-                    # custom_data = payment['custom_data'],
-                    # escrow = payment['escrow'],
-                    # fail_reason = payment['fail_reason'],
-                    # failed_at = payment['failed_at'] if payment['failed_at']==0 else datetime.datetime.fromtimestamp(payment['failed_at']),
-                    # imp_uid = payment['imp_uid'],
-                    # merchant_uid = payment['merchant_uid'],
-                    # name = payment['name'],
-                    # paid_at = payment['paid_at'] if payment['paid_at']==0 else datetime.datetime.fromtimestamp(payment['paid_at']),
-                    # pay_method = payment['pay_method'],
-                    # pg_id = payment['pg_id'],
-                    # pg_provider = payment['pg_provider'],
-                    # pg_tid = payment['pg_tid'],
-                    # receipt_url = payment['receipt_url'],
-                    # status = payment['status'],
-                    # user_agent = payment['user_agent'],
-                    # vbank_code = payment['vbank_code'],
-                    # vbank_date = payment['vbank_date'] if payment['vbank_date']==0 else datetime.datetime.fromtimestamp(payment['vbank_date']),
-                    # vbank_holder = payment['vbank_holder'],
-                    # vbank_issued_at = payment['vbank_issued_at'] if payment['vbank_issued_at']==0 else datetime.datetime.fromtimestamp(payment['vbank_issued_at']),
-                    # vbank_name = payment['vbank_name'],
-                    # vbank_num = payment['vbank_num'],
-                )
-            except:
-                print('ImportInfo 모델 생성 오류')
+            importInfo = ImportInfo.objects.create(
+                order = order,
+                # amount = payment['amount'],
+                # apply_num = payment['apply_num'],
+                # bank_code = payment['bank_code'],
+                # bank_name = payment['bank_name'],
+                # buyer_addr = payment['buyer_addr'],
+                # buyer_email = payment['buyer_email'],
+                # buyer_name = payment['buyer_name'],
+                # buyer_postcode = payment['buyer_postcode'],
+                # buyer_tel = payment['buyer_tel'],
+                # cancel_amount = payment['cancel_amount'],
+                # cancel_history = payment['cancel_history'],
+                # cancel_reason = payment['cancel_reason'],
+                # cancel_receipt_urls = payment['cancel_receipt_urls'],
+                # cancelled_at = payment['cancelled_at'] if payment['cancelled_at'] == 0 else datetime.datetime.fromtimestamp(payment['cancelled_at']),
+                # card_code = payment['card_code'],
+                # card_name = payment['card_name'],
+                # card_quota = payment['card_quota'],
+                # cash_receipt_issued = payment['cash_receipt_issued'],
+                # channel = payment['channel'],
+                # currency = payment['currency'],
+                # custom_data = payment['custom_data'],
+                # escrow = payment['escrow'],
+                # fail_reason = payment['fail_reason'],
+                # failed_at = payment['failed_at'] if payment['failed_at']==0 else datetime.datetime.fromtimestamp(payment['failed_at']),
+                # imp_uid = payment['imp_uid'],
+                # merchant_uid = payment['merchant_uid'],
+                # name = payment['name'],
+                # paid_at = payment['paid_at'] if payment['paid_at']==0 else datetime.datetime.fromtimestamp(payment['paid_at']),
+                # pay_method = payment['pay_method'],
+                # pg_id = payment['pg_id'],
+                # pg_provider = payment['pg_provider'],
+                # pg_tid = payment['pg_tid'],
+                # receipt_url = payment['receipt_url'],
+                # status = payment['status'],
+                # user_agent = payment['user_agent'],
+                # vbank_code = payment['vbank_code'],
+                # vbank_date = payment['vbank_date'] if payment['vbank_date']==0 else datetime.datetime.fromtimestamp(payment['vbank_date']),
+                # vbank_holder = payment['vbank_holder'],
+                # vbank_issued_at = payment['vbank_issued_at'] if payment['vbank_issued_at']==0 else datetime.datetime.fromtimestamp(payment['vbank_issued_at']),
+                # vbank_name = payment['vbank_name'],
+                # vbank_num = payment['vbank_num'],
+            )
 
             ################################OrderDelivery 생성##########################
-            try:
-                OrderDelivery.objects.create(
-                    order=order,
-                    delivery_fee=delivery_fee,
-                    name=name,
-                    email=email,
-                    phone=phone,
-                    address=address,
-                    detailAddress=detailAddress,
-                    extraAddress=extraAddress,
-                    postal_code=postal_code,
-                    delivery_note=note
+            OrderDelivery.objects.create(
+                order=order,
+                delivery_fee=delivery_fee,
+                name=name,
+                email=email,
+                phone=phone,
+                address=address,
+                detailAddress=detailAddress,
+                extraAddress=extraAddress,
+                postal_code=postal_code,
+                delivery_note=note
 
-                )
-            except:
-                print('OrderDelivery 모델 생성 오류')
-
+            )
 
             if isDirect:
                 ###############################OrderItem 생성################################
@@ -457,6 +272,11 @@ def order_initial_processing(request):
                         tex_free_cost += newItem.cost
                         print("면제 제품 비용 : {}원".format(tex_free_cost))
 
+                # clear the cart
+                cart.clear()
+                print("session cart is cleared")
+                dbCart.delete()
+                print("database cart is cleared")
                 ############################################################################
 
             # #################### launch asynchronous task(이메일)#########################
@@ -467,6 +287,7 @@ def order_initial_processing(request):
 
             context={
                 'merchant_uid' : merchant_uid,
+                'imp_uid' : imp_uid,
                 'success' : success,
             }
 
@@ -474,6 +295,7 @@ def order_initial_processing(request):
 
         context = {
             'merchant_uid': '',
+            'imp_uid': '',
             'success': success,
         }
 
@@ -498,6 +320,10 @@ def order_one_create(request, pk, quantity):
     tex_free_cost = 0
 
     ########################################################
+    #카트세션과 dbCart와 관계없이 진행한다.
+    # cart = Cart(request)
+    # dbCart = CM.objects.filter(user=user)
+
     #Content모델을 들고와서 처리한다.
     content = get_object_or_404(Content, pk=pk)
 
@@ -510,6 +336,7 @@ def order_one_create(request, pk, quantity):
         totalCost = content.discount * quantity
     else:
         totalCost = content.cost * quantity
+
     ########################################################
 
     print("면제 제품 비용 : {}원".format(tex_free_cost))
@@ -517,17 +344,167 @@ def order_one_create(request, pk, quantity):
 
     print("no.{} order_one_create executed in orders.views.py".format(merchant_uid))
 
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        print("form was executed as the way of POST")
+        if form.is_valid():
 
-    form = OrderCreateForm(initial={
-        'merchant_uid':merchant_uid,
-        'name':user.first_name,
-        'email':user.email,
-        'phone':user_profile.phone,
-        'postal_code':user_profile.postal_code,
-        'address':user_profile.address,
-        'extraAddress':user_profile.extraAddress,
-        'detailAddress':user_profile.detailAddress,
-    })
+            client = Iamporter(imp_key="1286359584086938",
+                               imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
+
+            #############################PG사 및 import사의 DB가 반영될 것으로 예상되는 시간 딜레이##########################
+            time.sleep(0.3)
+
+            #form data 가져오기
+
+            method=form.cleaned_data.get('method')
+
+            delivery_fee=form.cleaned_data.get('delivery_fee')# OrderDelivery에 사용
+            note=form.cleaned_data.get('note')# OrderDelivery에 사용
+            name=form.cleaned_data.get('name') #user_profile에 사용, OrderDelivery에 사용
+            email=form.cleaned_data.get('email')# OrderDelivery에 사용
+            phone=form.cleaned_data.get('phone') #user_profile에 사용, OrderDelivery에 사용
+            postal_code=form.cleaned_data.get('postal_code') #user_profile에 사용, OrderDelivery에 사용
+            address=form.cleaned_data.get('address') #user_profile에 사용, OrderDelivery에 사용
+            extraAddress=form.cleaned_data.get('extraAddress') #user_profile에 사용, OrderDelivery에 사용
+            detailAddress=form.cleaned_data.get('detailAddress') #user_profile에 사용, OrderDelivery에 사용
+            infoSave=form.cleaned_data.get('infoSave') #user_profile에 사용
+
+            merchant_uid = request.POST.get('merchant_uid')
+            imp_uid = request.POST.get('imp_uid')
+            print('merchant_uid : ', merchant_uid)
+            print('imp_uid : ', imp_uid)
+
+            #아임포트 API로 구매 정보 들고오기
+            payment = client.find_payment(imp_uid=imp_uid,merchant_uid=merchant_uid)
+            paid = payment['status']
+            print('결제상태 : {}'.format(paid))
+
+            try:
+                print("payment['tex_free'] : {}".format(payment['tex_free']))
+            except:
+                print("payment['tex_free'] Non existence Error 발생")
+
+            def delivery_decide(x):
+                return {
+                    '001': 2500, #일반배송
+                    '002': 5000, #도서산간
+                    '003': 0, #착불
+                    '004': 0, #직접찾기
+                    '005': 0, #기타
+                }.get(x, 2500)
+
+            charge = delivery_decide(delivery_fee)
+            print('배송료 : ' + str(charge))
+            totalCost = totalCost + charge
+            tex_free_cost = tex_free_cost
+            print('최종금액 : ' + str(totalCost))
+
+
+            if infoSave:
+                user_profile.phone = phone
+                user_profile.postal_code = postal_code
+                user_profile.address = address
+                user_profile.extraAddress = extraAddress
+                user_profile.detailAddress = detailAddress
+                user_profile.save()
+
+            ################################Order 생성#############################
+            order = Order.objects.create(user=user,
+                                         merchant_uid=merchant_uid,
+                                         imp_uid=imp_uid,
+                                         totalCost=totalCost,
+                                         tex_free_cost=tex_free_cost,
+                                         )
+
+            ################################ImportInfo 생성#############################
+            importInfo = ImportInfo.objects.create(
+                order = order,
+                amount = payment['amount'],
+                apply_num = payment['apply_num'],
+                bank_code = payment['bank_code'],
+                bank_name = payment['bank_name'],
+                buyer_addr = payment['buyer_addr'],
+                buyer_email = payment['buyer_email'],
+                buyer_name = payment['buyer_name'],
+                buyer_postcode = payment['buyer_postcode'],
+                buyer_tel = payment['buyer_tel'],
+                cancel_amount = payment['cancel_amount'],
+                cancel_history = payment['cancel_history'],
+                cancel_reason = payment['cancel_reason'],
+                cancel_receipt_urls = payment['cancel_receipt_urls'],
+                cancelled_at = payment['cancelled_at'] if payment['cancelled_at'] == 0 else datetime.datetime.fromtimestamp(payment['cancelled_at']),
+                card_code = payment['card_code'],
+                card_name = payment['card_name'],
+                card_quota = payment['card_quota'],
+                cash_receipt_issued = payment['cash_receipt_issued'],
+                channel = payment['channel'],
+                currency = payment['currency'],
+                custom_data = payment['custom_data'],
+                escrow = payment['escrow'],
+                fail_reason = payment['fail_reason'],
+                failed_at = payment['failed_at'] if payment['failed_at']==0 else datetime.datetime.fromtimestamp(payment['failed_at']),
+                imp_uid = payment['imp_uid'],
+                merchant_uid = payment['merchant_uid'],
+                name = payment['name'],
+                paid_at = payment['paid_at'] if payment['paid_at']==0 else datetime.datetime.fromtimestamp(payment['paid_at']),
+                pay_method = payment['pay_method'],
+                pg_id = payment['pg_id'],
+                pg_provider = payment['pg_provider'],
+                pg_tid = payment['pg_tid'],
+                receipt_url = payment['receipt_url'],
+                status = payment['status'],
+                user_agent = payment['user_agent'],
+                vbank_code = payment['vbank_code'],
+                vbank_date = payment['vbank_date'] if payment['vbank_date']==0 else datetime.datetime.fromtimestamp(payment['vbank_date']),
+                vbank_holder = payment['vbank_holder'],
+                vbank_issued_at = payment['vbank_issued_at'] if payment['vbank_issued_at']==0 else datetime.datetime.fromtimestamp(payment['vbank_issued_at']),
+                vbank_name = payment['vbank_name'],
+                vbank_num = payment['vbank_num'],
+            )
+
+            ################################OrderDelivery 생성##########################
+            OrderDelivery.objects.create(
+                order=order,
+                delivery_fee=delivery_fee,
+                name=name,
+                email=email,
+                phone=phone,
+                address=address,
+                detailAddress=detailAddress,
+                extraAddress=extraAddress,
+                postal_code=postal_code,
+                delivery_note=note
+
+            )
+
+
+            ###############################OrderItem 생성################################
+
+            newItem=OrderItem.objects.create(order=order,
+                                             content=content,
+                                             cost=content.discount if content.isDiscount else content.cost,
+                                             quantity=quantity)
+            ############################################################################
+
+            #################### launch asynchronous task(이메일)#########################
+            order_created.delay(order.id)
+
+
+            return redirect('accounts:order_status')
+    else:
+
+
+        form = OrderCreateForm(initial={
+            'merchant_uid':merchant_uid,
+            'name':user.first_name,
+            'email':user.email,
+            'phone':user_profile.phone,
+            'postal_code':user_profile.postal_code,
+            'address':user_profile.address,
+            'extraAddress':user_profile.extraAddress,
+            'detailAddress':user_profile.detailAddress,
+        })
 
     return render(request,
                   'orders/order_created.html',
@@ -583,17 +560,179 @@ def order_create(request):
 
     print("no.{} order_create executed in orders.views.py".format(merchant_uid))
 
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        print("form was executed as the way of POST")
+        if form.is_valid():
 
-    form = OrderCreateForm(initial={
-        'merchant_uid':merchant_uid,
-        'name':user.first_name,
-        'email':user.email,
-        'phone':user_profile.phone,
-        'postal_code':user_profile.postal_code,
-        'address':user_profile.address,
-        'extraAddress':user_profile.extraAddress,
-        'detailAddress':user_profile.detailAddress,
-    })
+            client = Iamporter(imp_key="1286359584086938",
+                               imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
+
+            #############################PG사 및 import사의 DB가 반영될 것으로 예상되는 시간 딜레이##########################
+            time.sleep(0.3)
+
+            #form data 가져오기
+
+            method=form.cleaned_data.get('method')
+
+            delivery_fee=form.cleaned_data.get('delivery_fee')# OrderDelivery에 사용
+            note=form.cleaned_data.get('note')# OrderDelivery에 사용
+            name=form.cleaned_data.get('name') #user_profile에 사용, OrderDelivery에 사용
+            email=form.cleaned_data.get('email')# OrderDelivery에 사용
+            phone=form.cleaned_data.get('phone') #user_profile에 사용, OrderDelivery에 사용
+            postal_code=form.cleaned_data.get('postal_code') #user_profile에 사용, OrderDelivery에 사용
+            address=form.cleaned_data.get('address') #user_profile에 사용, OrderDelivery에 사용
+            extraAddress=form.cleaned_data.get('extraAddress') #user_profile에 사용, OrderDelivery에 사용
+            detailAddress=form.cleaned_data.get('detailAddress') #user_profile에 사용, OrderDelivery에 사용
+            infoSave=form.cleaned_data.get('infoSave') #user_profile에 사용
+
+            merchant_uid = request.POST.get('merchant_uid')
+            imp_uid = request.POST.get('imp_uid')
+            print('merchant_uid : ', merchant_uid)
+            print('imp_uid : ', imp_uid)
+
+            #아임포트 API로 구매 정보 들고오기
+            payment = client.find_payment(imp_uid=imp_uid,merchant_uid=merchant_uid)
+            paid = payment['status']
+            print('결제상태 : {}'.format(paid))
+
+            try:
+                print("payment['tex_free'] : {}".format(payment['tex_free']))
+            except:
+                print("payment['tex_free'] Non existence Error 발생")
+
+            def delivery_decide(x):
+                return {
+                    '001': 2500, #일반배송
+                    '002': 5000, #도서산간
+                    '003': 0, #착불
+                    '004': 0, #직접찾기
+                    '005': 0, #기타
+                }.get(x, 2500)
+
+            charge = delivery_decide(delivery_fee)
+            print('배송료 : ' + str(charge))
+            totalCost = totalCost + charge
+            tex_free_cost = tex_free_cost
+            print('최종금액 : ' + str(totalCost))
+
+
+            if infoSave:
+                user_profile.phone = phone
+                user_profile.postal_code = postal_code
+                user_profile.address = address
+                user_profile.extraAddress = extraAddress
+                user_profile.detailAddress = detailAddress
+                user_profile.save()
+
+
+
+            ################################Order 생성#############################
+            order = Order.objects.create(user=user,
+                                         merchant_uid=merchant_uid,
+                                         imp_uid=imp_uid,
+                                         totalCost=totalCost,
+                                         tex_free_cost=tex_free_cost,
+                                         )
+
+            ################################ImportInfo 생성#############################
+            importInfo = ImportInfo.objects.create(
+                order = order,
+                amount = payment['amount'],
+                apply_num = payment['apply_num'],
+                bank_code = payment['bank_code'],
+                bank_name = payment['bank_name'],
+                buyer_addr = payment['buyer_addr'],
+                buyer_email = payment['buyer_email'],
+                buyer_name = payment['buyer_name'],
+                buyer_postcode = payment['buyer_postcode'],
+                buyer_tel = payment['buyer_tel'],
+                cancel_amount = payment['cancel_amount'],
+                cancel_history = payment['cancel_history'],
+                cancel_reason = payment['cancel_reason'],
+                cancel_receipt_urls = payment['cancel_receipt_urls'],
+                cancelled_at = payment['cancelled_at'] if payment['cancelled_at']==0 else datetime.datetime.fromtimestamp(payment['cancelled_at']),
+                card_code = payment['card_code'],
+                card_name = payment['card_name'],
+                card_quota = payment['card_quota'],
+                cash_receipt_issued = payment['cash_receipt_issued'],
+                channel = payment['channel'],
+                currency = payment['currency'],
+                custom_data = payment['custom_data'],
+                escrow = payment['escrow'],
+                fail_reason = payment['fail_reason'],
+                failed_at = payment['failed_at'] if payment['failed_at']==0 else datetime.datetime.fromtimestamp(payment['failed_at']),
+                imp_uid = payment['imp_uid'],
+                merchant_uid = payment['merchant_uid'],
+                name = payment['name'],
+                paid_at = payment['paid_at'] if payment['paid_at']==0 else datetime.datetime.fromtimestamp(payment['paid_at']),
+                pay_method = payment['pay_method'],
+                pg_id = payment['pg_id'],
+                pg_provider = payment['pg_provider'],
+                pg_tid = payment['pg_tid'],
+                receipt_url = payment['receipt_url'],
+                status = payment['status'],
+                user_agent = payment['user_agent'],
+                vbank_code = payment['vbank_code'],
+                vbank_date = payment['vbank_date'] if payment['vbank_date']==0 else datetime.datetime.fromtimestamp(payment['vbank_date']),
+                vbank_holder = payment['vbank_holder'],
+                vbank_issued_at = payment['vbank_issued_at'] if payment['vbank_issued_at']==0 else datetime.datetime.fromtimestamp(payment['vbank_issued_at']),
+                vbank_name = payment['vbank_name'],
+                vbank_num = payment['vbank_num'],
+            )
+
+            ################################OrderDelivery 생성##########################
+            OrderDelivery.objects.create(
+                order=order,
+                delivery_fee=delivery_fee,
+                name=name,
+                email=email,
+                phone=phone,
+                address=address,
+                detailAddress=detailAddress,
+                extraAddress=extraAddress,
+                postal_code=postal_code,
+                delivery_note=note
+
+            )
+
+
+            ###############################OrderItem 생성################################
+
+            for item in cart:
+                newItem=OrderItem.objects.create(order=order,
+                                                 content=item['content'],
+                                                 cost=item['cost'],
+                                                 quantity=item['quantity'])
+                if newItem.content.category == '교재':
+                    tex_free_cost += newItem.cost
+                    print("면제 제품 비용 : {}원".format(tex_free_cost))
+
+            ############################################################################
+
+            #################### launch asynchronous task(이메일)#########################
+            order_created.delay(order.id)
+
+            # clear the cart
+            cart.clear()
+            print("session cart is cleared")
+            dbCart.delete()
+            print("database cart is cleared")
+
+            return redirect('accounts:order_status')
+    else:
+
+
+        form = OrderCreateForm(initial={
+            'merchant_uid':merchant_uid,
+            'name':user.first_name,
+            'email':user.email,
+            'phone':user_profile.phone,
+            'postal_code':user_profile.postal_code,
+            'address':user_profile.address,
+            'extraAddress':user_profile.extraAddress,
+            'detailAddress':user_profile.detailAddress,
+        })
 
     return render(request,
                   'orders/order_created.html',

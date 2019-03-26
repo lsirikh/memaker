@@ -31,6 +31,49 @@ def order_notified(order_id):
     return mail_sent
 
 @task
+def order_created(order_id):
+    """
+    Task to send an e-mail notification when an order is
+    successfully created.
+    """
+    order = Order.objects.get(id=order_id)
+    if order.orderItem.count() > 1:
+        subject = '주문번호:{} - 미메이커에서 {} 외 {}개 상품 주문이 완료되었습니다.'.format(order.merchant_uid,
+                                                                 order.orderItem.first().content,
+                                                                 order.orderItem.count()-1)
+        message = '{}님 안녕하세요. ' \
+                  '\n만들면서 배우는 코딩교육서비스 미미에커 입니다.' \
+                  '\n\n요청하신 {} 외 {} 개 상품이 잘 주문접수되었습니다.\n\n'.format(order.user.first_name,
+                                                                    order.orderItem.first().content,
+                                                                    order.orderItem.count() - 1)
+    else:
+        subject = '주문번호:{} - 미메이커에서 {} 상품 주문이 완료되었습니다.'.format(order.merchant_uid,
+                                                                     order.orderItem.first().content)
+        message = '{}님 안녕하세요. ' \
+                  '\n만들면서 배우는 코딩교육서비스 미미에커 입니다.' \
+                  '\n\n요청하신 {} 상품이 잘 주문접수되었습니다.\n\n'.format(order.user.first_name,
+                                                                   order.orderItem.first().content)
+    # print(subject)
+    # print(message)
+    mail_sent = send_mail(subject,
+                          message,
+                          'openfingers@openfingers.com',
+                          [order.user.email])
+
+    if order.importInfo.status == 'paid':
+        # 운영자 확인용 메일 송부
+        auth_subject = '{}님께서 {}을 주문하셨습니다.(금액:{})'.format(order.user.first_name,
+                                                          order.orderItem.first().content,
+                                                          order.totalCost)
+        auth_message = '주문완료'
+        send_mail(auth_subject,
+                  auth_message,
+                  'openfingers@openfingers.com',
+                  ['openfingers@openfingers.com'])
+
+    return mail_sent
+
+@task
 def order_canceled(order_id):
     """
     Task to send an e-mail notification when an order is
@@ -91,7 +134,7 @@ def import_refresh():
                        imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
 
     ####### 해당 유저가 보유한 모든 주문정보 확보 ######
-    order_list = Order.objects.all()
+    order_list = Order.objects.exclude(result=False)
 
     ######################유저가 현재 가지고 있는 주문 정보를 모두 가지고와 지속적인 업데이트 및 편집 작업###############################
     index = 0
@@ -107,6 +150,7 @@ def import_refresh():
             # 가상계좌의 결제상태가 paid가 되는 순간 관리자에게 메일을 보낸다.
             if importInfo.status == 'ready' and payment['status'] == 'paid':
                 ############## launch asynchronous task(이메일)#################
+                order_created.delay(order.id)
                 order_notified.delay(order.id)
             # print("order.importInfo.status : {} , payment['status'] : {}".format(importInfo.status,
             #                                                                           payment['status']))

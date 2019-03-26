@@ -5,24 +5,6 @@ from django.contrib.auth.models import User
 
 import datetime
 
-# Create your models here.
-
-# def generate_order_number():
-#     try:
-#         last_order = Order.objects.all().order_by('id').last()
-#     except:
-#         last_order = 0
-#
-#     dt = datetime.datetime.now()
-#     gen_code = 'me' + str(dt.year) + str(dt.month) + \
-#                str(dt.day) + str(dt.hour) + \
-#                str(dt.minute) + str(dt.second)
-#     if not last_order:
-#         return gen_code + '0'
-#     order_no = last_order.id + 1
-#     new_order_no = gen_code + str(order_no)
-#
-#     return new_order_no
 
 class Order(models.Model):
 
@@ -43,10 +25,9 @@ class Order(models.Model):
     totalCost = models.PositiveIntegerField('최종금액', default=0)
     tex_free_cost = models.PositiveIntegerField('면세금액', default=0, null=True, blank=True)
 
-    # method = models.CharField('결제수단', max_length=10, choices=PAYMENT_OF_METHOD, default='card')
-    # paid = models.CharField('결제상태', max_length=10, choices=PAYMENT_STATUS, default='ready')
-
     confirm = models.CharField('구매결정', max_length=4, choices=CONFIRM_CAT, default='001')
+    isDirect= models.BooleanField('바로구매', default=False, null=True, blank=True)
+    result= models.BooleanField('구매상태', default=False, null=True, blank=True)
 
     class Meta:
         ordering = ('-created',)

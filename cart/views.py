@@ -146,6 +146,7 @@ def cart_detail(request):
         dbCart = CM.objects.filter(user=user)
         message = "session cart({0})와 user DB cart({1}) 일치 여부 :{2}".format(dbCart.count(), cart.isExist(), dbCart.count()==cart.isExist())
         if(dbCart.count() is not cart.isExist()):
+            print("session cart and DB cart are not synchronized")
             admin.email_user("일치 여부 확인", message, from_email='openfingers@openfingers.com')
         else:
             print("session cart and DB cart are synchronized")

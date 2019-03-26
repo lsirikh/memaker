@@ -561,7 +561,7 @@ def order_status_view(request):
     user = auth.get_user(request)
 
     # 해당 유저가 보유한 모든 주문정보 확보
-    order_list = user.order.all()
+    order_list = user.order.exclude(result=False)
 
 
 

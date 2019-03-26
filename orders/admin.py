@@ -131,6 +131,7 @@ class OrderAdmin(admin.ModelAdmin):
                     # 'paid',
                     # 'delivery_fee',
                     # 'delivery',
+                    'isDirect',
                     'totalCost',
                     'tex_free_cost',
                     # 'note',
