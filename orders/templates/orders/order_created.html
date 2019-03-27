@@ -19,6 +19,49 @@
         {% include 'includes/order_cart_create.html'%}
     {% endif %}
 </div>
+<div class="modal fade" id="payment_modal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">결제하기</h4>
+      </div>
+      <div class="modal-body">
+        <div class="me_title3_nopadding" align="center">주문하신 상품을 </br>구매하시겠습니까?</div></br>
+        <small style="color:red;"><주의>별도의 팝업창 Blocking을 하신경우 반드시 해제 바랍니다. 결제오류로 정상적인 결과가 나타나지 않을 수 있습니다.</small>
+      </div>
+      <div class="modal-footer" align="center">
+          <div class="col-md-6 col-xs-6">
+              <button type="button" class="btn btn-default btn-block" data-dismiss="modal">취소</button>
+          </div>
+          <div class="col-md-6 col-xs-6">
+              <button type="button" class="btn btn-primary btn-block" id="payment_allow_button" data-dismiss="modal" onclick="orderInitialProcessing();">결제</button>
+          </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="success_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="success_modal" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">결제하기</h4>
+      </div>
+      <div class="modal-body">
+        <div class="me_title4_nopadding" align="center">결제가 성공적으로 진행되었습니다.</br>구매내역을 확인하시겠습니까?</div></br>
+      </div>
+      <div class="modal-footer" align="center">
+          <div class="col-md-6 col-xs-6">
+              <button type="button" class="btn btn-default btn-block" id="home_button" data-dismiss="modal" onclick="goHome();">홈으로</button>
+          </div>
+          <div class="col-md-6 col-xs-6">
+              <button type="button" class="btn btn-primary btn-block" id="payment_check_button" data-dismiss="modal" onclick="goOrderStatus();">결제확인</button>
+          </div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- iOS에서는 position:fixed 버그가 있음, 적용하는 사이트에 맞게 position:absolute 등을 이용하여 top,left값 조정 필요 -->
 <div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch;">
@@ -34,7 +77,7 @@
     // "imp00000000" 대신 발급받은 "가맹점 식별코드"를 사용합니다.
     //실제 상점아이디 기반의 식별코드
     IMP.init("imp64225880");
-
+    location_url = $(window.location).attr('href');
     function requestPay() {
     // IMP.request_pay(param, callback) 호출
     // validation check
@@ -78,7 +121,8 @@
                 } else {
                     //alert(rsp.merchant_uid);
                     //alert(rsp.success);
-                    alert("결제가 완료되지 않았습니다.(사유: " +  rsp.error_msg + " )");
+                    alert("결제가 완료되지 않았습니다.(사유: " +  rsp.error_msg + " )" );
+
                 }
 
                 payment_confirm(rsp);
@@ -94,11 +138,20 @@
             dataType: 'json',
             success: function(response){ // 통신 성공시
                 if (response.success){
-                    if (confirm('결제가 성공하였습니다. 결제정보를 확인하러 가시겠습니까?')){
-                        window.location.href = "{% url 'accounts:order_status' %}";
-                    }else{
-                        window.location.href = "/";
-                    }
+                    //if (confirm('결제가 성공하였습니다. 결제정보를 확인하러 가시겠습니까?')){
+                    //    window.location.href = "{% url 'accounts:order_status' %}";
+                    //}else{
+                    //    window.location.href = "/";
+                    //}
+
+                    //모달로 확인창 제작
+                    $('#success_modal').modal({
+                        show: 'true'
+                    });
+
+                }else{
+                    //refresh를 통한 에러방지
+                    window.location.href = location_url;
                 }
             },
             error: function(request, status, error){ // 통신 실패시 - 로그인 페이지 리다이렉트
@@ -108,6 +161,19 @@
                 //alert('test');
         });
     }
+
+    function goHome(){
+        window.location.href = "/";
+    }
+    function goOrderStatus(){
+        window.location.href = "{% url 'accounts:order_status' %}";
+    }
+
+    //function checkResult(){
+    //    $('#success_modal').modal({
+    //        show: 'true'
+    //    });
+    //}
 
 
     $(document).on('submit', '#order-form', function(e){
@@ -121,12 +187,15 @@
 
         result=validator(data);
         if (result) {
-            if (confirm('결제를 진행하시겠습니까?')){
-                //먼저 DB에 모든 내용을 저장하고 넘긴다.
-                orderInitialProcessing();
-            }else{
-                alert('결제가 취소되었습니다.');
-            }
+            $('#payment_modal').modal({
+                show : 'true'
+            });
+            //if (confirm('결제를 진행하시겠습니까?')){
+            //    //먼저 DB에 모든 내용을 저장하고 넘긴다.
+            //    orderInitialProcessing();
+            //}else{
+            //    //alert('결제가 취소되었습니다.');
+            //}
         }
 
     });
