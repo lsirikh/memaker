@@ -105,17 +105,15 @@
                         <h4 class="modal-title me_title3_nopadding">장바구니 이동</h4>
                       </div>
                       <div class="modal-body" align="center">
+
+                      </div>
+                      <div class="modal-footer" align="center">
                           <div class="col-md-6 col-xs-6">
-                              <button type="button" class="btn btn-default btn-block" data-dismiss="modal">취소</button>
+                            <button type="button" class="btn btn-default btn-block" data-dismiss="modal">취소</button>
                           </div>
                           <div class="col-md-6 col-xs-6">
                               <button type="button" class="btn btn-primary btn-block" id="cart_redirect_button" data-dismiss="modal" onclick="cartRedirect();">이동</button>
                           </div>
-                          <br>
-                          <br>
-                      </div>
-                      <div class="modal-footer" align="center">
-
                       </div>
                     </div><!-- /.modal-content -->
                   </div><!-- /.modal-dialog -->
@@ -268,6 +266,7 @@
     }
 
     function cartCheckShow(){
+        $('#cart_check_modal').children('.modal-dialog').children('.modal-content').children('.modal-body').html('<div class="me_title5_nopadding" align="center">장바구니로 이동하여 확인하시겠습니까?</div>');
         $('#cart_check_modal').modal({
             show: 'true'
         })
