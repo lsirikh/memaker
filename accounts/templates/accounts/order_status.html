@@ -1,8 +1,9 @@
 {% extends "accounts/index.html" %}
 
-{% block accounts %}
 {% load staticfiles%}
 {% load humanize %}
+{% block accounts %}
+
 <style>
   th {
     text-align: center;
@@ -12,8 +13,6 @@
     margin-right: auto;
 
   }
-
-
 </style>
 <div class="row">
 
@@ -21,6 +20,7 @@
         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 주문 내역</a>
         <br>
     </div>
+
     <div class="panel panel-primary">
         <table class="table table-condensed">
             <thead class="thead-inverse">
@@ -233,9 +233,10 @@
         </div>
     </div>
 
+</div>
 
 
-    <div class="modal fade" id="confirm_decision_modal">
+<div class="modal fade" id="confirm_decision_modal">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header" style="background:#BB8FCE;color:white;">
@@ -281,7 +282,7 @@
         <div class="modal-content">
           <div class="modal-header" style="background:#BB8FCE;color:white;">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title cancelTitle" ></h4>
+            <h4 class="modal-title cancelTitle"></h4>
           </div>
           <div class="modal-body cancelBody">
             <form action="{% url 'orders:order_cancel' %}" method="post" class="cancel-form" id="cancel-form">
@@ -300,28 +301,20 @@
                         <p style="color: red">{{ error }}</p>
                         {% endfor %}
                 {% endfor %}
-                <div class="modal-footer cancelFooter">
-                    <div class="col-md-6 col-xs-6">
-                        <button type="button" class="btn btn-default btn-block" data-dismiss="modal">취소</button>
+
+                    <div class="modal-footer cancelFooter">
+                        <div class="col-md-6 col-xs-6">
+                            <button type="button" class="btn btn-default btn-block" data-dismiss="modal">취소</button>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <button type="submit" class="btn btn-primary btn-block" >제출</button>
+                        </div>
                     </div>
-                    <div class="col-md-6 col-xs-6">
-                        <button type="submit" class="btn btn-primary btn-block" >제출</button>
-                    <div>
-                </div>
             </form>
           </div>
-
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
-</div>
-
-
-
-
-
-
 
 <script type="text/javascript">
     function purchaseCancel(merchant_uid){
@@ -399,7 +392,6 @@
                         alert("문제발생");
                     });
         });
-
     }
     function purchaseConfirm(merchant_uid){
         $.ajax({
@@ -421,8 +413,6 @@
 
                     $('#payment_receipt_'+merchant_uid).removeClass("disabled");
                 }
-
-
             },
             error: function(request, status, error){ // 통신 실패시 - 로그인 페이지 리다이렉트
                 alert("로그인이 필요합니다.");
@@ -516,8 +506,6 @@
 
     $(function(){
 
-
-
         //주문 취소 버튼 클릭 동작
         $('.btn_cancel').click(function(){
             var name = this.name;
@@ -562,8 +550,6 @@
         });
 
     });
-
-
-
 </script>
 {% endblock accounts %}
+
