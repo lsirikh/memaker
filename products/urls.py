@@ -68,6 +68,10 @@ urlpatterns = [
     re_path(r'^content/(?P<content_slug>[-\w]+)/information/favorite/sub/$', views.content_information_favorite_sub_view,
          name='content_information_favorite_sub'),
 
+    # /content/product/엔트리-어찌구/information/favorite/sub
+    re_path(r'^content/(?P<content_slug>[-\w]+)/information/favorite/$', views.content_information_favorite_view,
+         name='content_information_favorite'),
+
 
     # /content/product/4/video/1/
     # path('content/<int:pk>/video/<int:pk_video>/', views.ContentVideoView.as_view(),

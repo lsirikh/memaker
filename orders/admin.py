@@ -124,6 +124,7 @@ class OrderCancelInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
+                    'user',
                     'merchant_uid',
                     'imp_uid',
                     'result',

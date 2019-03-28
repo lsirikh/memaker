@@ -148,6 +148,18 @@
                 </tr>
             </td>
             </tr>
+            {% empty %}
+            <tr>
+                <td style="border:1px;" colspan="4">
+                    <br>
+                    <br>
+                    <div class="me_title4_nopadding" align="center">
+                        구매내역이 없습니다.
+                    </div>
+                    <br>
+                    <br>
+                </td>
+            </tr>
             {% endfor %}
                 <tr>
                     <!--테이블 마무리를 위한 tr 설정-->
@@ -160,76 +172,74 @@
         </table>
         <br>
         <br>
-        <br>
-        <br>
+        <div class="container" align="center">
+            {% if data_list.has_other_pages %}
+            <div class="col-md-offset-2 col-md-6" align="center">
+                <nav aria-label="Post pagination" class="mb-4">
+                    <ul class="pagination pagination-sm">
+                        {% if data_list.number > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1"> << </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"> << </span>
+                        </li>
+                        {% endif %}
+
+                        {% if has_previous_index %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ previous_index }}"> < </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"> < </span>
+                        </li>
+                        {% endif %}
+
+                        {% for page in page_range %}
+                        {% if page == data_list.number %}
+                        <li class="active">
+                        {% else%}
+                        <li>
+                        {% endif %}
+                        <a href="?page={{ page }}">{{ page }}</a>
+                        </li>
+                        {% endfor %}
+
+                        {% if has_next_index %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ next_index }}"> > </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"> > </span>
+                        </li>
+                        {% endif %}
+
+                        {% if data_list.number != data_list.paginator.num_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ data_list.paginator.num_pages }}"> >> </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"> >> </span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
     </div>
 
 </div>
-<hr>
-<div class="container" align="center">
-    {% if data_list.has_other_pages %}
-    <div class="col-md-offset-2 col-md-6" align="center">
-        <nav aria-label="Post pagination" class="mb-4">
-            <ul class="pagination pagination-sm">
-                {% if data_list.number > 1 %}
-                <li class="page-item">
-                    <a class="page-link" href="?page=1"> << </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> << </span>
-                </li>
-                {% endif %}
 
-                {% if has_previous_index %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ previous_index }}"> < </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> < </span>
-                </li>
-                {% endif %}
-
-                {% for page in page_range %}
-                {% if page == data_list.number %}
-                <li class="active">
-                {% else%}
-                <li>
-                {% endif %}
-                <a href="?page={{ page }}">{{ page }}</a>
-                </li>
-                {% endfor %}
-
-                {% if has_next_index %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ next_index }}"> > </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> > </span>
-                </li>
-                {% endif %}
-
-                {% if data_list.number != data_list.paginator.num_pages %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ data_list.paginator.num_pages }}"> >> </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link"> >> </span>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-    </div>
-    {% endif %}
-</div>
 
 <div class="modal fade cancelModal" id="cancelModal" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="background:#BB8FCE;color:white;">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title cancelTitle" ></h4>
       </div>
@@ -251,8 +261,12 @@
                     {% endfor %}
             {% endfor %}
             <div class="modal-footer cancelFooter">
-               <button type="button" class="btn btn-default cancelModal" data-dismiss="modal">취소</button>
-               <button type="submit" class="btn btn-primary cancelModal">제출</button>
+                <div class="col-md-6 col-xs-6">
+                    <button type="button" class="btn btn-default btn-block cancelModal" data-dismiss="modal">취소</button>
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <button type="submit" class="btn btn-primary btn-block cancelModal">제출</button>
+                <div class="col-md-6 col-xs-6">
             </div>
         </form>
       </div>
@@ -264,7 +278,7 @@
 <div class="modal fade deliveryModal" id="deliveryModal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" style="background:#BB8FCE;color:white;">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title deliveryTitle"></h4>
       </div>
@@ -273,7 +287,10 @@
         <div class="deliveryDetail"><table class="table table-condensed" id="deliveryDetail"></table></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <div class="col-md-offset-6 col-md-6 col-xs-12">
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+        </div>
+
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -383,8 +400,8 @@
 
                         },
                         error: function(request, status, error){ // 통신 실패시 - 로그인 페이지 리다이렉트
-                            alert("로그인이 필요합니다.")
-                            window.location.replace("/accounts/login/")
+                            alert("로그인이 필요합니다.");
+                            window.location.replace("/accounts/login/");
                         },
                     }).done(function (data) {
                         //동적 결과물 제시 페이지 request 없음

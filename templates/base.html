@@ -32,7 +32,8 @@
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <!-- iamport.payment.js -->
-    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <!--<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>-->
+    <script type="text/javascript" src="{% static 'import/iamport.payment-1.1.5.js' %}"></script>
 
     <!-- You can alternatively load the minified version -->
     <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
@@ -220,7 +221,8 @@
 
 
           .me_badge {
-            max-height : 150px;
+            max-height : 130px;
+            padding:0px 5px 0px 5px;
           }
           .company_info {
             font-size: 13px;
@@ -500,14 +502,14 @@
             <br>
             <div class="container">
 
-                <div class="col-md-4" align="center">
+                <div class="col-md-3" align="center">
                     <span><img class="me_badge" src="{% static 'img/memaker_logo.png' %}"></span>
                     <span></span>
                     <span><img class="me_badge" src="{% static 'img/2018_hiseoul.png' %}" alt="하이서울어워드"></span>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-9">
 
-                    <table class="table table-borderless">
+                    <table class="table table-borderless" width="500">
                         <thead>
                         <tr>
                             <th class="col-md-2 col-xs-2"><a href="{% url 'intro:index'%}">소개</a><br></th>

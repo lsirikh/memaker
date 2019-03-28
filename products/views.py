@@ -4,6 +4,7 @@ from django.shortcuts import (
     redirect,
     reverse,
     render_to_response,
+    HttpResponse
 )
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -35,11 +36,13 @@ from django.views.generic import (
 )
 from accounts.models import UserProfile
 from django.contrib import auth
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 
 from cart.forms import CartAddContentForm
+import json
 
 
 
@@ -61,17 +64,80 @@ logger = logging.getLogger(__name__)
 #        return context
 
 @login_required(login_url="accounts:login")
+def content_information_favorite_view(request, content_slug):
+    # UserProfile.objects.get을 통해 싱글 오브젝트 retrive하기
+
+    success = False
+    status = 'None'
+    msg = ''
+
+    context = {
+        'success': success,
+        'status': status,
+        'msg': msg,
+    }
+
+    # 로그인된 고객만 이 기능을 활용할 수 있기 때문에 중복적인 의미가 있음....
+    try:
+        userprofile = UserProfile.objects.get(user__username=request.user)
+    except:
+        print("로그인이 필요한 서비스 입니다.")
+        msg='로그인이 필요한 서비스 입니다.'
+        context = {'success': success, 'status': status, 'msg': msg, }
+        return HttpResponse(json.dumps(context), content_type="application/json")
+
+    try:
+        requested_content = Content.objects.get(slug=content_slug)
+    except:
+        print("컨텐츠를 불러오는 과정에서 오류가 발생하였습니다.")
+        msg='컨텐츠를 불러오는 과정에서 오류가 발생하였습니다.'
+        context = {'success': success, 'status': status, 'msg': msg, }
+        return HttpResponse(json.dumps(context), content_type="application/json")
+
+
+    # 관심 상품 등록 과정
+    try:
+        if userprofile.favorite.filter(id=requested_content.id).exists()== False:
+            userprofile.favorite.add(requested_content)
+            status='add'
+            print("{}에 '{}' 상품 등록 성공".format(userprofile, requested_content))
+            # print(userprofile.favorite.all())
+        else:
+            userprofile.favorite.remove(requested_content)
+            status='remove'
+            print("{}에 '{}' 상품 등록 취소".format(userprofile, requested_content))
+            # print(userprofile.favorite.all())
+        success = True
+    except:
+        print("관심상품 등록는 중에 오류가 발생했습니다.")
+        msg = '관심상품 등록는 중에 오류가 발생했습니다.'
+        context = {'success': success, 'status': status, 'msg': msg, }
+        return HttpResponse(json.dumps(context), content_type="application/json")
+
+
+    context = {'success': success, 'status': status, 'msg': msg,}
+    return HttpResponse(json.dumps(context), content_type="application/json")
+
+@login_required(login_url="accounts:login")
 def content_information_favorite_add_view(request, content_slug):
     # UserProfile.objects.get을 통해 싱글 오브젝트 retrive하기
     userprofile = UserProfile.objects.get(user__username=request.user)
     requested_content = Content.objects.get(slug=content_slug)
+
+    success = False
     # 관심 상품 등록 과정
     try:
         userprofile.favorite.add(requested_content)
+        success = True
     except:
         print("관심상품 등록는 중에 오류가 발생했습니다.")
 
-    return redirect('products:content_information', content_slug=content_slug)
+    # return redirect('products:content_information', content_slug=content_slug)
+    context = {
+        'success': success,
+    }
+
+    return HttpResponse(json.dumps(context), content_type="application/json")
 
 
 # @login_required(login_url="accounts:login")

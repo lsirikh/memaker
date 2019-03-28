@@ -37,14 +37,23 @@
     background-image: url('../static/img/main_slide03_2000X500.png');
 }
 
-.fade-in{
-    opacity:0;
+.fade-in1{
+    opacity:0.2;
+}
+.fade-in2{
+    opacity:0.2;
+}
+.fade-in3{
+    opacity:0.2;
+}
+.fade-in4{
+    opacity:0.2;
 }
 .fade-in-title{
-    opacity:0;
+    opacity:0.2;
 }
 .fade-in-card{
-    opacity:0;
+    opacity:0.2;
 }
 
 @media screen and (min-width: 601px) {
@@ -250,7 +259,7 @@
 
     <!-- Three columns of text below the carousel -->
     <div class="row">
-        <div class="col-lg-3 fade-in" align="center">
+        <div class="col-lg-3 fade-in1" align="center">
             <img class="img-circle"
                  src="{% static 'img/mathematics_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -261,7 +270,7 @@
             </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3 fade-in" align="center">
+        <div class="col-lg-3 fade-in2" align="center">
             <img class="img-circle"
                  src="{% static 'img/science_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -272,7 +281,7 @@
             </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3 fade-in" align="center">
+        <div class="col-lg-3 fade-in3" align="center">
             <img class="img-circle"
                  src="{% static 'img/technology_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -283,7 +292,7 @@
             </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3 fade-in" align="center">
+        <div class="col-lg-3 fade-in4" align="center">
             <img class="img-circle"
                  src="{% static 'img/engineering_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -431,12 +440,36 @@
         /* 1 */
         $(window).scroll( function(){
             /* 2 */
-            $('.fade-in').each( function(i){
+            $('.fade-in1').each( function(i){
                 var bottom_of_object = $(this).offset().top + $(this).outerHeight();
                 var bottom_of_window = $(window).scrollTop() + $(window).height();
                 /* 3 */
-                if( bottom_of_window > bottom_of_object/2 ){
-                    $(this).animate({'opacity':'1'},500);
+                if( bottom_of_window > bottom_of_object ){
+                    $(this).animate({'opacity':'1'},100);
+                }
+            });
+            $('.fade-in2').each( function(i){
+                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_window = $(window).scrollTop() + $(window).height();
+                /* 3 */
+                if( bottom_of_window > bottom_of_object ){
+                    $(this).animate({'opacity':'1'},400);
+                }
+            });
+            $('.fade-in3').each( function(i){
+                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_window = $(window).scrollTop() + $(window).height();
+                /* 3 */
+                if( bottom_of_window > bottom_of_object ){
+                    $(this).animate({'opacity':'1'},700);
+                }
+            });
+            $('.fade-in4').each( function(i){
+                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_window = $(window).scrollTop() + $(window).height();
+                /* 3 */
+                if( bottom_of_window > bottom_of_object ){
+                    $(this).animate({'opacity':'1'},1000);
                 }
             });
             $('.fade-in-card').each( function(i){

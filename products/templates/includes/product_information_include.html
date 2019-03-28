@@ -101,24 +101,23 @@
         </div>
         {% if isRegistered == True%}
         <div class="col-md-4 col-xs-12">
-            <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
-               class="btn btn-primary btn-block"
-               role="button"
-               disabled="disabled"
-               style="margin:5px;"
-            >
+            <button
+                class="btn btn-primary btn-block"
+                id="add_favorite"
+                role="button"
+                style="margin:5px;">
                 <span class="glyphicon glyphicon glyphicon-heart" aria-hidden="true"></span> 관심상품
-            </a>
+            </button>
         </div>
         {% else %}
         <div class="col-md-4 col-xs-12">
-            <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
-               class="btn btn-primary btn-block"
-               role="button"
-               style="margin:5px;"
-            >
+            <button
+                class="btn btn-primary btn-block"
+                id="add_favorite"
+                role="button"
+                style="margin:5px;">
                 <span class="glyphicon glyphicon glyphicon-heart-empty" aria-hidden="true"></span> 관심상품
-            </a>
+            </button>
         </div>
         {% endif %}
         <div class="col-md-4 col-xs-12">

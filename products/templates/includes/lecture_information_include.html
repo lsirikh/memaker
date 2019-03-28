@@ -87,19 +87,21 @@
 
     <div class="section row ">
         <div class="col-md-offset-3 col-md-6 col-xs-12">
+            <!--href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"-->
             {% if isRegistered == True%}
-            <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
-               class="btn btn-primary btn-block"
-               role="button"
-               disabled="disabled">
+            <button
+                class="btn btn-primary btn-block" id="add_favorite"
+                role="button"
+                disabled="disabled">
                 <span class="glyphicon glyphicon glyphicon-heart" aria-hidden="true"></span> 관심강의
-            </a>
+            </button>
             {% else %}
-            <a href="{% url 'products:content_information_favorite_add' content_slug=content.slug %}"
-               class="btn btn-primary btn-block"
-               role="button">
+            <button
+                class="btn btn-primary btn-block"
+                id="add_favorite"
+                role="button">
                 <span class="glyphicon glyphicon glyphicon-heart-empty" aria-hidden="true"></span> 관심강의
-            </a>
+            </button>
             {% endif %}
         </div>
     </div>
