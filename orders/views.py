@@ -656,28 +656,42 @@ def order_create(request):
 def order_confirm(request):
     user = auth.get_user(request)
 
+    confirm = ''
+    result = False
+    msg = ''
+
 
     print("order_confirm executed!")
-    merchant_uid=request.POST.get('merchant_uid')
-    order = Order.objects.get(merchant_uid=merchant_uid)
-    order.confirm ='002'
-    order.save()
-    print(order.confirm)
-    print("Product no.{} is confirmed to {}".format(merchant_uid, order.confirm))
+    try:
+        merchant_uid=request.POST.get('merchant_uid')
+        order = Order.objects.get(merchant_uid=merchant_uid)
+        order.confirm ='002'
+        order.save()
 
-    # ('001', '미정'),
-    # ('002', '확정'),
-    # ('003', '취소'),
-    if order.confirm == '001':
-        confirm = '미정'
-    elif order.confirm == '002':
-        confirm = '확정'
-    elif order.confirm == '003':
-        confirm = '취소'
+        print(order.confirm)
+        print("Product no.{} is confirmed to {}".format(merchant_uid, order.confirm))
+
+        # ('001', '미정'),
+        # ('002', '확정'),
+        # ('003', '취소'),
+        if order.confirm == '001':
+            confirm = '미정'
+        elif order.confirm == '002':
+            confirm = '확정'
+        elif order.confirm == '003':
+            confirm = '취소'
+        msg='confirm decision commit succeeded.'
+        result = True
+    except:
+        print('error 발생')
+        msg = 'confirm decision commit failed.'
+
 
 
     context = {
                 'confirm': confirm,
+                'result': result,
+                'msg': msg,
     }
 
     return HttpResponse(json.dumps(context), content_type="application/json")
@@ -688,6 +702,8 @@ def order_cancel(request):
     context = {}
 
     confirm=''
+    result=False
+    msg=''
 
     if request.method == 'POST':
 
@@ -734,9 +750,12 @@ def order_cancel(request):
             payment = client.find_payment(merchant_uid=merchant_uid)
             print('주문 취소를 위해 호출한 payment의 정보 : {}'.format(payment))
 
+
+            msg='validation was checked.'
+
+
             #아임포트 API를 활용한 취소 처리
             #확인을 위한 변수 Boolean 설정
-            cancel_success = False
             try:
                 #취소 작업은 반드시, 결제 상태가 '결제완료(paid)' 상태로 되어있을 때,
                 if payment['status'] == 'paid':
@@ -768,12 +787,12 @@ def order_cancel(request):
                 elif order.confirm == '003':
                     confirm = '취소'
 
-                cancel_success= True
+                result= True
             except:
                 print("############결제 취소 실패#############")
 
 
-            if cancel_success:
+            if result:
                 ########################아임포트 정보 갱신##########################
                 importInfo.amount = payment['amount']
                 importInfo.apply_num = payment['apply_num']
@@ -831,6 +850,7 @@ def order_cancel(request):
                 importInfo.save()
                 order.save()
                 order_cancel.save()
+                msg = "The order({}) was successfully cancelled.".format(order_cancel.merchant_uid)
                 print("order_cancel : {}".format(order_cancel))
 
 
@@ -839,7 +859,8 @@ def order_cancel(request):
 
             context = {
                 'confirm': confirm,
-                'result' : cancel_success,
+                'result' : result,
+                'msg' : msg,
             }
 
     else:
@@ -847,6 +868,8 @@ def order_cancel(request):
             context = {
                 'cancelForm' : OrderCancelForm(),
                 'confirm': confirm,
+                'result' : result,
+                'msg': msg,
             }
 
     print(context)

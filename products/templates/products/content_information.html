@@ -205,7 +205,7 @@
                 $('#direct_purchase_modal').children('.modal-dialog').children('.modal-content').children('.modal-body').html('<div class="me_title5_nopadding" align="center">\'{{content.title}}\'을(를) '+quantity+'개 구매하시겠습니까?</div>');
                 $('#direct_purchase_modal').modal({
                     show: 'true'
-                })
+                });
                 //if (confirm()){
                 //    window.location.href = "/orders/{{content.pk}}/content/"+quantity+"/create/";
                 //}
@@ -218,7 +218,7 @@
             $('#favorite_modal').children('.modal-dialog').children('.modal-content').children('.modal-body').html('<div class="me_title5_nopadding" align="center">\'{{content.title}}\'을(를) 관심 콘텐츠 설정을 변경하시겠습니까?</div>');
             $('#favorite_modal').modal({
                 show: 'true'
-            })
+            });
 
         });
     });
@@ -247,7 +247,7 @@
                 //$('#login_request_modal').children('.modal-dialog').children('.modal-content').children('.modal-body').html('<div class="me_title5_nopadding" align="center">해당 서비스는 로그인이 필요합니다. 로그인(또는 회원가입)을 진행해주세요.</div>');
                 //$('#login_request_modal').modal({
                 //    show: 'true'
-                //})
+                //});
             },
         }).done(function (data) {
             //동적 결과물 제시 페이지 request 없음
@@ -265,12 +265,7 @@
         window.location.href = "/orders/{{content.pk}}/content/"+quantity+"/create/";
     }
 
-    function cartCheckShow(){
-        $('#cart_check_modal').children('.modal-dialog').children('.modal-content').children('.modal-body').html('<div class="me_title5_nopadding" align="center">장바구니로 이동하여 확인하시겠습니까?</div>');
-        $('#cart_check_modal').modal({
-            show: 'true'
-        })
-    }
+
 
     $(document).on('submit', '#cart_quantity_form', function(e){
         e.preventDefault();
@@ -286,13 +281,20 @@
             $('#cart_in_modal').children('.modal-dialog').children('.modal-content').children('.modal-body').html('<div class="me_title5_nopadding" align="center">주문하신 상품 \'{{content.title}}\'을(를) '+data['quantity']+'개 카트에 담으시겠습니까?</div>');
             $('#cart_in_modal').modal({
                 show:'true'
-            })
+            });
             //if (confirm('장바구니에 담으시겠습니까?')){
             //}
 
         }
 
     });
+
+    function cartCheckShow(){
+        $('#cart_check_modal').children('.modal-dialog').children('.modal-content').children('.modal-body').html('<div class="me_title5_nopadding" align="center">장바구니로 이동하여 확인하시겠습니까?</div>');
+        $('#cart_check_modal').modal({
+            show: 'true'
+        })
+    }
 
     function cartInsert(){
         <!--//get form action url-->
@@ -317,9 +319,7 @@
                 //}
 
                 // 모달팝업으로 이동 여부 확인
-                $('#cart_check_modal').modal({
-                    show: 'true'
-                })
+                cartCheckShow();
 
                 
             },
