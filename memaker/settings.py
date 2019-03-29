@@ -24,16 +24,34 @@ with open(os.path.join(BASE_DIR, 'static', 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
+#DEBUG = False
 DEBUG = True
 
-# For test, this comment needs to be discarded.
-ALLOWED_HOSTS = ['127.0.0.1']
-# For operational, this comment needs to be discarded.
-# ALLOWED_HOSTS = ['memaker.co.kr','www.memaker.co.kr',
-#                  'openfingers.com','www.openfingers.com',
-#                  'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
+# 세션 쿠키에 보안 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키는 "보안"으로 표시됩니다. 즉, 브라우저는 HTTPS 연결에서만 쿠키가 전송되도록 할 수 있습니다.
+# 이 설정을 해제하는 것은 좋은 생각이 아닙니다. 공격자가 패킷 스니퍼로 암호화되지 않은 세션 쿠키를 캡처하여 쿠키를 사용하여 사용자의 세션을 가로 챌 수 있기 때문입니다.
+SESSION_COOKIE_SECURE=True
+# CSRF 쿠키에 대해 안전한 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키가 "안전"으로 표시되어 브라우저가 쿠키가 HTTPS 연결로만 전송되도록 할 수 있습니다.
+CSRF_COOKIE_SECURE=True
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+PREPEND_WWW = True
+BASE_URL = "https://www.memaker.co.kr"
 
+#?
+#SECURE_BROWSER_XSS_FILTER=True
+# ??
+#SECURE_CONTENT_TYPE_NOSNIFF=True
+# ??
+#X_FRAME_OPTIONS='DENY'
+# SECURE_HSTS_SECONDS = ['openfingers.com']
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = ['openfingers.com']
+
+# For test, this comment needs to be discarded.
+# ALLOWED_HOSTS = ['127.0.0.1']
+# For operational, this comment needs to be discarded.
+ALLOWED_HOSTS = ['memaker.co.kr','www.memaker.co.kr',
+                 'openfingers.com','www.openfingers.com',
+                 'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
 
 
 # Application definition
@@ -192,7 +210,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = 'staticfiles'
-STATIC_ROOT = os.path.join(ROOT_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(ROOT_DIR, 'memaker','staticfiles')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
