@@ -8,18 +8,18 @@
 <div class="panel panel-success">
     <div class="panel-heading">
         <div class="row" style="vertical-align:middle;" >
-            <table  style="width:100%">
+            <table  style="width:100%" class="board-content-title-table">
                 <tr>
-                    <td rowspan="2" width="80" style="text-align:left;padding:0px 5px 0px 5px;"><img class="img-rounded profile" src="{{topic.user.userprofile.thumbnail.url}}"></td>
-                    <td colspan="2" style="text-align:left;padding:0px 5px 0px 0px;">{{topic}}</td>
+                    <td rowspan="2" width="80" style="text-align:left;padding:0px 10px 0px 10px;"><img class="img-rounded profile" src="{{topic.user.userprofile.thumbnail.url}}"></td>
+                    <td colspan="2" style="text-align:left;padding:0px 5px 0px 5px;">{{topic}}</td>
                 </tr>
                 <tr>
-                    <td style="text-align:left;padding:0px 5px 0px 0px;">
+                    <td style="text-align:left;padding:0px 10px 0px 5px;">
                         <strong>{{topic.user}}</strong>&nbsp;
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style="vertical-align:middle;"></span>
-                        <small>{{topic.views}}</small>
                     </td>
-                    <td style="text-align:right;padding:0px 5px 0px 0px;">
+                    <td style="text-align:right;padding:0px 10px 0px 0px;">
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style="vertical-align:middle;"></span>
+                        <small>{{topic.views}}&nbsp;&nbsp;</small>
                         {% if topic.updated_at|date:'d m y h:i:s' == topic.created_at|date:'d m y h:i:s' %}
                         <span style="vertical-align:middle;" class="glyphicon glyphicon-time" aria-hidden="true" ></span>
                         <small >{{topic.created_at|date:'y-m-d H:i'}}</small>
