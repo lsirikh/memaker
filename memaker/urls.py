@@ -51,10 +51,15 @@ sitemaps = {
 
 app_name = 'memaker'
 urlpatterns = [
-                  path('admin/', admin.site.urls),
+                  path('memaker-admin/', admin.site.urls),
                   path('_nested_admin/', include('nested_admin.urls')),
 
                   path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
+                  path('google2cea96b33d0c202f.html/', views.GoogleView.as_view()),
+                  path('google640e077116d2555d.html/', views.GoogleView2nd.as_view()),
+                  path('navere8566efa5b506b61efd740303a95e363.html/', views.NaverView.as_view()),
+                  path('robots.txt/', include('robots.urls')),
+
 
                   path('ckeditor/', include('ckeditor_uploader.urls')),
                   # path('ckeditor/upload/', uploader_views.upload, name='ckeditor_upload'),
@@ -62,10 +67,7 @@ urlpatterns = [
 
                   #    re_path(r'^r/$', views.login_redirect, name='login_redirect'),
                   path('', views.HomeView.as_view(), name='home'),
-                  path('google2cea96b33d0c202f.html/', views.GoogleView.as_view()),
-                  path('google640e077116d2555d.html/', views.GoogleView2nd.as_view()),
-                  path('navere8566efa5b506b61efd740303a95e363.html/', views.NaverView.as_view()),
-                  path('robots.txt/', views.NaverRobot.as_view()),
+
                   path('polls/', include('polls.urls')),
                   path('intro/', include('intro.urls')),
                   path('products/', include('products.urls')),
