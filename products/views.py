@@ -453,6 +453,7 @@ class ContentInformationView(DetailView):
         category_list = Category.objects.filter(section=category.section)
 
         content = self.object
+
         cart_content_form = CartAddContentForm() #장바구니를 위한 Form 인스턴스 추가
 
         #content.file.first().file_extension()
@@ -471,7 +472,7 @@ class ContentInformationView(DetailView):
         kwargs['content_list'] = Content.objects.all()
         kwargs['category'] = category
         kwargs['category_list'] = category_list
-        kwargs['cart_content_form'] = cart_content_form
+        kwargs['cart_content_form'] = cart_content_form  #장바구니를 위한 Form kwargs
         if self.object.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
@@ -552,6 +553,9 @@ class ContentReviewView(ListView):
         kwargs['content'] = self.content
         kwargs['category'] = category
         kwargs['category_list'] = category_list
+
+        cart_content_form = CartAddContentForm()  # 장바구니를 위한 Form 인스턴스 추가
+        kwargs['cart_content_form'] = cart_content_form  # 장바구니를 위한 Form kwargs
         if self.content.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
@@ -639,6 +643,10 @@ class ContentVideoView(ListView):
         kwargs['video'] = self.video
         kwargs['category'] = category
         kwargs['category_list'] = category_list
+
+        cart_content_form = CartAddContentForm()  # 장바구니를 위한 Form 인스턴스 추가
+        kwargs['cart_content_form'] = cart_content_form  # 장바구니를 위한 Form kwargs
+
         if self.content.category.section == '강좌':
             print("강좌선택")
             kwargs['selected_base_page'] = 'base_lectures.html'
@@ -658,6 +666,8 @@ class ContentVideoView(ListView):
         return queryset
 
 
+
+#AJAX로 view변환 필요
 
 @login_required(login_url="accounts:login")
 def content_review_add_view(request, content_slug):
@@ -686,6 +696,8 @@ def content_review_add_view(request, content_slug):
             selected_base_page = 'base_products.html'
         form = AppraisalForm()
 
+    cart_content_form = CartAddContentForm()  # 장바구니를 위한 Form 인스턴스 추가
+
     return render(request, 'products/content_review_add.html',
                   {'content': content,
                    'appraisal_list': appraisal_list,
@@ -693,6 +705,7 @@ def content_review_add_view(request, content_slug):
                    'category': category,
                    'form': form,
                    'selected_base_page': selected_base_page,
+                   'cart_content_form': cart_content_form, # 장바구니를 위한 Form kwargs
                    })
 
 
@@ -729,7 +742,6 @@ def video_add_reply_view(request, content_slug, pk_video):
     video = get_object_or_404(Video, pk=pk_video)
     reply_list = ReplyChapter.objects.filter(video=video).order_by('-order')
 
-
     if request.method == 'POST':
         form = ReplyChapterForm(request.POST)
         if form.is_valid():
@@ -764,6 +776,7 @@ def video_add_reply_view(request, content_slug, pk_video):
             print("상품선택")
             selected_base_page = 'base_products.html'
 
+    cart_content_form = CartAddContentForm()  # 장바구니를 위한 Form 인스턴스 추가
 
     return render(request, 'products/content_video_reply.html',
                   {'content': content,
@@ -774,6 +787,7 @@ def video_add_reply_view(request, content_slug, pk_video):
                    'category': category,
                    'isRegistered': isRegistered,
                    'selected_base_page': selected_base_page,
+                   'cart_content_form': cart_content_form,  # 장바구니를 위한 Form kwargs
                    })
 
 
@@ -948,6 +962,7 @@ def video_edit_reply_view(request, content_slug, pk_video, pk_reply):
             print("상품선택")
             selected_base_page = 'base_products.html'
 
+    cart_content_form = CartAddContentForm()  # 장바구니를 위한 Form 인스턴스 추가
     return render(request, 'products/content_video_reply_edit.html',
                   {'content': content,
                    'video': video,
@@ -963,6 +978,7 @@ def video_edit_reply_view(request, content_slug, pk_video, pk_reply):
                    'has_previous_index': has_previous_index,
                    'isRegistered': isRegistered,
                    'selected_base_page': selected_base_page,
+                   'cart_content_form': cart_content_form,  # 장바구니를 위한 Form kwargs
                    }
                   )
 
@@ -1099,6 +1115,7 @@ def video_reply_to_reply_view(request, content_slug, pk_video, pk_reply):
             print("상품선택")
             selected_base_page = 'base_products.html'
 
+    cart_content_form = CartAddContentForm()  # 장바구니를 위한 Form 인스턴스 추가
     return render(request, 'products/content_video_reply_to_reply.html',
                   {'content': content,
                    'video': video,
@@ -1114,6 +1131,7 @@ def video_reply_to_reply_view(request, content_slug, pk_video, pk_reply):
                    'has_previous_index': has_previous_index,
                    'isRegistered': isRegistered,
                    'selected_base_page': selected_base_page,
+                   'cart_content_form': cart_content_form,  # 장바구니를 위한 Form kwargs
                    }
                   )
 
