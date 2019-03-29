@@ -45,7 +45,9 @@ X_FRAME_OPTIONS= 'DENY'
 # For test, this comment needs to be discarded.
 # ALLOWED_HOSTS = ['127.0.0.1']
 # For operational, this comment needs to be discarded.
-ALLOWED_HOSTS = ['memaker.co.kr','www.memaker.co.kr',
+ALLOWED_HOSTS = [
+                 '*',
+                 'memaker.co.kr','www.memaker.co.kr',
                  'openfingers.com','www.openfingers.com',
                  'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
 
