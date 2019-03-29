@@ -25,7 +25,7 @@ with open(os.path.join(BASE_DIR, 'static', 'secret_key.txt')) as f:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-#DEBUG = True
+# DEBUG = True
 
 # 세션 쿠키에 보안 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키는 "보안"으로 표시됩니다. 즉, 브라우저는 HTTPS 연결에서만 쿠키가 전송되도록 할 수 있습니다.
 # 이 설정을 해제하는 것은 좋은 생각이 아닙니다. 공격자가 패킷 스니퍼로 암호화되지 않은 세션 쿠키를 캡처하여 쿠키를 사용하여 사용자의 세션을 가로 챌 수 있기 때문입니다.
@@ -35,19 +35,15 @@ CSRF_COOKIE_SECURE=True
 SECURE_SSL_REDIRECT = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 PREPEND_WWW = True
-BASE_URL = "https://www.memaker.co.kr"
-
-#?
-#SECURE_BROWSER_XSS_FILTER=True
-# ??
-#SECURE_CONTENT_TYPE_NOSNIFF=True
-# ??
-#X_FRAME_OPTIONS='DENY'
-# SECURE_HSTS_SECONDS = ['openfingers.com']
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = ['openfingers.com']
-
+# BASE_URL = "https://www.memaker.co.kr"
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_HSTS_SECONDS = 86400  # 1 day
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+X_FRAME_OPTIONS= 'DENY'
 # For test, this comment needs to be discarded.
-#ALLOWED_HOSTS = ['127.0.0.1']
+# ALLOWED_HOSTS = ['127.0.0.1']
 # For operational, this comment needs to be discarded.
 ALLOWED_HOSTS = ['memaker.co.kr','www.memaker.co.kr',
                  'openfingers.com','www.openfingers.com',
@@ -88,7 +84,12 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig', #주문내역 처리 앱
 ]
 
+#Sitemap 세팅이 바뀌면 반드시 아이디 확인한다. python mamage.py shell
+#python manage.py  shell
+#from django.contrib.sites.models import Site
+#print Site.objects.get(name='example.com').id
 SITE_ID = 1
+
 
 ###################################CK Editor Setting################################################
 

@@ -52,7 +52,7 @@ sitemaps = {
 app_name = 'memaker'
 urlpatterns = [
                   path('memaker-admin/', admin.site.urls),
-                  path('_nested_admin/', include('nested_admin.urls')),
+                  path('nested_admin/', include('nested_admin.urls')),
 
                   path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
                   path('google2cea96b33d0c202f.html/', views.GoogleView.as_view()),

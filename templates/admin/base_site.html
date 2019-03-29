@@ -5,5 +5,10 @@
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">ME:MAKER 사이트 운영자 페이지</a></h1>
 {% endblock %}
+{% block extrahead %}
+<!-- https에 content security policy때문에 설치를 해준 코드-->
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
+
+{% endblock %}
 {% block nav-global %}{% endblock %}
