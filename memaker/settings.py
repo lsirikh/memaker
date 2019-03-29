@@ -24,8 +24,8 @@ with open(os.path.join(BASE_DIR, 'static', 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 
 # 세션 쿠키에 보안 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키는 "보안"으로 표시됩니다. 즉, 브라우저는 HTTPS 연결에서만 쿠키가 전송되도록 할 수 있습니다.
 # 이 설정을 해제하는 것은 좋은 생각이 아닙니다. 공격자가 패킷 스니퍼로 암호화되지 않은 세션 쿠키를 캡처하여 쿠키를 사용하여 사용자의 세션을 가로 챌 수 있기 때문입니다.
@@ -47,7 +47,7 @@ BASE_URL = "https://www.memaker.co.kr"
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = ['openfingers.com']
 
 # For test, this comment needs to be discarded.
-# ALLOWED_HOSTS = ['127.0.0.1']
+#ALLOWED_HOSTS = ['127.0.0.1']
 # For operational, this comment needs to be discarded.
 ALLOWED_HOSTS = ['memaker.co.kr','www.memaker.co.kr',
                  'openfingers.com','www.openfingers.com',
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'robots', # 추가 20190329 https://godjango.com/23-robots-and-sitemaps/
 
     'nested_admin',  # 추가 20190102
 
@@ -228,6 +229,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+import logging.config
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -239,7 +242,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'memaker.log'),
             'formatter': 'verbose'
@@ -247,17 +250,26 @@ LOGGING = {
 
     },
     'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+
+        },
         'lectures': {
             'handlers': ['file'],
-            'level': 'DEBUG'
+            'level': 'INFO'
+        },
+        'sitemapLogger': {
+            'handlers': ['file'],
+            'level': 'INFO'
         },
         'intro': {
             'handlers': ['file'],
-            'level': 'DEBUG'
+            'level': 'INFO'
         },
         'products': {
             'handlers': ['file'],
-            'level': 'DEBUG'
+            'level': 'INFO'
         },
         'polls': {
             'handlers': ['file'],

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse, get_object_or_404
+from django.http import HttpResponseNotFound
 from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -68,7 +69,6 @@ import os
 class AccountsIndexView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/dash_board.html'
 
-
     def get_context_data(self, **kwargs):  # get_context_data method 정의시, super() method 반드시 호출!
         context = super().get_context_data(**kwargs)
         #context['model_list'] = UserProfile.objects.all()
@@ -109,14 +109,15 @@ def index_view(request):
 
 def login_view(request):
     print("login view execute")
+    current_site = ''
     try:
         # 테스트시 오류 발생
-        current_site = Site.objects.get(name='memaker.co.kr')
-        #current_site = get_current_site(request)
+        current_site = get_current_site(request)
         print("current_site : ", current_site)
         print("current_site.domain : ", current_site.domain)
     except:
-        print("current_site 할당 실패!!!")
+        current_site = Site.objects.get(name='www.memaker.co.kr')
+        print("current_site 할당 실패 -> {}로 강제할당".format(current_site))
 
     ################로그인 된 경우 redirect######################
     if auth.get_user(request).is_authenticated:
@@ -129,7 +130,12 @@ def login_view(request):
 
 
     if request.method == 'POST':
-        form = LoginForm(data=request.POST)
+        form =''
+
+        try:
+            form = LoginForm(data=request.POST)
+        except:
+            return HttpResponseNotFound("없는 페이지 입니다.")
 
         if form.is_valid():
             print("form is valid")
@@ -326,8 +332,18 @@ def register_view(request):
     messages = ''
 
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        form_profile = RegistrationProfileForm(request.POST)
+        form=''
+        form_profile=''
+
+        try:
+            form = RegistrationForm(request.POST)
+        except:
+            return HttpResponseNotFound("없는 페이지 입니다.")
+
+        try:
+            form_profile = RegistrationProfileForm(request.POST)
+        except:
+            return HttpResponseNotFound("없는 페이지 입니다.")
 
         ##################테스트 프린팅#################
         #username = request.POST.get('username')
@@ -428,6 +444,14 @@ def register_view(request):
                                    'form_profile': form_profile,
                                    'messages': messages,
                                    })
+    # return render(request, 'https://memaker.co.kr/accounts/login/',  {'form': form,
+    #                                'form_profile': form_profile,
+    #                                'messages': messages,
+    #                                })
+    # return render(request, '/accounts/login/',  {'form': form,
+    #                                'form_profile': form_profile,
+    #                                'messages': messages,
+    #                                })
 
 def account_activation_sent(request):
     ################로그인 된 경우 redirect######################

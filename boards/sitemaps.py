@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 class StaticBoardsSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return ['index']
@@ -15,6 +16,7 @@ class StaticBoardsSitemap(Sitemap):
 class BoardSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return Board.objects.all()
@@ -25,6 +27,7 @@ class BoardSitemap(Sitemap):
 class TopicSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return Topic.objects.all()

@@ -5,6 +5,7 @@ from products.models import Category, Content, Appraisal, Video
 class StaticProductsSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return ['product_list', 'lecture_list']
@@ -16,6 +17,7 @@ class StaticProductsSitemap(Sitemap):
 class CategorySitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return Category.objects.all()
@@ -26,6 +28,7 @@ class CategorySitemap(Sitemap):
 class ContentSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return Content.objects.all()
@@ -36,6 +39,7 @@ class ContentSitemap(Sitemap):
 class VideoSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'
+    protocol = 'https'
 
     def items(self):
         return Video.objects.all()

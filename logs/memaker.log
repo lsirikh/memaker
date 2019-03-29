@@ -1,2 +1,49 @@
 [11/09/18/November/2018 14:33:45] DEBUG [polls.views:46] vote().question_id: 2
 [11/09/18/November/2018 14:34:13] DEBUG [polls.views:46] vote().question_id: 1
+[03/29/19/March/2019 13:20:25] INFO [homeLogger:15] HomeView Start
+[03/29/19/March/2019 13:20:25] INFO [homeLogger:15] HomeView Start
+[03/29/19/March/2019 13:21:42] INFO [homeLogger:15] HomeView Start
+[03/29/19/March/2019 13:29:09] INFO [homeLogger:16] HomeView Start
+[03/29/19/March/2019 13:37:14] INFO [django.server:124] "GET /sitemap.xml HTTP/1.1" 200 19568
+[03/29/19/March/2019 13:44:29] INFO [django.server:124] "GET / HTTP/1.1" 200 46428
+[03/29/19/March/2019 13:44:33] INFO [django.server:124] "GET /accounts/logout/ HTTP/1.1" 302 0
+[03/29/19/March/2019 13:44:33] INFO [django.server:124] "GET / HTTP/1.1" 200 46348
+[03/29/19/March/2019 13:44:34] INFO [django.server:124] "GET /accounts/login/?next=/ HTTP/1.1" 200 21964
+[03/29/19/March/2019 13:44:46] INFO [django.server:124] "GET /accounts/login/?next=/ HTTP/1.1" 200 21964
+[03/29/19/March/2019 13:45:31] INFO [django.server:124] "GET /accounts/login/?next=/ HTTP/1.1" 200 21964
+[03/29/19/March/2019 13:50:03] ERROR [django.request:228] Internal Server Error: /accounts/register/
+Traceback (most recent call last):
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/core/handlers/base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/core/handlers/base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lsirikh/DjangoProject_for_AWS/memaker/accounts/views.py", line 453, in register_view
+    'messages': messages,
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: https://memaker.co.kr/accounts/login/
+[03/29/19/March/2019 13:50:03] ERROR [django.server:124] "GET /accounts/register/ HTTP/1.1" 500 100947
+[03/29/19/March/2019 13:52:31] ERROR [django.request:228] Internal Server Error: /accounts/register/
+Traceback (most recent call last):
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/core/handlers/base.py", line 126, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/core/handlers/base.py", line 124, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lsirikh/DjangoProject_for_AWS/memaker/accounts/views.py", line 453, in register_view
+    'messages': messages,
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/lsirikh/Env/memaker/lib/python3.6/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: /accounts/login/
+[03/29/19/March/2019 13:52:31] ERROR [django.server:124] "GET /accounts/register/ HTTP/1.1" 500 93758
