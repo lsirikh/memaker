@@ -437,7 +437,11 @@ def register_view(request):
         form_profile = RegistrationProfileForm()
 
 
-    # return render(request, 'accounts/register_form.html',  {'form': form,
+    return render(request, 'accounts/register_form.html',  {'form': form,
+                                   'form_profile': form_profile,
+                                   'messages': messages,
+                                   })
+    # return render(request, 'https://memaker.co.kr/accounts/login/',  {'form': form,
     #                                'form_profile': form_profile,
     #                                'messages': messages,
     #                                })
@@ -445,10 +449,6 @@ def register_view(request):
     #                                'form_profile': form_profile,
     #                                'messages': messages,
     #                                })
-    return render(request, 'https://memaker.co.kr/accounts/login/',  {'form': form,
-                                   'form_profile': form_profile,
-                                   'messages': messages,
-                                   })
 
 def account_activation_sent(request):
     ################로그인 된 경우 redirect######################
