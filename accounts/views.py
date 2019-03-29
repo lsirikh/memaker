@@ -113,9 +113,11 @@ def login_view(request):
     try:
         # 테스트시 오류 발생
         current_site = get_current_site(request)
+        print("current_site : ", current_site)
+        print("current_site.domain : ", current_site.domain)
     except:
+        current_site = Site.objects.get(name='www.memaker.co.kr')
         print("current_site 할당 실패!!!")
-        current_site = Site.objects.get(name='memaker.co.kr')
 
     ################로그인 된 경우 redirect######################
     if auth.get_user(request).is_authenticated:
@@ -128,11 +130,7 @@ def login_view(request):
 
 
     if request.method == 'POST':
-        form=''
-        try:
-            form = LoginForm(data=request.POST)
-        except:
-            return HttpResponseNotFound('존재하지 않습니다.')
+        form = LoginForm(data=request.POST)
 
         if form.is_valid():
             print("form is valid")
@@ -441,14 +439,6 @@ def register_view(request):
                                    'form_profile': form_profile,
                                    'messages': messages,
                                    })
-    # return render(request, 'https://memaker.co.kr/accounts/login/',  {'form': form,
-    #                                'form_profile': form_profile,
-    #                                'messages': messages,
-    #                                })
-    # return render(request, 'https://memaker.co.kr/accounts/login/',  {'form': form,
-    #                                'form_profile': form_profile,
-    #                                'messages': messages,
-    #                                })
 
 def account_activation_sent(request):
     ################로그인 된 경우 redirect######################

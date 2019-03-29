@@ -434,7 +434,7 @@
             $.ajax({
                 type:"GET",
                 dataType : "json",
-                url:"http://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice,
+                url:"https://info.sweettracker.co.kr/api/v1/trackingInfo?t_key="+myKey+"&t_code="+t_code+"&t_invoice="+t_invoice,
                 success:function(data){
                     console.log(data);
                     var myInvoiceData = "";
@@ -457,6 +457,9 @@
                         myInvoiceData += ('<th>'+data.invoiceNo+'</td>');
                         myInvoiceData += ('</tr>');
                         myInvoiceData += ('<tr>');
+                        myInvoiceData += ('<th style="color:white;font-weight:bold;background:#AB95D4;">'+"받는사람"+'</td>');
+                        myInvoiceData += ('<th>'+data.receiverName+'</td>');
+                        myInvoiceData += ('</tr>');
                         myInvoiceData += ('<th style="color:white;font-weight:bold;background:#AB95D4;">'+"주소지"+'</td>');
                         myInvoiceData += ('<th>'+data.receiverAddr+'</td>');
                         myInvoiceData += ('</tr>');
