@@ -69,6 +69,7 @@ import os
 class AccountsIndexView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/dash_board.html'
 
+
     def get_context_data(self, **kwargs):  # get_context_data method 정의시, super() method 반드시 호출!
         context = super().get_context_data(**kwargs)
         #context['model_list'] = UserProfile.objects.all()
@@ -109,15 +110,12 @@ def index_view(request):
 
 def login_view(request):
     print("login view execute")
-    current_site = ''
     try:
         # 테스트시 오류 발생
         current_site = get_current_site(request)
-        print("current_site : ", current_site)
-        print("current_site.domain : ", current_site.domain)
     except:
-        current_site = Site.objects.get(name='www.memaker.co.kr')
-        print("current_site 할당 실패 -> {}로 강제할당".format(current_site))
+        print("current_site 할당 실패!!!")
+        current_site = Site.objects.get(name='memaker.co.kr')
 
     ################로그인 된 경우 redirect######################
     if auth.get_user(request).is_authenticated:
@@ -130,12 +128,11 @@ def login_view(request):
 
 
     if request.method == 'POST':
-        form =''
-
+        form=''
         try:
             form = LoginForm(data=request.POST)
         except:
-            return HttpResponseNotFound("없는 페이지 입니다.")
+            return HttpResponseNotFound('존재하지 않습니다.')
 
         if form.is_valid():
             print("form is valid")
@@ -440,18 +437,18 @@ def register_view(request):
         form_profile = RegistrationProfileForm()
 
 
-    return render(request, 'accounts/register_form.html',  {'form': form,
-                                   'form_profile': form_profile,
-                                   'messages': messages,
-                                   })
+    # return render(request, 'accounts/register_form.html',  {'form': form,
+    #                                'form_profile': form_profile,
+    #                                'messages': messages,
+    #                                })
     # return render(request, 'https://memaker.co.kr/accounts/login/',  {'form': form,
     #                                'form_profile': form_profile,
     #                                'messages': messages,
     #                                })
-    # return render(request, '/accounts/login/',  {'form': form,
-    #                                'form_profile': form_profile,
-    #                                'messages': messages,
-    #                                })
+    return render(request, 'https://memaker.co.kr/accounts/login/',  {'form': form,
+                                   'form_profile': form_profile,
+                                   'messages': messages,
+                                   })
 
 def account_activation_sent(request):
     ################로그인 된 경우 redirect######################
