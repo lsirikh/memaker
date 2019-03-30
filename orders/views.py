@@ -339,18 +339,45 @@ def order_initial_processing(request):
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         print("form was executed as the way of POST")
+
+        #merchant_uid를 통해서 결제 유효성 확인
+        #1. Order DB에 imp_uid가 0인(즉, 결제가 올바르게 진행되지 않은) 데이터가 있는지 확인하고 있다면, 삭제
+        #2. 결제창이 의도대로 작동하지 않아 imp_uid를 부여받고 결제 결과를 알지 못하는 경우
+        ####2-1. 그 상태에서 제 결제 시도를 할 경우 : 기존의 Order DB를 삭제하고 다시 진행
+        ####2-2. 그 상태로 다른 페이지 리다이렉션을 할 경우 : Celery를 활용하여 1일 1회 삭제 작업해주기(보류)
+
+        merchant_uid = request.POST.get('merchant_uid')
+        print('merchant_uid : ', merchant_uid)
+
+        #1. Order DB에 imp_uid가 0인(즉, 결제가 올바르게 진행되지 않은) 데이터가 있는지 확인하고 있다면, 삭제
+        try:
+            #imp_uid가 0인 Order DB의 정보를 list로 만들고 하나씩 삭제 진행
+            order_list=user.order.filter(imp_uid='0')
+            for order in order_list:
+                print('오류: imp_uid가 0인 Order DB({})의 내용이 발견되어 삭제합니다.'.format(order))
+                order.delete()
+
+        except :
+            print('통과: imp_uid가 0인 Order DB의 내용이 없습니다.'.format(merchant_uid))
+
+        # 2. 결제창이 의도대로 작동하지 않아 imp_uid를 부여받고 결제 결과를 알지 못하는 경우
+        ####2-1. 그 상태에서 제 결제 시도를 할 경우 : 기존의 Order DB를 삭제하고 다시 진행
+        ####2-2. 그 상태로 다른 페이지 리다이렉션을 할 경우 : Celery를 활용하여 1일 1회 삭제 작업해주기(보류)
+        try:
+            #동일한 merchant_uid가 있고, imp_uid가 0이면 삭제 진행
+            order=Order.objects.get(merchant_uid=merchant_uid)
+            if order.imp_uid=='0' or order.imp_uid==0:
+                print('실패:Order DB에 등록된 merchant_uid({})입니다.'.format(merchant_uid))
+                order.delete()
+        except Order.DoesNotExist:
+            print('성공:Order DB에 등록되지 않은 merchant_uid({})입니다.'.format(merchant_uid))
+
+
+
+
         if form.is_valid():
-
-            # client = Iamporter(imp_key="1286359584086938",
-            #                    imp_secret="QLVYiaFsqw5L43jRxmHbk61Vvic1a211OX068FyycDkgHD8f0QqkWsgrKssVvuXjsXqACZ9ODu5k7dz8")
-
-            #############################PG사 및 import사의 DB가 반영될 것으로 예상되는 시간 딜레이##########################
-            time.sleep(0.3)
-
             #form data 가져오기
-
             method=form.cleaned_data.get('method')
-
             delivery_fee=form.cleaned_data.get('delivery_fee')# OrderDelivery에 사용
             note=form.cleaned_data.get('note')# OrderDelivery에 사용
             name=form.cleaned_data.get('name') #user_profile에 사용, OrderDelivery에 사용
@@ -361,10 +388,6 @@ def order_initial_processing(request):
             extraAddress=form.cleaned_data.get('extraAddress') #user_profile에 사용, OrderDelivery에 사용
             detailAddress=form.cleaned_data.get('detailAddress') #user_profile에 사용, OrderDelivery에 사용
             infoSave=form.cleaned_data.get('infoSave') #user_profile에 사용
-
-            merchant_uid = request.POST.get('merchant_uid')
-            print('merchant_uid : ', merchant_uid)
-
 
 
             def delivery_decide(x):
@@ -495,9 +518,6 @@ def order_initial_processing(request):
 
                 ############################################################################
 
-            # #################### launch asynchronous task(이메일)#########################
-            # order_created.delay(order.id)
-            # ############################################################################
 
             success = True
 
