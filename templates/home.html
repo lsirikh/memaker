@@ -259,7 +259,7 @@
 
     <!-- Three columns of text below the carousel -->
     <div class="row">
-        <div class="col-lg-3 fade-in1" align="center">
+        <div class="col-lg-3 fade-in1" align="center" id="fade_feature1">
             <img class="img-circle"
                  src="{% static 'img/mathematics_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -270,7 +270,7 @@
             </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3 fade-in2" align="center">
+        <div class="col-lg-3 fade-in2" align="center" id="fade_feature2">
             <img class="img-circle"
                  src="{% static 'img/science_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -281,7 +281,7 @@
             </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3 fade-in3" align="center">
+        <div class="col-lg-3 fade-in3" align="center" id="fade_feature3">
             <img class="img-circle"
                  src="{% static 'img/technology_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -292,7 +292,7 @@
             </small>
             <!--<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>-->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-3 fade-in4" align="center">
+        <div class="col-lg-3 fade-in4" align="center" id="fade_feature4">
             <img class="img-circle"
                  src="{% static 'img/engineering_memaker.png'%}"
                  alt="Generic placeholder image" width="140" height="140">
@@ -318,7 +318,7 @@
 
     <div class="row">
         {% for lecture in lecture_list %}
-        <div class="col-sm-6 col-md-4 fade-in-card" align="center">
+        <div class="col-sm-6 col-md-4 fade-in-card" align="center" id="fade_lecture{{forloop.counter}}">
             <div class="thumbnail">
                 <a href="{% url 'products:content_information' content_slug=lecture.slug %}" style="text-decoration:none; !important">
                     <img src="{{lecture.image.first.thumbnail.url}}" alt="...">
@@ -363,7 +363,7 @@
     </div>
     <div class="row">
         {% for product in product_list %}
-        <div class="col-sm-6 col-md-4 fade-in-card" align="center">
+        <div class="col-sm-6 col-md-4 fade-in-card" align="center" id="fade_product{{forloop.counter}}">
             <div class="thumbnail">
             <a href="{% url 'products:content_information' content_slug=product.slug %}" style="text-decoration:none; !important">
                 <img src="{{product.image.first.thumbnail.url}}" alt="...">
@@ -417,17 +417,17 @@
     </div>
 
     <div class="row container-fluid">
-        <div class="col-sm-12 col-md-12 fade-in-card" align="center">
+        <div class="col-sm-12 col-md-12 fade-in-card" align="center" id="fade_pic1">
             <br>
             <img src="{% static 'img/특징_인강.png'%}" alt="Responsive image"
                  class="img-responsive img-thumbnail col-sm-12 col-md-push-2 col-md-8">
         </div>
-        <div class="col-sm-12 col-md-12 fade-in-card" align="center">
+        <div class="col-sm-12 col-md-12 fade-in-card" align="center" id="fade_pic2">
             <br>
             <img src="{% static 'img/특징_보드.png'%}" alt="Responsive image"
                  class="img-responsive img-thumbnail col-sm-12 col-md-push-2 col-md-8">
         </div>
-        <div class="col-sm-12 col-md-12 fade-in-card" align="center">
+        <div class="col-sm-12 col-md-12 fade-in-card" align="center" id="fade_pic3">
             <br>
             <img src="{% static 'img/특징_교재.png'%}" alt="Responsive image"
                  class="img-responsive img-thumbnail col-sm-12 col-md-push-2 col-md-8">
@@ -440,79 +440,52 @@
         /* 1 */
         $(window).scroll( function(){
             /* 2 */
-            $('.fade-in1').each( function(i){
-                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
-                var bottom_of_window = $(window).scrollTop() + $(window).height();
-                /* 3 */
-                if( bottom_of_window > bottom_of_object ){
-                    $(this).animate({'opacity':'1'},100);
-                }
-            });
-            $('.fade-in2').each( function(i){
-                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
-                var bottom_of_window = $(window).scrollTop() + $(window).height();
-                /* 3 */
-                if( bottom_of_window > bottom_of_object ){
-                    $(this).animate({'opacity':'1'},400);
-                }
-            });
-            $('.fade-in3').each( function(i){
-                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
-                var bottom_of_window = $(window).scrollTop() + $(window).height();
-                /* 3 */
-                if( bottom_of_window > bottom_of_object ){
-                    $(this).animate({'opacity':'1'},700);
-                }
-            });
-            $('.fade-in4').each( function(i){
-                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
-                var bottom_of_window = $(window).scrollTop() + $(window).height();
-                /* 3 */
-                if( bottom_of_window > bottom_of_object ){
-                    $(this).animate({'opacity':'1'},1000);
-                }
-            });
-            $('.fade-in-card').each( function(i){
-                var bottom_of_object = $(this).offset().top + $(this).outerHeight();
-                var bottom_of_window = $(window).scrollTop() + $(window).height();
-                /* 3 */
-                if( bottom_of_window > bottom_of_object ){
-                    $(this).animate({'opacity':'1'},500);
-                }
-            });
-            $('.slide-in').each( function(i){ 
-
-                var bottom_of_element = $(this).offset().top + $(this).outerHeight();
-                var bottom_of_window = $(window).scrollTop() + $(window).height();
-
-                if(bottom_of_window > bottom_of_element ){
-
-                    $(this).animate({'opacity':'1', 'margin-left':'0px'},500);
-                }
-
-            });
+            for(var i=1;i<5;i++){
+                $('#fade_feature'+i).each( function(i){
+                    var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                    var bottom_of_window = $(window).scrollTop() + $(window).height();
+                    /* 3 */
+                    if( bottom_of_window > bottom_of_object ){
+                        $(this).stop().animate({'opacity':'1'},300);
+                    }
+                });
+            }
+            for(var i=1;i<4;i++){
+                $('#fade_lecture'+i).each( function(i){
+                    var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                    var bottom_of_window = $(window).scrollTop() + $(window).height();
+                    /* 3 */
+                    if( bottom_of_window > bottom_of_object ){
+                        $(this).stop().animate({'opacity':'1'},300);
+                    }
+                });
+            }
+            for(var i=1;i<4;i++){
+                $('#fade_product'+i).each( function(i){
+                    var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                    var bottom_of_window = $(window).scrollTop() + $(window).height();
+                    /* 3 */
+                    if( bottom_of_window > bottom_of_object ){
+                        $(this).stop().animate({'opacity':'1'},300);
+                    }
+                });
+            }
+            for(var i=1;i<4;i++){
+                $('#fade_pic'+i).each( function(i){
+                    var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                    var bottom_of_window = $(window).scrollTop() + $(window).height();
+                    /* 3 */
+                    if( bottom_of_window > bottom_of_object ){
+                        $(this).stop().animate({'opacity':'1'},300);
+                    }
+                });
+            }
             $('.fade-in-title').each( function(i){
-
                 var bottom_of_element = $(this).offset().top + $(this).outerHeight();
                 var bottom_of_window = $(window).scrollTop() + $(window).height();
-
                 if(bottom_of_window > bottom_of_element ){
-
                     $(this).animate({'opacity':'1'},500);
                 }
-
-            });
-
-            $('.increase-in').each( function(i){
-
-                var bottom_of_element = $(this).offset().top + $(this).outerHeight();
-                var bottom_of_window = $(window).scrollTop() + $(window).height();
-
-                if( bottom_of_window > bottom_of_element ){
-
-                    $(this).animate({'opacity':'1', 'width':'100%', 'height':'100%'},500);
-                }
-
             });
 
         });
