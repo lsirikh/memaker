@@ -120,7 +120,7 @@ class ProductInline(nested_admin.NestedTabularInline):  # 테이블 형식
 class ProductAdmin(nested_admin.NestedModelAdmin):
     fields = ['introduce', 'link', 'stock']
     list_display = ('get_title', 'get_category', 'link', 'stock')
-    list_editable = ['stock',]
+    list_editable = ['stock']
 
     def get_introduce(self, obj):
         return str(obj.introduce)[0:30]
@@ -208,7 +208,13 @@ class ContentAdmin(nested_admin.NestedModelAdmin):
 
     def get_stock(self, obj):
         if obj.category.section == '상품':
-            return obj.product_set.first().stock
+            try:
+                #print(obj.product_set.first().__dir__())
+                if hasattr(obj.product_set.first(), 'stock'):
+                    return obj.product_set.first().stock
+            except:
+                return '미완료'
+
         else:
             return '해당없음'
 

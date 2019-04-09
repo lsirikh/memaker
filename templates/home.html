@@ -452,7 +452,7 @@
             }
             for(var i=1;i<4;i++){
                 $('#fade_lecture'+i).each( function(i){
-                    var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                    var bottom_of_object = $(this).offset().top + $(this).outerHeight()/2;
                     var bottom_of_window = $(window).scrollTop() + $(window).height();
                     /* 3 */
                     if( bottom_of_window > bottom_of_object ){
@@ -462,7 +462,7 @@
             }
             for(var i=1;i<4;i++){
                 $('#fade_product'+i).each( function(i){
-                    var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                    var bottom_of_object = $(this).offset().top + $(this).outerHeight()/2;
                     var bottom_of_window = $(window).scrollTop() + $(window).height();
                     /* 3 */
                     if( bottom_of_window > bottom_of_object ){
@@ -472,7 +472,7 @@
             }
             for(var i=1;i<4;i++){
                 $('#fade_pic'+i).each( function(i){
-                    var bottom_of_object = $(this).offset().top + $(this).outerHeight();
+                    var bottom_of_object = $(this).offset().top + $(this).outerHeight()/2;
                     var bottom_of_window = $(window).scrollTop() + $(window).height();
                     /* 3 */
                     if( bottom_of_window > bottom_of_object ){
@@ -481,7 +481,7 @@
                 });
             }
             $('.fade-in-title').each( function(i){
-                var bottom_of_element = $(this).offset().top + $(this).outerHeight();
+                var bottom_of_element = $(this).offset().top + $(this).outerHeight()*4;
                 var bottom_of_window = $(window).scrollTop() + $(window).height();
                 if(bottom_of_window > bottom_of_element ){
                     $(this).animate({'opacity':'1'},500);

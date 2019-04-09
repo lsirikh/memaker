@@ -150,7 +150,7 @@ class Product(models.Model):
     introduce = RichTextUploadingField('내용', max_length=8000) # 내용
     link = models.URLField('구매링크', default='', blank=True) # 네이버 구매 링크
 
-    stock = models.PositiveSmallIntegerField('재고', default=0) #제고 물건만 유의미
+    stock = models.PositiveIntegerField('재고', blank=True, null=True, default=0) #제고 물건만 유의미
 
 
     def __str__(self):
