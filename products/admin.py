@@ -211,7 +211,10 @@ class ContentAdmin(nested_admin.NestedModelAdmin):
             try:
                 #print(obj.product_set.first().__dir__())
                 if hasattr(obj.product_set.first(), 'stock'):
+                    print(obj.product_set.first().stock)
                     return obj.product_set.first().stock
+                else:
+                    return '미완료'
             except:
                 return '미완료'
 
