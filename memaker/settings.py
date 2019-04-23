@@ -24,33 +24,37 @@ with open(os.path.join(BASE_DIR, 'static', 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# DEBUG = True
+# DEBUG = False
+DEBUG = True
 
-# 세션 쿠키에 보안 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키는 "보안"으로 표시됩니다. 즉, 브라우저는 HTTPS 연결에서만 쿠키가 전송되도록 할 수 있습니다.
-# 이 설정을 해제하는 것은 좋은 생각이 아닙니다. 공격자가 패킷 스니퍼로 암호화되지 않은 세션 쿠키를 캡처하여 쿠키를 사용하여 사용자의 세션을 가로 챌 수 있기 때문입니다.
-SESSION_COOKIE_SECURE=True
-# CSRF 쿠키에 대해 안전한 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키가 "안전"으로 표시되어 브라우저가 쿠키가 HTTPS 연결로만 전송되도록 할 수 있습니다.
-CSRF_COOKIE_SECURE=True
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-PREPEND_WWW = True
-# BASE_URL = "https://www.memaker.co.kr"
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_HSTS_SECONDS = 86400  # 1 day
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-X_FRAME_OPTIONS= 'DENY'
-# For test, this comment needs to be discarded.
-# ALLOWED_HOSTS = ['127.0.0.1']
-# For operational, this comment needs to be discarded.
-ALLOWED_HOSTS = [
-                 '*',
-                 'memaker.co.kr','www.memaker.co.kr',
-                 'openfingers.com','www.openfingers.com',
-                 'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
+if DEBUG:
 
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    #BASE_URL = "http://www.memaker.co.kr"
+    ALLOWED_HOSTS = ['127.0.0.1']
+else:
+    # 세션 쿠키에 보안 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키는 "보안"으로 표시됩니다. 즉, 브라우저는$
+    # 이 설정을 해제하는 것은 좋은 생각이 아닙니다. 공격자가 패킷 스니퍼로 암호화되지 않은 세션 쿠키를 캡처하여 쿠키를 >$
+    SESSION_COOKIE_SECURE = True
+    # CSRF 쿠키에 대해 안전한 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키가 "안전"으로 표시되어 브라우저가$
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    PREPEND_WWW = True
+    # BASE_URL = "https://www.memaker.co.kr"
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 86400  # 1 day
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    X_FRAME_OPTIONS = 'DENY'
+    ALLOWED_HOSTS = [
+        '*',
+        'memaker.co.kr', 'www.memaker.co.kr',
+        'openfingers.com', 'www.openfingers.com',
+        'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
 
 # Application definition
 
@@ -74,6 +78,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'bootstrap_modal_forms', # 20190314추가
 
+    'storages', #AWS s3 추가 작업
+
     'ckeditor',
     'ckeditor_uploader',
     'polls.apps.PollsConfig',  # 추가
@@ -90,7 +96,8 @@ INSTALLED_APPS = [
 #python manage.py  shell
 #from django.contrib.sites.models import Site
 #print Site.objects.get(name='example.com').id
-SITE_ID = 3
+SITE_ID = 1
+#SITE_ID = 3
 
 
 ###################################CK Editor Setting################################################
@@ -207,27 +214,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-ROOT_DIR = os.path.dirname(BASE_DIR)
-
-STATIC_URL = '/static/'
-# STATIC_ROOT = 'staticfiles'
-STATIC_ROOT = os.path.join(ROOT_DIR, 'memaker','staticfiles')
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-
-STATICFILES_DIRS = [
-    #'home/ubuntu/memaker/memaker/',
-    # os.path.join(BASE_DIR, 'static'),
-    STATIC_DIR
-]
-
-# set the log configuration with keeping Django default setting
-
-
-MEDIA_URL = '/uploads/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -307,3 +293,47 @@ DEFAULT_FROM_EMAIL = 'help@openfingers.com'
 
 
 CELERY_BROKER_URL = 'amqp://localhost'
+
+
+
+
+if DEBUG:
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/2.1/howto/static-files/
+
+    ROOT_DIR = os.path.dirname(BASE_DIR)
+
+    STATIC_URL = '/static/'
+    # STATIC_ROOT = 'staticfiles'
+    STATIC_ROOT = os.path.join(ROOT_DIR, 'memaker', 'staticfiles')
+    STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+    STATICFILES_DIRS = [
+        # 'home/ubuntu/memaker/memaker/',
+        # os.path.join(BASE_DIR, 'static'),
+        STATIC_DIR
+    ]
+
+    # set the log configuration with keeping Django default setting
+
+    MEDIA_URL = '/uploads/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+else:
+    # AWS Setting
+    AWS_ACCESS_KEY_ID = 'AKIAXP6ISX4JFOJAJ3PF'
+    with open(os.path.join(BASE_DIR, 'static', 'aws_secret_access_key.txt')) as e:
+        AWS_SECRET_ACCESS_KEY = e.read().strip()
+    AWS_STORAGE_BUCKET_NAME = 'mamaker-static'
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    AWS_LOCATION = 'static'
+
+    # Static Setting
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'staticfiles'),
+    ]
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
