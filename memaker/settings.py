@@ -27,11 +27,18 @@ with open(os.path.join(BASE_DIR, 'static', 'secret_key.txt')) as f:
 # DEBUG = False
 DEBUG = True
 
+
 if DEBUG:
 
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_PRELOAD = False
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_BROWSER_XSS_FILTER = False
+    SECURE_CONTENT_TYPE_NOSNIFF = False 
+    SECURE_PROXY_SSL_HEADER = None
     #BASE_URL = "http://www.memaker.co.kr"
     ALLOWED_HOSTS = ['127.0.0.1']
 else:
@@ -58,6 +65,7 @@ else:
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -82,22 +90,23 @@ INSTALLED_APPS = [
 
     'ckeditor',
     'ckeditor_uploader',
-    'polls.apps.PollsConfig',  # 추가
-    'intro.apps.IntroConfig',  # 추가
-    'products.apps.ProductsConfig',  # 추가
-    'lectures.apps.LecturesConfig',  # 추가
-    'accounts.apps.AccountsConfig',  # 추가
-    'boards.apps.BoardsConfig',  # 추가
+    'polls.apps.PollsConfig',  # 추가 투포 관련 내용 현재 사용 안됨
+    'intro.apps.IntroConfig',  # 추가 서비스 소개 관련 사항
+    'products.apps.ProductsConfig',  # 추가 제품 및 온라인 강좌 관련 내용
+    'lectures.apps.LecturesConfig',  # 추가 현재 사용 안됨
+    'accounts.apps.AccountsConfig',  # 추가 계정관련
+    'boards.apps.BoardsConfig',  # 추가 게시판
     'cart.apps.CartConfig', #쇼핑카트 추가
     'orders.apps.OrdersConfig', #주문내역 처리 앱
+    'infos.apps.InfosConfig', #이용정보 동의 및 개인정보 활용 동의 관련 내용
 ]
 
 #Sitemap 세팅이 바뀌면 반드시 아이디 확인한다. python mamage.py shell
 #python manage.py  shell
 #from django.contrib.sites.models import Site
 #print Site.objects.get(name='example.com').id
-SITE_ID = 1
-#SITE_ID = 3
+#SITE_ID = 1
+SITE_ID = 3
 
 
 ###################################CK Editor Setting################################################
