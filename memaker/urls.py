@@ -70,6 +70,7 @@ urlpatterns = [
 
                   path('polls/', include('polls.urls')),
                   path('intro/', include('intro.urls')),
+                  path('infos/', include('infos.urls')),
                   path('products/', include('products.urls')),
                   path('lectures/', include('lectures.urls')),
                   path('accounts/', include('accounts.urls')),

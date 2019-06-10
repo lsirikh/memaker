@@ -17,12 +17,12 @@
 
                     <p>미메이커 서비스에 회원가입을 하시고 다양한 코딩 교육 콘텐츠와 서비스를 즐겨보세요!</p>
 
-                    <form method="post">
+                    <form method="post" class="form-inline">
                         {% csrf_token%}
 
                         {% for field in form %}
                         <p>
-                            {{ field.label_tag }}<br>
+                            {{ field.label_tag }}
                             {{ field }}
                             {% if field.help_text %}
                             <small style="color: grey">{{ field.help_text|linebreaks }}</small>
@@ -38,7 +38,7 @@
 
                         {% for field in form_profile %}
                         <p>
-                            {{ field.label_tag }}<br>
+                            {{ field.label_tag }}&nbsp;&nbsp;&nbsp;
                             {{ field }}
                             {% if field.help_text %}
                             <small style="color: grey">{{ field.help_text|linebreaks }}</small>
@@ -57,6 +57,54 @@
                     <br>
                     <p>아이디가 생각나지 않습니다.<a href="{% url 'accounts:find_id'%}">아이디 찾기</a></p>
                     <p>비밀번호가 생각나지 않습니다.<a href="{% url 'accounts:password_reset'%}">비밀번호 찾기</a></p>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#serviceUsageModal">
+                        {{service_usage.title|safe}}
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="serviceUsageModal" tabindex="-1" role="dialog" aria-labelledby="serviceUsageModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="serviceUsageModalLabel">{{service_usage.title|safe}}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    {{service_usage.content|safe}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#privacyPolicyModal">
+                        {{privacy_policy.title|safe}}
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="privacyPolicyModal" tabindex="-1" role="dialog" aria-labelledby="privacyPolicyModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="privacyPolicyModalLabel">{{privacy_policy.title|safe}}</h4>
+                                </div>
+                                <div class="modal-body">
+                                    {{privacy_policy.content|safe}}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

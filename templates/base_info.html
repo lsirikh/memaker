@@ -1,0 +1,26 @@
+{%extends "base.html"%}
+{% load staticfiles %}
+{% block menu %}
+{% load humanize %}
+<!--------------------------------------------메뉴 시작------------------------------------------------------>
+<li>
+    <!--인트로-->
+    {% include 'includes/nav_menu_intro.html' %}
+</li>
+<li class="dropdown">
+    <!--교보재 및 교재-->
+    {% include 'includes/nav_menu_products.html' %}
+</li>
+<li class="dropdown">
+    <!--강좌-->
+    {% include 'includes/nav_menu_lectures.html' %}
+</li>
+<li class="dropdown">
+    <!--게시판-->
+    {% include 'includes/nav_menu_boards.html' %}
+</li>
+<!--------------------------------------------메뉴 종료------------------------------------------------------>
+
+
+{% endblock menu%}
+

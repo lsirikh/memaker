@@ -1,0 +1,25 @@
+{%extends "base_info.html"%}
+
+{% block content %}
+
+{%load staticfiles%}
+<div class="container">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <p>{{content.title}}</p>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12 col-xs-12">
+                <div class="message row">
+                    <p>{{content.content|safe}}</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock content %}

@@ -45,19 +45,33 @@ class RegistrationForm(UserCreationForm):
 
     username = forms.CharField(max_length=30,
                                label='아이디',
-                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+                               widget=forms.TextInput(
+                                   attrs={
+                                       'size':20,
+                                       'class': 'form-control',
+                                       'title': '아이디를 입력하세요.',
+                                   }))
     first_name = forms.CharField(max_length=30,
                                  label='이름',
-                                 widget=forms.TextInput(attrs={'class': 'form-control'}),
+                                 widget=forms.TextInput(attrs={
+                                     'size':20,
+                                     'class': 'form-control',
+                                     'title': '이름 또는 별명을 입력하세요.',
+                                 }),
                                  help_text='실명을 입력해 주세요.')
     email = forms.EmailField(max_length=254,
                              label='이메일',
-                             widget=forms.EmailInput(attrs={'class': 'form-control'}),
+                             widget=forms.EmailInput(attrs={
+                                 'class': 'form-control',
+                                 'title': '이메일은 검증을 위해 반드시 필요합니다.',
+                             }),
                              required=True,
                              help_text='사용 가능한 이메일을 입력해 주세요.')
 
     password1 = forms.CharField(label='비밀번호',
-                                widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+                                widget=forms.PasswordInput(attrs={
+                                    'class': 'form-control',
+                                }),
                                 help_text='*비밀번호는 아이디 혹은 개인 정보와 유사하게 만들 수 없습니다.\n' \
                                           '*비밀번호는 최소 8자리 이상으로 구성하셔야 합니다.\n' \
                                           '*비밀번호는 간단한 규칙이나 일반적인 단어를 사용하 만들 수 없습니다.\n' \
@@ -112,10 +126,10 @@ class RegistrationProfileForm(UserChangeForm):
         choices=REGISTER_ROUTE)
 
     agree = forms.BooleanField(
-        label = '정보제공 동의',
+        label = '개인 정보 제공 동의 및 서비스 이용 약관 동의',
         required=True,
         help_text= "회원 가입에 관한 정보를 제공합니다.",
-        widget=forms.CheckboxInput()
+        widget=forms.CheckboxInput(attrs={'class': 'form-inline'})
     )
 
     class Meta:

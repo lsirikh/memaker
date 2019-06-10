@@ -30,6 +30,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from accounts.models import UserProfile
 
+from infos.models import ServiceUsage, PrivacyPolicy
+
+
 from accounts.forms import (
     LoginForm,
     #    PasswordChangeForm,
@@ -326,6 +329,9 @@ def register_view(request):
     print("====register_view execute===")
     messages = ''
 
+    service_usage = ServiceUsage.objects.get(pk=1)
+    privacy_policy = PrivacyPolicy.objects.get(pk=1)
+
     if request.method == 'POST':
         form=''
         form_profile=''
@@ -438,7 +444,10 @@ def register_view(request):
     return render(request, 'accounts/register_form.html',  {'form': form,
                                    'form_profile': form_profile,
                                    'messages': messages,
-                                   })
+                                    'service_usage': service_usage,
+                                    'privacy_policy': privacy_policy,
+
+                                    })
 
 def account_activation_sent(request):
     ################로그인 된 경우 redirect######################

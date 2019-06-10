@@ -521,8 +521,8 @@
                         <thead>
                         <tr>
                             <th class="col-md-2 col-xs-2"><a href="{% url 'intro:index'%}">소개</a><br></th>
-                            <th class="col-md-2 col-xs-2"><a href="#">제품</a><br></th>
-                            <th class="col-md-2 col-xs-2"><a href="#">강의</a></th>
+                            <th class="col-md-2 col-xs-2"><a href="{% url 'products:product_list'%}">제품</a><br></th>
+                            <th class="col-md-2 col-xs-2"><a href="{% url 'products:lecture_list'%}">강의</a></th>
                             <th class="col-md-3 col-xs-3"><a href="{% url 'boards:index'%}">게시판</a></th>
                             <th class="col-md-3 col-xs-3"><a href="#">채널</a><br></th>
                         </tr>
@@ -531,10 +531,10 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="#" style="color:#FDFEFE;">코딩보드 및 센서</a>
+                                <a href="{% url 'products:content_category_list' category_slug='코딩보드' %}" style="color:#FDFEFE;">코딩보드 및 센서</a>
                             </td>
                             <td>
-                                <a href="#" style="color:#FDFEFE;">엔트리</a>
+                                <a href="{% url 'products:content_category_list' category_slug='엔트리' %}" style="color:#FDFEFE;">엔트리</a>
                             </td>
                             <td>
                                 <a href="{% url 'boards:board_topic' pk=1%}" style="color:#FDFEFE;">코딩 강의 게시판</a>
@@ -550,10 +550,10 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="#">조립 키트</a>
+                                <a href="{% url 'products:content_category_list' category_slug='조립키트' %}">조립 키트</a>
                             </td>
                             <td>
-                                <a href="#">메이커</a>
+                                <a href="{% url 'products:content_category_list' category_slug='메이커' %}">메이커</a>
                             </td>
                             <td>
                                 <a href="{% url 'boards:board_topic' pk=2%}" style="color:#FDFEFE;">미메이커 코딩보드 게시판</a>
@@ -565,10 +565,10 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="#">언플러그드</a>
+                                <a href="{% url 'products:content_category_list' category_slug='언플러그드' %}">언플러그드</a>
                             </td>
                             <td>
-                                <a href="#">스크래치</a>
+                                <a href="{% url 'products:content_category_list' category_slug='스크래치' %}">스크래치</a>
                             </td>
                             <td>
                                 <a href="{% url 'boards:board_topic' pk=3%}" style="color:#FDFEFE;">3D모델링 및 출력 게시판</a>
@@ -580,7 +580,7 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="#">교재</a>
+                                <a href="{% url 'products:content_category_list' category_slug='교재' %}">교재</a>
                             </td>
                             <td></td>
                             <td>
@@ -600,7 +600,10 @@
                     주소 : 경기도 안산시 단원구 연수원로 87 중소기업연수원 창의관 109
                 </div>
                 <div class="company_help col-md-4" style="color:#FDFEFE;">
-                    학습지원센터 031-365-5315<br><br>
+                    <a href="{% url 'infos:privacy_policy' pk=1 %}" style="color:#FDFEFE;">*개인정보 제공 동의</a><br>
+                    <a href="{% url 'infos:service_policy' pk=1 %}" style="color:#FDFEFE;">*서비스 이용 약관</a><br>
+                    학습지원센터 031-365-5315<br>
+
                     © 2017 Openfingers. All rights reserved.
                 </div>
             </div>
