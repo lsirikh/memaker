@@ -29,7 +29,6 @@ DEBUG = True
 
 
 if DEBUG:
-
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
@@ -42,10 +41,10 @@ if DEBUG:
     #BASE_URL = "http://www.memaker.co.kr"
     ALLOWED_HOSTS = ['127.0.0.1']
 else:
-    # 세션 쿠키에 보안 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키는 "보안"으로 표시됩니다. 즉, 브라우저는$
-    # 이 설정을 해제하는 것은 좋은 생각이 아닙니다. 공격자가 패킷 스니퍼로 암호화되지 않은 세션 쿠키를 캡처하여 쿠키를 >$
+    # 세션 쿠키에 보안 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키는 "보안"으로 표시됩니다. 즉, 브라우저는
+    # 이 설정을 해제하는 것은 좋은 생각이 아닙니다. 공격자가 패킷 스니퍼로 암호화되지 않은 세션 쿠키를 캡처하여 쿠키를
     SESSION_COOKIE_SECURE = True
-    # CSRF 쿠키에 대해 안전한 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키가 "안전"으로 표시되어 브라우저가$
+    # CSRF 쿠키에 대해 안전한 쿠키를 사용할지 여부. 이 옵션을 true로 설정 True하면 쿠키가 "안전"으로 표시되어 브라우저가
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -58,7 +57,7 @@ else:
     SECURE_HSTS_PRELOAD = True
     X_FRAME_OPTIONS = 'DENY'
     ALLOWED_HOSTS = [
-        '*',
+        #'*',
         'memaker.co.kr', 'www.memaker.co.kr',
         'openfingers.com', 'www.openfingers.com',
         'ec2-13-209-5-163.ap-northeast-2.compute.amazonaws.com']
@@ -329,20 +328,27 @@ if DEBUG:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 else:
+    #https://simpleisbetterthancomplex.com/tutorial/2017/08/01/how-to-setup-amazon-s3-in-a-django-project.html
+    STATIC_URL = '/static/'
+
     # AWS Setting
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     AWS_ACCESS_KEY_ID = 'AKIAXP6ISX4JFOJAJ3PF'
     with open(os.path.join(BASE_DIR, 'static', 'aws_secret_access_key.txt')) as e:
         AWS_SECRET_ACCESS_KEY = e.read().strip()
-    AWS_STORAGE_BUCKET_NAME = 'mamaker-static'
-    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_STORAGE_BUCKET_NAME = 'memaker-static'
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_REGION = 'ap-northeast-2'  ### When AWS region is 'SEOUL'
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME)
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    AWS_LOCATION = 'static'
+    #AWS_LOCATION = 'static'
 
     # Static Setting
+    STATIC_DIR = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'staticfiles'),
+        STATIC_DIR,
     ]
-    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    #STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
