@@ -289,7 +289,7 @@ def order_initial_processing(request):
 
     #isDirect에 따라서 Cart방식으로 저장할지 Direct방식으로 저장할지 결정.
     if isDirect:
-        print('test1')
+        print('isDirect is True')
         ########################################################
         pk = request.POST.get('pk')
         quantity = int(request.POST.get('quantity'))
@@ -314,8 +314,6 @@ def order_initial_processing(request):
     else:
         ########################################################
         # 카트 세션의 정보와 dbCart의 정보를 retrieve한다.
-
-        print('test2')
         cart = Cart(request)
         dbCart = CM.objects.filter(user=user)
 
@@ -371,7 +369,6 @@ def order_initial_processing(request):
                 order.delete()
         except Order.DoesNotExist:
             print('성공:Order DB에 등록되지 않은 merchant_uid({})입니다.'.format(merchant_uid))
-
 
 
 

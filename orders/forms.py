@@ -129,6 +129,7 @@ class OrderCreateForm(forms.Form):
 
     extraAddress = forms.CharField(
         label='참조주소',
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'id': 'extraAddress',
