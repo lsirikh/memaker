@@ -106,6 +106,7 @@ INSTALLED_APPS = [
 #print Site.objects.get(name='example.com').id
 #SITE_ID = 1
 SITE_ID = 3
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
 ###################################CK Editor Setting################################################
