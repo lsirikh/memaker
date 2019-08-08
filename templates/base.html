@@ -14,7 +14,6 @@
     <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
 
 
-
     <script src="{% static 'bootstrap/js/jquery-3.1.1.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/jquery.waypoints.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/infinite.min.js' %}"></script>
@@ -40,7 +39,8 @@
     <!-- You can alternatively load the minified version -->
     <!--<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>-->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, minimum-scale=1.0">
     <!--<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">-->
 
     <!-- Naver site register -->
@@ -54,6 +54,10 @@
       gtag('js', new Date());
 
       gtag('config', 'UA-132446468-1');
+
+
+
+
 
     </script>
     <link rel="shortcut icon" href="{% static 'favicon/favicon.png' %}"/>
@@ -341,7 +345,10 @@
 
 
     @media screen and (max-width: 600px) {
-
+      .mark-table > tr > td > img{
+        max-width:50%;
+        height:auto!important;
+      }
 
       .file_icon{
         max-width:100%;
@@ -502,22 +509,47 @@
 
 
 
+
+
+
+
     </style>
     <!--#####################################링크 내용 수정 필요#########################################################-->
     <div class="row">
         <div class="container-fluid" id="footer" style="background:#8E44AD;">
             <br>
             <br>
-            <div class="container">
 
-                <div class="col-md-3" align="center">
-                    <span><img class="me_badge" src="{% static 'img/memaker_logo.png' %}"></span>
-                    <span></span>
-                    <span><img class="me_badge" src="{% static 'img/2018_hiseoul.png' %}" alt="하이서울어워드"></span>
+            <div class="container">
+                <div class="me_title3_nopadding fade-in-title">
+                    <font color="white"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+                        협력사</font>
+                </div>
+                <br>
+                <div class="col-xs-4 col-md-2" align="center">
+                    <img class="me_badge" src="{% static 'img/2018_hiseoul.png' %}" alt="하이서울어워드">
+                </div>
+                <div class="col-xs-4 col-md-2" align="center">
+                    <img class="me_badge" src="{% static 'img/ci_bg_9_cut.png' %}" alt="중소벤처기업진흥공단">
+                </div>
+                <div class="col-xs-4 col-md-2" align="center">
+                    <img class="me_badge" src="{% static 'img/CCS_CI_RE.png' %}" alt="청년창업사관학교">
+                </div>
+                <div class="col-xs-4 col-md-2" align="center">
+                    <img class="me_badge" src="{% static 'img/SEOUL_SEOBU.png' %}" alt="서울특별시서부여성발전센터">
+                </div>
+                <div class="col-xs-4 col-md-2" align="center">
+                    <img class="me_badge" src="{% static 'img/gwangmyung_si_women.png' %}" alt="경기도광명시문화센터">
+                </div>
+                <div class="col-xs-4 col-md-2" align="center">
+                    <img class="me_badge" src="{% static 'img/kopo.png' %}" alt="한국폴리텍대">
+                </div>
+                <div class="col-xs-12 col-md-3" align="center">
+                    <img class="me_badge" src="{% static 'img/memaker_logo.png' %}">
                 </div>
                 <div class="col-md-9">
 
-                    <table class="table table-borderless" width="500">
+                    <table class="table table-borderless" width="550">
                         <thead>
                         <tr>
                             <th class="col-md-2 col-xs-2"><a href="{% url 'intro:index'%}">소개</a><br></th>
@@ -531,10 +563,12 @@
                         <tr>
                             <td></td>
                             <td>
-                                <a href="{% url 'products:content_category_list' category_slug='코딩보드' %}" style="color:#FDFEFE;">코딩보드 및 센서</a>
+                                <a href="{% url 'products:content_category_list' category_slug='코딩보드' %}"
+                                   style="color:#FDFEFE;">코딩보드 및 센서</a>
                             </td>
                             <td>
-                                <a href="{% url 'products:content_category_list' category_slug='엔트리' %}" style="color:#FDFEFE;">엔트리</a>
+                                <a href="{% url 'products:content_category_list' category_slug='엔트리' %}"
+                                   style="color:#FDFEFE;">엔트리</a>
                             </td>
                             <td>
                                 <a href="{% url 'boards:board_topic' pk=1%}" style="color:#FDFEFE;">코딩 강의 게시판</a>
@@ -592,7 +626,7 @@
 
                 </div>
 
-                <hr>
+                <hr color="white">
                 <div class="company_info col-md-8">
                     회사명 : (주)오픈핑거스 | 대표 : 이기호 | 이메일 : openfingers@openfingers.com<br>
                     대표전화 : 031 365 5315 | 팩스 : 031 365 5317 | 카카오톡ID : 미메이커<br>
