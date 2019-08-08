@@ -1,5 +1,6 @@
 from django.views.generic.base import TemplateView
 from products.models import Content
+from intro.models import EduHistory
 #from lectures.models import Lecture
 
 import logging
@@ -15,8 +16,12 @@ class HomeView(TemplateView):
         print("HomeView Start")
         logger.info("HomeView Start")
         context = super().get_context_data(**kwargs)
-        context = {'product_list':Content.objects.filter(category__section='상품', isShow = True, recommend__in=[1, 2])[:3],
-                   'lecture_list':Content.objects.filter(category__section='강좌', isShow = True, recommend__in=[1, 2])[:3]}
+        context = {
+                    'product_list':Content.objects.filter(category__section='상품', isShow = True, recommend__in=[1, 2])[:3],
+                    'lecture_list':Content.objects.filter(category__section='강좌', isShow = True, recommend__in=[1, 2])[:3],
+                    'education_history':EduHistory.objects.all()
+                   }
+        print(EduHistory.objects.all())
         return context
 
 #def login_redirect(request):
